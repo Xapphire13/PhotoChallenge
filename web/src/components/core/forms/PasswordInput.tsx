@@ -1,46 +1,15 @@
-import { css, cx } from "@linaria/core";
 import React from "react";
-import theme from "../../../theme";
-import { LabelOrPlaceHolderRequired } from "./BaseInput";
+import BaseInput, {
+  BaseInputProps,
+  LabelOrPlaceHolderRequired,
+} from "./BaseInput";
 
-const classNames = {
-  inputField: css`
-    background: none;
-    border: none;
-    outline: none;
-    color: ${theme.palette.white};
-    border-bottom: 2px solid ${theme.palette.lightGray};
+export type PasswordInputProps = Omit<
+  BaseInputProps,
+  "type" | "label" | "placeholder"
+> &
+  LabelOrPlaceHolderRequired;
 
-    :focus {
-      border-bottom: 2px solid ${theme.palette.primary};
-      color: ${theme.palette.primary};
-    }
-  `,
-  visiblyHidden: css`
-    display: none;
-  `,
-};
-
-export type PasswordInputProps = {
-  id: string;
-} & LabelOrPlaceHolderRequired;
-
-export default function PasswordInput({
-  id,
-  label,
-  placeholder,
-}: PasswordInputProps) {
-  return (
-    <label htmlFor={id}>
-      <span className={cx(classNames.visiblyHidden)}>
-        {label || placeholder}
-      </span>
-      <input
-        id={id}
-        type="password"
-        placeholder={placeholder}
-        className={cx(classNames.inputField)}
-      />
-    </label>
-  );
+export default function PasswordInput(props: PasswordInputProps) {
+  return <BaseInput {...props} type="password" />;
 }

@@ -17,6 +17,20 @@ const classNames = {
 export default function HomePage() {
   const navigate = useNavigate();
   const [challengeText, setChallengeText] = useState("");
+  const submitDisabled = !challengeText.trim();
+
+  const handleSubmit = () => {
+    if (!submitDisabled) {
+      setChallengeText("");
+    }
+  };
+
+  const handleKeyPress = (ev: React.KeyboardEvent) => {
+    if (ev.key === "Enter" && (ev.ctrlKey || ev.shiftKey)) {
+      handleSubmit();
+      ev.preventDefault();
+    }
+  };
 
   useEffect(() => {
     const loggedIn = Boolean(localStorage.getItem("logged-in"));
@@ -38,10 +52,12 @@ export default function HomePage() {
             onChange={setChallengeText}
             fullWidth
             placeholder="Enter challenge here..."
+            onKeyPress={handleKeyPress}
           />
           <PrimaryButton
             className={cx(classNames.submitButton)}
-            disabled={!challengeText.trim()}
+            disabled={submitDisabled}
+            onClick={handleSubmit}
             fullWidth
           >
             Submit

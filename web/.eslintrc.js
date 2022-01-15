@@ -24,5 +24,6 @@ module.exports = {
     quotes: [2, "double"],
     "import/extensions": [2, "never"],
     "import/no-unresolved": "off",
+    "react/jsx-props-no-spreading": "off",
   },
 };

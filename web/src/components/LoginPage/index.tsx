@@ -1,5 +1,5 @@
 import { css, cx } from "@linaria/core";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import theme from "../../theme";
 import PrimaryButton from "../core/buttons/PrimaryButton";
@@ -20,10 +20,21 @@ const classNames = {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+
+  const submitDisabled = !password.trim();
 
   const handleSubmitPressed = () => {
-    localStorage.setItem("logged-in", "true");
-    navigate("/");
+    if (!submitDisabled) {
+      localStorage.setItem("logged-in", "true");
+      navigate("/");
+    }
+  };
+
+  const handleKeyPress = (ev: React.KeyboardEvent) => {
+    if (ev.key === "Enter") {
+      handleSubmitPressed();
+    }
   };
 
   return (
@@ -31,10 +42,17 @@ export default function LoginPage() {
       <Card>
         <CardContent className={cx(classNames.cardContent)}>
           <h1>Login</h1>
-          <PasswordInput id="password" placeholder="Password" />
+          <PasswordInput
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={setPassword}
+            onKeyPress={handleKeyPress}
+          />
           <PrimaryButton
             className={classNames.submitButton}
             onClick={handleSubmitPressed}
+            disabled={submitDisabled}
           >
             Submit
           </PrimaryButton>

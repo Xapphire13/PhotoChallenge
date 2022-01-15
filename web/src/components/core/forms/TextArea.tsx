@@ -32,7 +32,14 @@ export type TextAreaProps = {
   maxRows?: number;
   onChange?: (value: string) => void;
   fullWidth?: boolean;
-} & LabelOrPlaceHolderRequired;
+} & LabelOrPlaceHolderRequired &
+  Omit<
+    React.DetailedHTMLProps<
+      React.InputHTMLAttributes<HTMLTextAreaElement>,
+      HTMLTextAreaElement
+    >,
+    "value" | "onChange" | "label" | "placeholder" | "height" | "style" | "ref"
+  >;
 
 export default function TextArea({
   id,
@@ -43,6 +50,7 @@ export default function TextArea({
   fullWidth,
   label,
   placeholder,
+  ...rest
 }: TextAreaProps) {
   const handleOnChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     let newValue = ev.target.value;
@@ -51,8 +59,8 @@ export default function TextArea({
       const lines = newValue.split("\n");
 
       if (lines.length > maxRows) {
-        const [line1, line2, line3, ...rest] = lines;
-        const overflow = rest.join(" ").trim();
+        const [line1, line2, line3, ...overflowLines] = lines;
+        const overflow = overflowLines.join(" ").trim();
 
         newValue = [line1, line2, line3 + overflow].join("\n");
       }
@@ -74,6 +82,7 @@ export default function TextArea({
         maxRows={maxRows}
         className={cx(classNames.textarea, fullWidth && classNames.fullWidth)}
         onChange={handleOnChange}
+        {...rest}
       />
     </label>
   );

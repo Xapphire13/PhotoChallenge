@@ -12,6 +12,6 @@ const classNames = {
 
 export default function CenterLayout({
   children,
-}: React.PropsWithChildren<{}>) {
+}: React.PropsWithChildren<unknown>) {
   return <div className={classNames.container}>{children}</div>;
 }
