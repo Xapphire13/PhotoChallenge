@@ -2,10 +2,10 @@ import { css, cx } from "@linaria/core";
 import React from "react";
 import { useNavigate } from "react-router";
 import theme from "../../theme";
-import PrimaryButton from "../common/buttons/PrimaryButton";
-import Card from "../common/Card";
-import CardContent from "../common/Card/CardContent";
-import PasswordInput from "../common/forms/PasswordInput";
+import PrimaryButton from "../core/buttons/PrimaryButton";
+import Card from "../core/Card";
+import CardContent from "../core/Card/CardContent";
+import PasswordInput from "../core/forms/PasswordInput";
 
 const classNames = {
   container: css`
