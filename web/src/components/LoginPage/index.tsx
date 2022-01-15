@@ -1,8 +1,11 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
 import { useNavigate } from "react-router";
+import theme from "../../theme";
+import PrimaryButton from "../common/buttons/PrimaryButton";
 import Card from "../common/Card";
 import CardContent from "../common/Card/CardContent";
+import PasswordInput from "../common/forms/PasswordInput";
 
 const classNames = {
   container: css`
@@ -14,6 +17,9 @@ const classNames = {
   cardContent: css`
     display: flex;
     flex-direction: column;
+  `,
+  submitButton: css`
+    margin-top: ${theme.spacing["8px"]};
   `,
 };
 
@@ -30,10 +36,13 @@ export default function LoginPage() {
       <Card>
         <CardContent className={cx(classNames.cardContent)}>
           <h1>Login</h1>
-          <input type="password" placeholder="Password" />
-          <button type="button" onClick={handleSubmitPressed}>
+          <PasswordInput placeholder="Password" />
+          <PrimaryButton
+            className={classNames.submitButton}
+            onClick={handleSubmitPressed}
+          >
             Submit
-          </button>
+          </PrimaryButton>
         </CardContent>
       </Card>
     </div>
