@@ -1,6 +1,7 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
 import theme from "../../../theme";
+import { LabelOrPlaceHolderRequired } from "./BaseInput";
 
 const classNames = {
   inputField: css`
@@ -19,10 +20,6 @@ const classNames = {
     display: none;
   `,
 };
-
-type LabelOrPlaceHolderRequired =
-  | { label?: string; placeholder: string }
-  | { label: string; placeholder?: string };
 
 export type PasswordInputProps = {
   id: string;

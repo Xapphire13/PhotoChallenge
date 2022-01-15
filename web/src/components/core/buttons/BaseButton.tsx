@@ -10,23 +10,41 @@ export const classNames = {
     padding: ${theme.spacing["8px"]};
     cursor: pointer;
     color: ${theme.palette.white};
+
+    :disabled {
+      cursor: not-allowed;
+      color: ${theme.palette.lightGray};
+    }
+  `,
+  fullWidth: css`
+    width: 100%;
   `,
 };
 
 export interface BaseButtonProps extends StylableProps {
-  onClick: () => void;
+  children: React.ReactNode;
+  onClick?: () => void;
+  fullWidth?: boolean;
+  disabled?: boolean;
 }
 
 export default function BaseButton({
   children,
   onClick,
   className,
-}: React.PropsWithChildren<BaseButtonProps>) {
+  fullWidth,
+  disabled,
+}: BaseButtonProps) {
   return (
     <button
       type="button"
-      onClick={onClick}
-      className={cx(classNames.container, className)}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={cx(
+        classNames.container,
+        fullWidth && classNames.fullWidth,
+        className
+      )}
     >
       {children}
     </button>

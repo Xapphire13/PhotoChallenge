@@ -6,14 +6,9 @@ import PrimaryButton from "../core/buttons/PrimaryButton";
 import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
 import PasswordInput from "../core/forms/PasswordInput";
+import CenterLayout from "../layouts/CenterLayout";
 
 const classNames = {
-  container: css`
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  `,
   cardContent: css`
     display: flex;
     flex-direction: column;
@@ -32,11 +27,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={cx(classNames.container)}>
+    <CenterLayout>
       <Card>
         <CardContent className={cx(classNames.cardContent)}>
           <h1>Login</h1>
-          <PasswordInput placeholder="Password" />
+          <PasswordInput id="password" placeholder="Password" />
           <PrimaryButton
             className={classNames.submitButton}
             onClick={handleSubmitPressed}
@@ -45,6 +40,6 @@ export default function LoginPage() {
           </PrimaryButton>
         </CardContent>
       </Card>
-    </div>
+    </CenterLayout>
   );
 }

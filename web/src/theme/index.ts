@@ -3,6 +3,7 @@ export default {
     background: "#272727",
     white: "#FFF",
     lightGray: "#575757",
+    faint: "#333",
     primary: "#F61067",
   },
   cornerRadius: {
