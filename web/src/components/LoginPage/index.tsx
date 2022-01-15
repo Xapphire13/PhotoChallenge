@@ -30,7 +30,7 @@ export default function LoginPage() {
       <Card>
         <CardContent className={cx(classNames.cardContent)}>
           <h1>Login</h1>
-          <input type="text" placeholder="Password" />
+          <input type="password" placeholder="Password" />
           <button type="button" onClick={handleSubmitPressed}>
             Submit
           </button>
