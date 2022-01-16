@@ -9,6 +9,7 @@ import PasswordInput from "../core/forms/PasswordInput";
 import useOnEnter from "../../hooks/useOnEnter";
 import CenterLayout from "../layouts/CenterLayout";
 import usePersistentStorage from "../../hooks/usePersistentStorage";
+import TextInput from "../core/forms/TextInput";
 
 const classNames = {
   cardContent: css`
@@ -42,12 +43,13 @@ export default function LoginPage() {
       <Card>
         <CardContent className={cx(classNames.cardContent)}>
           <h1>Login</h1>
-          <PasswordInput
+          <TextInput
             id="password"
             placeholder="Password"
             value={password}
             onChange={setPassword}
             onKeyPress={handleKeyPress}
+            type="password"
           />
           <PrimaryButton
             className={classNames.submitButton}

@@ -2,6 +2,7 @@ import { css, cx } from "@linaria/core";
 import React from "react";
 import usePersistentStorage from "../../hooks/usePersistentStorage";
 import theme from "../../theme";
+import User from "../../types/User";
 
 const classNames = {
   container: css`
@@ -18,14 +19,15 @@ const classNames = {
 };
 
 export default function NavBar() {
-  const [name] = usePersistentStorage<string>("name");
+  const [user] = usePersistentStorage<User>("user");
 
   return (
     <div className={cx(classNames.container)}>
       <div>
-        {name && (
+        {user && (
           <>
-            Welcome <span className={cx(classNames.colorText)}>{name}</span>
+            Welcome{" "}
+            <span className={cx(classNames.colorText)}>{user.name}</span>
           </>
         )}
       </div>

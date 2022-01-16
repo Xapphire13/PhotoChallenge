@@ -4,12 +4,9 @@ import BaseInput, {
   LabelOrPlaceHolderRequired,
 } from "./BaseInput";
 
-export type TextInputProps = Omit<
-  BaseInputProps,
-  "type" | "label" | "placeholder"
-> &
+export type TextInputProps = Omit<BaseInputProps, "label" | "placeholder"> &
   LabelOrPlaceHolderRequired;
 
-export default function TextInput(props: TextInputProps) {
-  return <BaseInput type="text" {...props} />;
+export default function TextInput({ type = "text", ...rest }: TextInputProps) {
+  return <BaseInput type={type} {...rest} />;
 }

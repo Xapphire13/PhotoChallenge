@@ -10,7 +10,13 @@ import useOnEnter from "../../hooks/useOnEnter";
 import ModalWithBackdrop from "../core/modal/ModalWithBackdrop";
 
 const classNames = {
-  textInput: css`
+  form: css`
+    display: flex;
+    flex-direction: column;
+    gap: ${theme.spacing["8px"]};
+    width: 300px;
+  `,
+  formField: css`
     width: 100%;
   `,
   submitButton: css`
@@ -20,14 +26,15 @@ const classNames = {
 
 export interface NameModalProps {
   isOpen: boolean;
-  onSubmit: (name: string) => void;
+  onSubmit: (name: string, email: string) => void;
 }
 
 export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
-  const submitDisabled = !name.trim();
-  const handleSubmit = () => !submitDisabled && onSubmit(name);
+  const submitDisabled = !name.trim() || !email.trim();
+  const handleSubmit = () => !submitDisabled && onSubmit(name, email);
   const handleKeyPress = useOnEnter(handleSubmit);
 
   return (
@@ -35,16 +42,27 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
       <ElevatedCardContainer>
         <FullBleedCard>
           <CardContent>
-            <h1>What&apos;s your name?</h1>
+            <h1>Who are you?</h1>
 
-            <TextInput
-              id="name"
-              value={name}
-              onChange={setName}
-              placeholder="Name..."
-              className={cx(classNames.textInput)}
-              onKeyPress={handleKeyPress}
-            />
+            <form className={cx(classNames.form)}>
+              <TextInput
+                id="name"
+                value={name}
+                onChange={setName}
+                placeholder="Name"
+                className={cx(classNames.formField)}
+              />
+
+              <TextInput
+                id="email"
+                value={email}
+                onChange={setEmail}
+                placeholder="Email"
+                onKeyPress={handleKeyPress}
+                type="email"
+                className={cx(classNames.formField)}
+              />
+            </form>
 
             <PrimaryButton
               className={cx(classNames.submitButton)}
