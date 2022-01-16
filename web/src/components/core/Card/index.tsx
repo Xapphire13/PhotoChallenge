@@ -1,6 +1,7 @@
 import { cx, css } from "@linaria/core";
 import React from "react";
 import theme from "../../../theme";
+import StylableProps from "../../../theme/StylableProps";
 
 const classNames = {
   container: css`
@@ -9,6 +10,10 @@ const classNames = {
   `,
 };
 
-export default function Card({ children }: React.PropsWithChildren<{}>) {
-  return <div className={cx(classNames.container)}>{children}</div>;
+export interface CardProps extends StylableProps {
+  children: React.ReactNode;
+}
+
+export default function Card({ children, className }: CardProps) {
+  return <div className={cx(classNames.container, className)}>{children}</div>;
 }

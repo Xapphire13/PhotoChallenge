@@ -44,6 +44,7 @@ export default function BaseInput({
   value,
   onChange,
   type,
+  className,
   ...rest
 }: BaseInputProps) {
   const handleOnChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +64,7 @@ export default function BaseInput({
         value={value}
         onChange={handleOnChange}
         placeholder={placeholder}
-        className={cx(classNames.inputField)}
+        className={cx(classNames.inputField, className)}
         {...rest}
       />
     </label>

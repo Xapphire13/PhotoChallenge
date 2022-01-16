@@ -6,6 +6,7 @@ import PrimaryButton from "../core/buttons/PrimaryButton";
 import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
 import PasswordInput from "../core/forms/PasswordInput";
+import useOnEnter from "../core/hooks/useOnEnter";
 import CenterLayout from "../layouts/CenterLayout";
 
 const classNames = {
@@ -31,11 +32,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleKeyPress = (ev: React.KeyboardEvent) => {
-    if (ev.key === "Enter") {
-      handleSubmitPressed();
-    }
-  };
+  const handleKeyPress = useOnEnter(handleSubmitPressed);
 
   return (
     <CenterLayout>

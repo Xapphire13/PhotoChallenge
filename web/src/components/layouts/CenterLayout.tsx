@@ -1,5 +1,6 @@
-import { css } from "@linaria/core";
+import { css, cx } from "@linaria/core";
 import React from "react";
+import StylableProps from "../../theme/StylableProps";
 
 const classNames = {
   container: css`
@@ -12,6 +13,7 @@ const classNames = {
 
 export default function CenterLayout({
   children,
-}: React.PropsWithChildren<unknown>) {
-  return <div className={classNames.container}>{children}</div>;
+  className,
+}: React.PropsWithChildren<unknown> & StylableProps) {
+  return <div className={cx(classNames.container, className)}>{children}</div>;
 }
