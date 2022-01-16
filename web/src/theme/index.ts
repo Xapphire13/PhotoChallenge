@@ -6,6 +6,7 @@ export default {
     lightGray: "#575757",
     faint: "#333",
     primary: "#F61067",
+    primaryText: "#FBAAC8", // Text friendly version of primary
     modalBackdrop: "#FFFFFF44",
   },
   cornerRadius: {

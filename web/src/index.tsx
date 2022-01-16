@@ -4,7 +4,7 @@ import { css } from "@linaria/core";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import theme from "./theme";
-import HomePage from "./components/HomePage";
+import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 
 export const classNames = {
@@ -40,7 +40,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>

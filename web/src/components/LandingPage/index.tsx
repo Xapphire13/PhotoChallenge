@@ -10,15 +10,24 @@ import useOnEnter from "../../hooks/useOnEnter";
 import CenterLayout from "../layouts/CenterLayout";
 import NameModal from "./NameModal";
 import usePersistentStorage from "../../hooks/usePersistentStorage";
+import NavBar from "../NavBar";
 
 const classNames = {
+  container: css`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  `,
   submitButton: css`
     /* HACKHACK Subtract 6px due to weird bug where input is getting blank space after it */
     margin-top: calc(${theme.spacing["8px"]} - 6px);
   `,
+  contentContainer: css`
+    flex-grow: 1;
+  `,
 };
 
-export default function HomePage() {
+export default function LandingPage() {
   const navigate = useNavigate();
   const [name, setName] = usePersistentStorage<string>("name");
   const [loggedIn] = usePersistentStorage<boolean>("logged-in");
@@ -44,8 +53,9 @@ export default function HomePage() {
   }, [loggedIn, navigate]);
 
   return (
-    <>
-      <CenterLayout>
+    <div className={cx(classNames.container)}>
+      <NavBar />
+      <CenterLayout className={cx(classNames.contentContainer)}>
         <Card>
           <CardContent>
             <h1>Submit a challenge...</h1>
@@ -73,6 +83,6 @@ export default function HomePage() {
       </CenterLayout>
 
       <NameModal isOpen={!name || !name.trim()} onSubmit={handleNameSet} />
-    </>
+    </div>
   );
 }

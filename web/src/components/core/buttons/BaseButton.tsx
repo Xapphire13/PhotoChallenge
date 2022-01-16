@@ -5,6 +5,7 @@ import StylableProps from "../../../theme/StylableProps";
 
 export const classNames = {
   container: css`
+    ${theme.typography.base.medium}
     ${theme.cornerRadius.small}
     border: none;
     padding: ${theme.spacing["8px"]};
