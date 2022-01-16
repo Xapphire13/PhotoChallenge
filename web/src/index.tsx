@@ -24,6 +24,14 @@ export const classNames = {
         background: ${theme.palette.background};
         color: ${theme.palette.white};
       }
+
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        ${theme.typography.base.medium}
+      }
     }
   `,
 };

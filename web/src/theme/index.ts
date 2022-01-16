@@ -29,14 +29,18 @@ export default {
   },
   typography: {
     base: {
+      // Ratio of 1.5 for font-size -> line-height
       small: {
         fontSize: "12px",
+        lineHeight: "18px",
       },
       medium: {
         fontSize: "14px",
+        lineHeight: "21px",
       },
       large: {
         fontSize: "16px",
+        lineHeight: "24px",
       },
     },
   },

@@ -13,7 +13,8 @@ import usePersistentStorage from "../../hooks/usePersistentStorage";
 
 const classNames = {
   submitButton: css`
-    margin-top: ${theme.spacing["8px"]};
+    /* HACKHACK Subtract 6px due to weird bug where input is getting blank space after it */
+    margin-top: calc(${theme.spacing["8px"]} - 6px);
   `,
 };
 
