@@ -19,6 +19,7 @@ export const classNames = {
       }
 
       body {
+        ${theme.typography.base.medium}
         font-family: Offside, sans-serif;
         background: ${theme.palette.background};
         color: ${theme.palette.white};

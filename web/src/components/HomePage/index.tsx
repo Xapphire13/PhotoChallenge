@@ -57,6 +57,7 @@ export default function HomePage() {
               fullWidth
               placeholder="Enter challenge here..."
               onKeyPress={handleKeyPress}
+              characterLimit={250}
             />
             <PrimaryButton
               className={cx(classNames.submitButton)}

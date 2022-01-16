@@ -1,5 +1,5 @@
 import { css, cx } from "@linaria/core";
-import React from "react";
+import React, { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import theme from "../../../theme";
 import { LabelOrPlaceHolderRequired } from "./BaseInput";
@@ -17,11 +17,25 @@ const classNames = {
       outline: 2px solid ${theme.palette.primary};
     }
   `,
+  withCharacterCount: css`
+    padding-bottom: ${theme.spacing["16px"]};
+  `,
   fullWidth: css`
     width: 100%;
   `,
   visiblyHidden: css`
     display: none;
+  `,
+  label: css`
+    display: inline-block;
+    position: relative;
+  `,
+  characterLimit: css`
+    ${theme.typography.base.small}
+    position: absolute;
+    right: ${theme.spacing["4px"]};
+    bottom: ${theme.spacing["4px"]};
+    color: ${theme.palette.primary};
   `,
 };
 
@@ -32,6 +46,7 @@ export type TextAreaProps = {
   maxRows?: number;
   onChange?: (value: string) => void;
   fullWidth?: boolean;
+  characterLimit?: number;
 } & LabelOrPlaceHolderRequired &
   Omit<
     React.DetailedHTMLProps<
@@ -50,10 +65,18 @@ export default function TextArea({
   fullWidth,
   label,
   placeholder,
+  characterLimit,
   ...rest
 }: TextAreaProps) {
+  const [focused, setFocused] = useState(false);
+  const showCharacterCount = characterLimit && focused;
+
   const handleOnChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     let newValue = ev.target.value;
+
+    if (characterLimit && newValue.length > characterLimit) {
+      newValue = newValue.slice(0, characterLimit);
+    }
 
     if (maxRows) {
       const lines = newValue.split("\n");
@@ -69,8 +92,14 @@ export default function TextArea({
     onChange?.(newValue);
   };
 
+  const handleOnFocus = () => setFocused(true);
+  const handleOnBlur = () => setFocused(false);
+
   return (
-    <label htmlFor={id}>
+    <label
+      htmlFor={id}
+      className={cx(classNames.label, fullWidth && classNames.fullWidth)}
+    >
       <span className={cx(classNames.visiblyHidden)}>
         {label || placeholder}
       </span>
@@ -80,10 +109,22 @@ export default function TextArea({
         value={value}
         minRows={minRows}
         maxRows={maxRows}
-        className={cx(classNames.textarea, fullWidth && classNames.fullWidth)}
+        className={cx(
+          classNames.textarea,
+          fullWidth && classNames.fullWidth,
+          showCharacterCount && classNames.withCharacterCount
+        )}
         onChange={handleOnChange}
+        onFocus={handleOnFocus}
+        onBlur={handleOnBlur}
         {...rest}
       />
+
+      {showCharacterCount && (
+        <div className={classNames.characterLimit}>
+          {value.length}/{characterLimit}
+        </div>
+      )}
     </label>
   );
 }

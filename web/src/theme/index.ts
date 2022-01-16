@@ -19,11 +19,25 @@ export default {
   spacing: {
     "4px": "4px",
     "8px": "8px",
+    "12px": "12px",
     "16px": "16px",
   },
   elevation: {
     primary: {
       boxShadow: "5px 5px 20px #00000055",
+    },
+  },
+  typography: {
+    base: {
+      small: {
+        fontSize: "12px",
+      },
+      medium: {
+        fontSize: "14px",
+      },
+      large: {
+        fontSize: "16px",
+      },
     },
   },
 };
