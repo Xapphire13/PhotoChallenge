@@ -6,7 +6,7 @@ import CardContent from "../core/Card/CardContent";
 import ElevatedCardContainer from "../core/Card/ElevatedCardContainer";
 import FullBleedCard from "../core/Card/FullBleedCard";
 import TextInput from "../core/forms/TextInput";
-import useOnEnter from "../core/hooks/useOnEnter";
+import useOnEnter from "../../hooks/useOnEnter";
 import ModalWithBackdrop from "../core/modal/ModalWithBackdrop";
 
 const classNames = {

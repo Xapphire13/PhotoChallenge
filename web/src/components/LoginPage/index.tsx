@@ -6,7 +6,7 @@ import PrimaryButton from "../core/buttons/PrimaryButton";
 import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
 import PasswordInput from "../core/forms/PasswordInput";
-import useOnEnter from "../core/hooks/useOnEnter";
+import useOnEnter from "../../hooks/useOnEnter";
 import CenterLayout from "../layouts/CenterLayout";
 
 const classNames = {
