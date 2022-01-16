@@ -11,14 +11,11 @@ const classNames = {
     background: ${theme.palette.faint};
     border: none;
     color: ${theme.palette.white};
-    padding: ${theme.spacing["8px"]};
+    padding: ${theme.spacing["16px"]} ${theme.spacing["8px"]};
 
     :focus {
       outline: 2px solid ${theme.palette.primary};
     }
-  `,
-  withCharacterCount: css`
-    padding-bottom: ${theme.spacing["16px"]};
   `,
   fullWidth: css`
     width: 100%;
@@ -35,7 +32,7 @@ const classNames = {
     position: absolute;
     right: ${theme.spacing["4px"]};
     bottom: ${theme.spacing["4px"]};
-    color: ${theme.palette.primary};
+    color: ${theme.palette.white};
   `,
 };
 
@@ -109,11 +106,7 @@ export default function TextArea({
         value={value}
         minRows={minRows}
         maxRows={maxRows}
-        className={cx(
-          classNames.textarea,
-          fullWidth && classNames.fullWidth,
-          showCharacterCount && classNames.withCharacterCount
-        )}
+        className={cx(classNames.textarea, fullWidth && classNames.fullWidth)}
         onChange={handleOnChange}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}

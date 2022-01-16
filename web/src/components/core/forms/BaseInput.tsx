@@ -8,11 +8,15 @@ const classNames = {
     border: none;
     outline: none;
     color: ${theme.palette.white};
+    padding: ${theme.spacing["4px"]};
+    border-top: 2px solid #00000000;
+    border-left: 2px solid #00000000;
+    border-right: 2px solid #00000000;
     border-bottom: 2px solid ${theme.palette.lightGray};
 
     :focus {
-      border-bottom: 2px solid ${theme.palette.primary};
-      color: ${theme.palette.primary};
+      ${theme.cornerRadius.small}
+      border: 2px solid ${theme.palette.primary};
     }
   `,
   visiblyHidden: css`
