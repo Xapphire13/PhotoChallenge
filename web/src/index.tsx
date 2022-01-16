@@ -33,6 +33,15 @@ export const classNames = {
       textarea {
         ${theme.typography.base.medium}
       }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        ${theme.typography.title.medium}
+      }
     }
   `,
 };

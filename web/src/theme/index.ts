@@ -30,18 +30,31 @@ export default {
   },
   typography: {
     base: {
-      // Ratio of 1.5 for font-size -> line-height
       small: {
         fontSize: "12px",
-        lineHeight: "18px",
+        lineHeight: 1.5,
       },
       medium: {
         fontSize: "14px",
-        lineHeight: "21px",
+        lineHeight: 1.5,
       },
       large: {
         fontSize: "16px",
-        lineHeight: "24px",
+        lineHeight: 1.5,
+      },
+    },
+    title: {
+      small: {
+        fontSize: "22px",
+        lineHeight: 1.5,
+      },
+      medium: {
+        fontSize: "28px",
+        lineHeight: 1.5,
+      },
+      large: {
+        fontSize: "32px",
+        lineHeight: 1.5,
       },
     },
   },
