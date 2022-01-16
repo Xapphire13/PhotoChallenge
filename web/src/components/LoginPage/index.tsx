@@ -8,6 +8,7 @@ import CardContent from "../core/Card/CardContent";
 import PasswordInput from "../core/forms/PasswordInput";
 import useOnEnter from "../../hooks/useOnEnter";
 import CenterLayout from "../layouts/CenterLayout";
+import usePersistentStorage from "../../hooks/usePersistentStorage";
 
 const classNames = {
   cardContent: css`
@@ -22,12 +23,14 @@ const classNames = {
 export default function LoginPage() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
+  const [, setLoggedIn] = usePersistentStorage<boolean>("logged-in");
 
   const submitDisabled = !password.trim();
 
   const handleSubmitPressed = () => {
     if (!submitDisabled) {
       localStorage.setItem("logged-in", "true");
+      setLoggedIn(true);
       navigate("/");
     }
   };

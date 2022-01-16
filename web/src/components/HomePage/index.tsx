@@ -9,6 +9,7 @@ import TextArea from "../core/forms/TextArea";
 import useOnEnter from "../../hooks/useOnEnter";
 import CenterLayout from "../layouts/CenterLayout";
 import NameModal from "./NameModal";
+import usePersistentStorage from "../../hooks/usePersistentStorage";
 
 const classNames = {
   submitButton: css`
@@ -18,7 +19,8 @@ const classNames = {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+  const [name, setName] = usePersistentStorage<string>("name");
+  const [loggedIn] = usePersistentStorage<boolean>("logged-in");
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
 
@@ -35,11 +37,10 @@ export default function HomePage() {
   const handleKeyPress = useOnEnter(handleSubmit, { requireModifier: true });
 
   useEffect(() => {
-    const loggedIn = Boolean(localStorage.getItem("logged-in"));
     if (!loggedIn) {
       navigate("/login");
     }
-  }, [navigate]);
+  }, [loggedIn, navigate]);
 
   return (
     <>
@@ -69,7 +70,7 @@ export default function HomePage() {
         </Card>
       </CenterLayout>
 
-      <NameModal isOpen={!name.trim()} onSubmit={handleNameSet} />
+      <NameModal isOpen={!name || !name.trim()} onSubmit={handleNameSet} />
     </>
   );
 }
