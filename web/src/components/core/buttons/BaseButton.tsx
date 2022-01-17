@@ -2,6 +2,7 @@ import { css, cx } from "@linaria/core";
 import React from "react";
 import theme from "../../../theme";
 import StylableProps from "../../../theme/StylableProps";
+import TextLink from "../TextLink";
 
 export const classNames = {
   container: css`
@@ -24,9 +25,11 @@ export const classNames = {
 
 export interface BaseButtonProps extends StylableProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (ev: React.MouseEvent) => void;
   fullWidth?: boolean;
   disabled?: boolean;
+  href?: string;
+  newTab?: boolean;
 }
 
 export default function BaseButton({
@@ -35,7 +38,26 @@ export default function BaseButton({
   className,
   fullWidth,
   disabled,
+  href,
+  newTab,
 }: BaseButtonProps) {
+  if (href) {
+    return (
+      <TextLink
+        className={cx(
+          classNames.container,
+          fullWidth && classNames.fullWidth,
+          className
+        )}
+        onClick={disabled ? undefined : onClick}
+        href={href}
+        newTab={newTab}
+      >
+        {children}
+      </TextLink>
+    );
+  }
+
   return (
     <button
       type="button"

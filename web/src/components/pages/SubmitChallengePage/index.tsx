@@ -4,8 +4,10 @@ import useOnEnter from "../../../hooks/useOnEnter";
 import theme from "../../../theme";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
 import TextArea from "../../core/forms/TextArea";
+import Footer from "../../footer";
 import CenterLayout from "../../layouts/CenterLayout";
 import ColumnLayout from "../../layouts/ColumnLayout";
+import FooterLayout from "../../layouts/FooterLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import NavBar from "../../NavBar";
 
@@ -37,31 +39,36 @@ export default function SubmitChallengePage() {
   return (
     <NavBarLayout>
       <NavBar />
-      <CenterLayout>
-        <ColumnLayout>
-          <h1>Submit a challenge...</h1>
-          <TextArea
-            id="challenge-text"
-            minRows={1}
-            maxRows={3}
-            value={challengeText}
-            onChange={setChallengeText}
-            placeholder="Enter challenge here..."
-            onKeyPress={handleKeyPress}
-            characterLimit={250}
-            className={cx(classNames.textarea)}
-            autoFocus
-          />
-          <PrimaryButton
-            className={cx(classNames.submitButton)}
-            disabled={submitDisabled}
-            onClick={handleSubmit}
-            fullWidth
-          >
-            Submit
-          </PrimaryButton>
-        </ColumnLayout>
-      </CenterLayout>
+
+      <FooterLayout>
+        <CenterLayout>
+          <ColumnLayout>
+            <h1>Submit a challenge...</h1>
+            <TextArea
+              id="challenge-text"
+              minRows={1}
+              maxRows={3}
+              value={challengeText}
+              onChange={setChallengeText}
+              placeholder="Enter challenge here..."
+              onKeyPress={handleKeyPress}
+              characterLimit={250}
+              className={cx(classNames.textarea)}
+              autoFocus
+            />
+            <PrimaryButton
+              className={cx(classNames.submitButton)}
+              disabled={submitDisabled}
+              onClick={handleSubmit}
+              fullWidth
+            >
+              Submit
+            </PrimaryButton>
+          </ColumnLayout>
+        </CenterLayout>
+
+        <Footer />
+      </FooterLayout>
     </NavBarLayout>
   );
 }
