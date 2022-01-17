@@ -8,6 +8,7 @@ import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
 import SubmitChallengePage from "./components/pages/SubmitChallengePage";
 import InvitePage from "./components/pages/InvitePage";
+import ToastProvider from "./contexts/ToastProvider";
 
 export const classNames = {
   globals: css`
@@ -61,15 +62,17 @@ export const classNames = {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/new-challenge" element={<SubmitChallengePage />} />
-        <Route path="/invite/:inviteCode" element={<InvitePage />} />
-        <Route path="*" element={<LandingPage />} />
-      </Routes>
-    </BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/new-challenge" element={<SubmitChallengePage />} />
+          <Route path="/invite/:inviteCode" element={<InvitePage />} />
+          <Route path="*" element={<LandingPage />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 

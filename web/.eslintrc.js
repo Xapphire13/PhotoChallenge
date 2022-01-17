@@ -26,5 +26,6 @@ module.exports = {
     "import/extensions": [2, "never"],
     "import/no-unresolved": "off",
     "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/no-unused-vars": "off",
   },
 };
