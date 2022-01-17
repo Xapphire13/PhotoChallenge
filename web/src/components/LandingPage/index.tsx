@@ -10,6 +10,7 @@ import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
 import ColumnLayout from "../layouts/ColumnLayout";
 import ElevatedCardContainer from "../core/Card/ElevatedCardContainer";
+import CenterLayout from "../layouts/CenterLayout";
 
 const classNames = {
   colorText: css`
@@ -17,7 +18,7 @@ const classNames = {
   `,
   todaysChallenge: css`
     ${theme.typography.title.large}
-    margin-bottom: ${theme.spacing["24px"]};
+    margin-bottom: ${theme.spacing["32px"]};
   `,
   challengeText: css`
     text-decoration: underline;
@@ -45,30 +46,34 @@ export default function LandingPage() {
   return (
     <NavBarLayout>
       <NavBar />
-      <ColumnLayout>
-        <p className={cx(classNames.todaysChallenge)}>
-          Today&apos;s challenge is{" "}
-          <span className={cx(classNames.challengeText)}>something shiny</span>
-        </p>
+      <CenterLayout>
+        <ColumnLayout>
+          <p className={cx(classNames.todaysChallenge)}>
+            Today&apos;s challenge is{" "}
+            <span className={cx(classNames.challengeText)}>
+              something shiny
+            </span>
+          </p>
 
-        <ElevatedCardContainer>
-          <Card>
-            <CardContent>
-              <p>
-                Next challenge in{" "}
-                <span className={cx(classNames.colorText)}>1hr 42min</span>
-              </p>
+          <ElevatedCardContainer>
+            <Card>
+              <CardContent>
+                <p>
+                  Next challenge in{" "}
+                  <span className={cx(classNames.colorText)}>1hr 42min</span>
+                </p>
 
-              <SecondaryButton
-                className={cx(classNames.submitChallengeButton)}
-                onClick={handleAddChallengeClicked}
-              >
-                Submit a challenge
-              </SecondaryButton>
-            </CardContent>
-          </Card>
-        </ElevatedCardContainer>
-      </ColumnLayout>
+                <SecondaryButton
+                  className={cx(classNames.submitChallengeButton)}
+                  onClick={handleAddChallengeClicked}
+                >
+                  Submit a challenge
+                </SecondaryButton>
+              </CardContent>
+            </Card>
+          </ElevatedCardContainer>
+        </ColumnLayout>
+      </CenterLayout>
     </NavBarLayout>
   );
 }

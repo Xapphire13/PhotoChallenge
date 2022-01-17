@@ -7,12 +7,10 @@ import theme from "../../theme";
 import User from "../../types/User";
 import PrimaryButton from "../core/buttons/PrimaryButton";
 import TextInput from "../core/forms/TextInput";
+import CenterLayout from "../layouts/CenterLayout";
 import ColumnLayout from "../layouts/ColumnLayout";
 
 const classNames = {
-  container: css`
-    display: flex;
-  `,
   form: css`
     display: flex;
     flex-direction: column;
@@ -43,7 +41,7 @@ export default function InvitePage() {
   const handleKeyPress = useOnEnter(handleSubmit);
 
   return (
-    <div className={cx(classNames.container)}>
+    <CenterLayout>
       <ColumnLayout>
         <h1>Create an account</h1>
         <form className={cx(classNames.form)}>
@@ -77,6 +75,6 @@ export default function InvitePage() {
           </PrimaryButton>
         </form>
       </ColumnLayout>
-    </div>
+    </CenterLayout>
   );
 }

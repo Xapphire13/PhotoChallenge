@@ -24,6 +24,7 @@ export default {
     "16px": "16px",
     "24px": "24px",
     "32px": "32px",
+    "64px": "64px",
   },
   elevation: {
     primary: {

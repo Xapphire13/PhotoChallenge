@@ -5,8 +5,8 @@ import StylableProps from "../../theme/StylableProps";
 
 const classNames = {
   container: css`
-    margin-left: auto;
-    margin-right: auto;
+    display: flex;
+    flex-direction: column;
     padding: ${theme.spacing["16px"]};
     max-width: 768px;
   `,
