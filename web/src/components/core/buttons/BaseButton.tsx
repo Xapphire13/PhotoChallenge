@@ -18,9 +18,6 @@ export const classNames = {
       color: ${theme.palette.faint};
     }
   `,
-  fullWidth: css`
-    width: 100%;
-  `,
 };
 
 export interface BaseButtonProps extends StylableProps {

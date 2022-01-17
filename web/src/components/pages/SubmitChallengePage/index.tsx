@@ -1,8 +1,11 @@
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import useOnEnter from "../../../hooks/useOnEnter";
 import theme from "../../../theme";
+import ButtonGroup from "../../core/buttons/ButtonGroup";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
+import SecondaryButton from "../../core/buttons/SecondaryButton";
 import TextArea from "../../core/forms/TextArea";
 import Footer from "../../footer";
 import CenterLayout from "../../layouts/CenterLayout";
@@ -12,7 +15,7 @@ import NavBarLayout from "../../layouts/NavBarLayout";
 import NavBar from "../../NavBar";
 
 const classNames = {
-  submitButton: css`
+  buttonGroup: css`
     /* HACKHACK Subtract 6px due to weird bug where input is getting blank space after it */
     margin-top: calc(${theme.spacing["8px"]} - 6px);
   `,
@@ -23,16 +26,23 @@ const classNames = {
       width: 400px;
     }
   `,
+  button: css`
+    flex-grow: 1;
+  `,
 };
 
 export default function SubmitChallengePage() {
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     if (!submitDisabled) {
       setChallengeText("");
     }
+  };
+  const handleCancel = () => {
+    navigate(-1);
   };
   const handleKeyPress = useOnEnter(handleSubmit, { requireModifier: true });
 
@@ -56,14 +66,22 @@ export default function SubmitChallengePage() {
               className={cx(classNames.textarea)}
               autoFocus
             />
-            <PrimaryButton
-              className={cx(classNames.submitButton)}
-              disabled={submitDisabled}
-              onClick={handleSubmit}
-              fullWidth
-            >
-              Submit
-            </PrimaryButton>
+
+            <ButtonGroup className={cx(classNames.buttonGroup)}>
+              <SecondaryButton
+                className={cx(classNames.button)}
+                onClick={handleCancel}
+              >
+                Cancel
+              </SecondaryButton>
+              <PrimaryButton
+                className={cx(classNames.button)}
+                disabled={submitDisabled}
+                onClick={handleSubmit}
+              >
+                Submit
+              </PrimaryButton>
+            </ButtonGroup>
           </ColumnLayout>
         </CenterLayout>
 
