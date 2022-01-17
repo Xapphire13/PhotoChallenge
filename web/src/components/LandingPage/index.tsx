@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import usePersistentStorage from "../../hooks/usePersistentStorage";
 import NavBar from "../NavBar";
 import NavBarLayout from "../layouts/NavBarLayout";
-import User from "../../types/User";
 import theme from "../../theme";
 import SecondaryButton from "../core/buttons/SecondaryButton";
 import Card from "../core/Card";

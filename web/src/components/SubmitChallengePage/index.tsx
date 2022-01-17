@@ -20,7 +20,7 @@ const classNames = {
   textarea: css`
     width: 100%;
 
-    ${theme.responsive.largeAndAbove} {
+    ${theme.responsive.mediumAndAbove} {
       width: 400px;
     }
   `,

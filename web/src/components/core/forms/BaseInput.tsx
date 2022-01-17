@@ -18,6 +18,9 @@ const classNames = {
   visiblyHidden: css`
     display: none;
   `,
+  fullWidth: css`
+    width: 100%;
+  `,
 };
 
 export type LabelOrPlaceHolderRequired =
@@ -28,6 +31,7 @@ export type BaseInputProps = {
   id: string;
   value?: string;
   onChange?: (value: string) => void;
+  fullWidth?: boolean;
 } & LabelOrPlaceHolderRequired &
   Omit<
     React.DetailedHTMLProps<
@@ -45,6 +49,7 @@ export default function BaseInput({
   onChange,
   type,
   className,
+  fullWidth,
   ...rest
 }: BaseInputProps) {
   const handleOnChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +69,11 @@ export default function BaseInput({
         value={value}
         onChange={handleOnChange}
         placeholder={placeholder}
-        className={cx(classNames.inputField, className)}
+        className={cx(
+          classNames.inputField,
+          fullWidth && classNames.fullWidth,
+          className
+        )}
         {...rest}
       />
     </label>

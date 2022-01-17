@@ -18,6 +18,7 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       title: "Photo Challenge",
+      publicPath: "/",
     }),
 
     new MiniCssExtractPlugin(),

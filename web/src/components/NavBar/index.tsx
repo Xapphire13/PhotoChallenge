@@ -27,7 +27,7 @@ export default function NavBar() {
         {user && (
           <>
             Welcome{" "}
-            <span className={cx(classNames.colorText)}>{user.name}</span>
+            <span className={cx(classNames.colorText)}>{user.username}</span>
           </>
         )}
       </div>

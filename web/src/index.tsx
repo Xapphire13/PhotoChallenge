@@ -7,6 +7,7 @@ import theme from "./theme";
 import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import SubmitChallengePage from "./components/SubmitChallengePage";
+import InvitePage from "./components/InvitePage";
 
 export const classNames = {
   globals: css`
@@ -65,6 +66,8 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/new-challenge" element={<SubmitChallengePage />} />
+        <Route path="/invite/:inviteCode" element={<InvitePage />} />
+        <Route path="*" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   );
