@@ -6,6 +6,6 @@ export default styled(BaseButton)`
   background: ${theme.palette.primary};
 
   :disabled {
-    background: ${theme.palette.faint};
+    background: ${theme.palette.background1};
   }
 `;

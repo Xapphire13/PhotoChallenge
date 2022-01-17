@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import useOnEnter from "../../hooks/useOnEnter";
 import theme from "../../theme";
 import PrimaryButton from "../core/buttons/PrimaryButton";
-import Card from "../core/Card";
-import CardContent from "../core/Card/CardContent";
 import TextArea from "../core/forms/TextArea";
 import ColumnLayout from "../layouts/ColumnLayout";
 import NavBarLayout from "../layouts/NavBarLayout";
@@ -14,6 +12,15 @@ const classNames = {
   submitButton: css`
     /* HACKHACK Subtract 6px due to weird bug where input is getting blank space after it */
     margin-top: calc(${theme.spacing["8px"]} - 6px);
+  `,
+  content: css`
+    display: flex;
+    flex-direction: column;
+  `,
+  textarea: css`
+    ${theme.responsive.largeAndAbove} {
+      width: 400px;
+    }
   `,
 };
 
@@ -31,7 +38,7 @@ export default function SubmitChallengePage() {
   return (
     <NavBarLayout>
       <NavBar />
-      <ColumnLayout>
+      <ColumnLayout className={cx(classNames.content)}>
         <h1>Submit a challenge...</h1>
         <TextArea
           id="challenge-text"
@@ -39,10 +46,10 @@ export default function SubmitChallengePage() {
           maxRows={3}
           value={challengeText}
           onChange={setChallengeText}
-          fullWidth
           placeholder="Enter challenge here..."
           onKeyPress={handleKeyPress}
           characterLimit={250}
+          className={cx(classNames.textarea)}
         />
         <PrimaryButton
           className={cx(classNames.submitButton)}

@@ -22,7 +22,7 @@ export const classNames = {
       body {
         ${theme.typography.base.medium}
         font-family: Offside, sans-serif;
-        background: ${theme.palette.background};
+        background: ${theme.palette.background0};
         color: ${theme.palette.white};
       }
 
@@ -32,6 +32,13 @@ export const classNames = {
       select,
       textarea {
         ${theme.typography.base.medium}
+      }
+
+      input,
+      textarea {
+        ::placeholder {
+          color: ${theme.palette.faint};
+        }
       }
 
       h1,

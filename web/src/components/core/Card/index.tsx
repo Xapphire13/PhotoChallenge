@@ -5,8 +5,8 @@ import StylableProps from "../../../theme/StylableProps";
 
 const classNames = {
   container: css`
-    ${theme.cornerRadius.small}
-    border: 1px solid ${theme.palette.lightGray};
+    ${theme.cornerRadius.medium}
+    border: 1px solid ${theme.palette.background1};
   `,
 };
 

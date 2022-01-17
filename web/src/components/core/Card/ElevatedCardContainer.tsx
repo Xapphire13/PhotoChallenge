@@ -6,7 +6,6 @@ const classNames = {
   container: css`
     ${theme.cornerRadius.small}
     ${theme.elevation.primary}
-    background: ${theme.palette.faint};
   `,
 };
 

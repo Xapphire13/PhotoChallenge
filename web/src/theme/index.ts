@@ -1,10 +1,10 @@
 export default {
   palette: {
-    background: "#272727",
+    background0: "#272737",
+    background1: "#3F3F59",
     white: "#FFF",
     black: "#000",
-    lightGray: "#575757",
-    faint: "#333",
+    faint: "#808080",
     primary: "#F61067",
     primaryText: "#FBAAC8", // Text friendly version of primary
     modalBackdrop: "#FFFFFF44",
@@ -59,5 +59,13 @@ export default {
         lineHeight: 1.5,
       },
     },
+  },
+  responsive: {
+    /** 1280px or larger  */
+    largeAndAbove: "@media screen and (min-width: 1280px)",
+    /** 768px or larger  */
+    mediumAndAbove: "@media screen and (min-width: 768px)",
+    /** 320px or larger  */
+    smallAndAbove: "@media screen and (min-width: 320px)",
   },
 };

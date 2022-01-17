@@ -1,7 +1,6 @@
 import { css, cx } from "@linaria/core";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
-import NameModal from "./NameModal";
 import usePersistentStorage from "../../hooks/usePersistentStorage";
 import NavBar from "../NavBar";
 import NavBarLayout from "../layouts/NavBarLayout";
@@ -11,6 +10,7 @@ import SecondaryButton from "../core/buttons/SecondaryButton";
 import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
 import ColumnLayout from "../layouts/ColumnLayout";
+import ElevatedCardContainer from "../core/Card/ElevatedCardContainer";
 
 const classNames = {
   colorText: css`
@@ -31,12 +31,7 @@ const classNames = {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [user, setUser] = usePersistentStorage<User>("user");
   const [loggedIn] = usePersistentStorage<boolean>("logged-in");
-
-  const handleUserSet = (name: string, email: string) => {
-    setUser({ name, email });
-  };
 
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
@@ -57,24 +52,24 @@ export default function LandingPage() {
           <span className={cx(classNames.challengeText)}>something shiny</span>
         </p>
 
-        <Card>
-          <CardContent>
-            <p>
-              Next challenge in{" "}
-              <span className={cx(classNames.colorText)}>1hr 42min</span>
-            </p>
+        <ElevatedCardContainer>
+          <Card>
+            <CardContent>
+              <p>
+                Next challenge in{" "}
+                <span className={cx(classNames.colorText)}>1hr 42min</span>
+              </p>
 
-            <SecondaryButton
-              className={cx(classNames.submitChallengeButton)}
-              onClick={handleAddChallengeClicked}
-            >
-              Submit a challenge
-            </SecondaryButton>
-          </CardContent>
-        </Card>
+              <SecondaryButton
+                className={cx(classNames.submitChallengeButton)}
+                onClick={handleAddChallengeClicked}
+              >
+                Submit a challenge
+              </SecondaryButton>
+            </CardContent>
+          </Card>
+        </ElevatedCardContainer>
       </ColumnLayout>
-
-      <NameModal isOpen={!user} onSubmit={handleUserSet} />
     </NavBarLayout>
   );
 }

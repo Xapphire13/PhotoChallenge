@@ -14,7 +14,7 @@ export const classNames = {
 
     :disabled {
       cursor: not-allowed;
-      color: ${theme.palette.lightGray};
+      color: ${theme.palette.faint};
     }
   `,
   fullWidth: css`

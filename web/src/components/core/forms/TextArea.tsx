@@ -8,7 +8,7 @@ const classNames = {
   textarea: css`
     ${theme.cornerRadius.small}
     resize: none;
-    background: ${theme.palette.faint};
+    background: ${theme.palette.background1};
     border: none;
     color: ${theme.palette.white};
     padding: ${theme.spacing["16px"]} ${theme.spacing["8px"]};
@@ -63,6 +63,7 @@ export default function TextArea({
   label,
   placeholder,
   characterLimit,
+  className,
   ...rest
 }: TextAreaProps) {
   const [focused, setFocused] = useState(false);
@@ -106,7 +107,11 @@ export default function TextArea({
         value={value}
         minRows={minRows}
         maxRows={maxRows}
-        className={cx(classNames.textarea, fullWidth && classNames.fullWidth)}
+        className={cx(
+          classNames.textarea,
+          fullWidth && classNames.fullWidth,
+          className
+        )}
         onChange={handleOnChange}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}

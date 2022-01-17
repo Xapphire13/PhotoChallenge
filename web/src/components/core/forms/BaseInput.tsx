@@ -9,14 +9,10 @@ const classNames = {
     outline: none;
     color: ${theme.palette.white};
     padding: ${theme.spacing["4px"]};
-    border-top: 2px solid #00000000;
-    border-left: 2px solid #00000000;
-    border-right: 2px solid #00000000;
-    border-bottom: 2px solid ${theme.palette.lightGray};
+    border-bottom: 2px solid ${theme.palette.background1};
 
     :focus {
-      ${theme.cornerRadius.small}
-      border: 2px solid ${theme.palette.primary};
+      border-bottom: 2px solid ${theme.palette.primary};
     }
   `,
   visiblyHidden: css`
