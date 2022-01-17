@@ -4,10 +4,10 @@ import { css } from "@linaria/core";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import theme from "./theme";
-import LandingPage from "./components/LandingPage";
-import LoginPage from "./components/LoginPage";
-import SubmitChallengePage from "./components/SubmitChallengePage";
-import InvitePage from "./components/InvitePage";
+import LandingPage from "./components/pages/LandingPage";
+import LoginPage from "./components/pages/LoginPage";
+import SubmitChallengePage from "./components/pages/SubmitChallengePage";
+import InvitePage from "./components/pages/InvitePage";
 
 export const classNames = {
   globals: css`

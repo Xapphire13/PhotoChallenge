@@ -1,13 +1,13 @@
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
-import useOnEnter from "../../hooks/useOnEnter";
-import theme from "../../theme";
-import PrimaryButton from "../core/buttons/PrimaryButton";
-import TextArea from "../core/forms/TextArea";
-import CenterLayout from "../layouts/CenterLayout";
-import ColumnLayout from "../layouts/ColumnLayout";
-import NavBarLayout from "../layouts/NavBarLayout";
-import NavBar from "../NavBar";
+import useOnEnter from "../../../hooks/useOnEnter";
+import theme from "../../../theme";
+import PrimaryButton from "../../core/buttons/PrimaryButton";
+import TextArea from "../../core/forms/TextArea";
+import CenterLayout from "../../layouts/CenterLayout";
+import ColumnLayout from "../../layouts/ColumnLayout";
+import NavBarLayout from "../../layouts/NavBarLayout";
+import NavBar from "../../NavBar";
 
 const classNames = {
   submitButton: css`
