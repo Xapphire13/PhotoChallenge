@@ -62,6 +62,7 @@ export default function LoginPage() {
                 onChange={setUsername}
                 placeholder="Username"
                 className={cx(classNames.formField)}
+                autoFocus
               />
               <TextInput
                 id="password"

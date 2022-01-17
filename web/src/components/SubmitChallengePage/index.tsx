@@ -18,6 +18,8 @@ const classNames = {
     flex-direction: column;
   `,
   textarea: css`
+    width: 100%;
+
     ${theme.responsive.largeAndAbove} {
       width: 400px;
     }
@@ -50,6 +52,7 @@ export default function SubmitChallengePage() {
           onKeyPress={handleKeyPress}
           characterLimit={250}
           className={cx(classNames.textarea)}
+          autoFocus
         />
         <PrimaryButton
           className={cx(classNames.submitButton)}

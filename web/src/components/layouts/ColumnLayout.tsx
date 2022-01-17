@@ -7,7 +7,7 @@ const classNames = {
   container: css`
     margin-left: auto;
     margin-right: auto;
-    padding: ${theme.spacing["16px"]} 0;
+    padding: ${theme.spacing["16px"]};
     max-width: 768px;
   `,
 };
