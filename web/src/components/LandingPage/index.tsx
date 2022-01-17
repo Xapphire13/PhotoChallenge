@@ -10,22 +10,22 @@ import theme from "../../theme";
 import SecondaryButton from "../core/buttons/SecondaryButton";
 import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
+import ColumnLayout from "../layouts/ColumnLayout";
 
 const classNames = {
   colorText: css`
     color: ${theme.palette.primaryText};
   `,
-  content: css`
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 768px;
-  `,
   todaysChallenge: css`
     ${theme.typography.title.large}
+    margin-bottom: ${theme.spacing["24px"]};
   `,
   challengeText: css`
     text-decoration: underline;
     text-decoration-color: ${theme.palette.primaryText};
+  `,
+  submitChallengeButton: css`
+    margin-top: ${theme.spacing["8px"]};
   `,
 };
 
@@ -51,7 +51,7 @@ export default function LandingPage() {
   return (
     <NavBarLayout>
       <NavBar />
-      <div className={cx(classNames.content)}>
+      <ColumnLayout>
         <p className={cx(classNames.todaysChallenge)}>
           Today&apos;s challenge is{" "}
           <span className={cx(classNames.challengeText)}>something shiny</span>
@@ -64,12 +64,15 @@ export default function LandingPage() {
               <span className={cx(classNames.colorText)}>1hr 42min</span>
             </p>
 
-            <SecondaryButton onClick={handleAddChallengeClicked}>
+            <SecondaryButton
+              className={cx(classNames.submitChallengeButton)}
+              onClick={handleAddChallengeClicked}
+            >
               Submit a challenge
             </SecondaryButton>
           </CardContent>
         </Card>
-      </div>
+      </ColumnLayout>
 
       <NameModal isOpen={!user} onSubmit={handleUserSet} />
     </NavBarLayout>

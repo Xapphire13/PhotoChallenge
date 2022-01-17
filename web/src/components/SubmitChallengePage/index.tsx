@@ -6,7 +6,7 @@ import PrimaryButton from "../core/buttons/PrimaryButton";
 import Card from "../core/Card";
 import CardContent from "../core/Card/CardContent";
 import TextArea from "../core/forms/TextArea";
-import CenterLayout from "../layouts/CenterLayout";
+import ColumnLayout from "../layouts/ColumnLayout";
 import NavBarLayout from "../layouts/NavBarLayout";
 import NavBar from "../NavBar";
 
@@ -31,32 +31,28 @@ export default function SubmitChallengePage() {
   return (
     <NavBarLayout>
       <NavBar />
-      <CenterLayout>
-        <Card>
-          <CardContent>
-            <h1>Submit a challenge...</h1>
-            <TextArea
-              id="challenge-text"
-              minRows={1}
-              maxRows={3}
-              value={challengeText}
-              onChange={setChallengeText}
-              fullWidth
-              placeholder="Enter challenge here..."
-              onKeyPress={handleKeyPress}
-              characterLimit={250}
-            />
-            <PrimaryButton
-              className={cx(classNames.submitButton)}
-              disabled={submitDisabled}
-              onClick={handleSubmit}
-              fullWidth
-            >
-              Submit
-            </PrimaryButton>
-          </CardContent>
-        </Card>
-      </CenterLayout>
+      <ColumnLayout>
+        <h1>Submit a challenge...</h1>
+        <TextArea
+          id="challenge-text"
+          minRows={1}
+          maxRows={3}
+          value={challengeText}
+          onChange={setChallengeText}
+          fullWidth
+          placeholder="Enter challenge here..."
+          onKeyPress={handleKeyPress}
+          characterLimit={250}
+        />
+        <PrimaryButton
+          className={cx(classNames.submitButton)}
+          disabled={submitDisabled}
+          onClick={handleSubmit}
+          fullWidth
+        >
+          Submit
+        </PrimaryButton>
+      </ColumnLayout>
     </NavBarLayout>
   );
 }

@@ -41,6 +41,11 @@ export const classNames = {
       h5,
       h6 {
         ${theme.typography.title.medium}
+        margin: 0 0 ${theme.spacing["12px"]};
+      }
+
+      p {
+        margin: 0;
       }
     }
   `,
