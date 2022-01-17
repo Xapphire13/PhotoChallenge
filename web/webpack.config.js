@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -13,6 +14,7 @@ const config = {
     open: true,
     host: "localhost",
   },
+  devtool: isProduction ? false : "source-map",
   plugins: [
     new HtmlWebpackPlugin({
       title: "Photo Challenge",
@@ -26,11 +28,6 @@ const config = {
   ],
   module: {
     rules: [
-      // {
-      //   test: /\.(ts|tsx)$/i,
-      //   loader: "ts-loader",
-      //   exclude: ["/node_modules/"],
-      // },
       {
         test: /\.(ts|tsx)$/i,
         exclude: ["/node_modules/"],
