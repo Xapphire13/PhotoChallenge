@@ -1,0 +1,1 @@
+web: java -jar build/libs/com.xapphire13.photo-challenge-server-0.0.1-all.jar
