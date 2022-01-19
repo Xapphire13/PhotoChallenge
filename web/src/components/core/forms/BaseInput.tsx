@@ -29,6 +29,7 @@ export type LabelOrPlaceHolderRequired =
 
 export type BaseInputProps = {
   id: string;
+  name: string;
   value?: string;
   onChange?: (value: string) => void;
   fullWidth?: boolean;
@@ -38,7 +39,7 @@ export type BaseInputProps = {
       React.InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >,
-    "value" | "onChange" | "label" | "placeholder"
+    "id" | "value" | "onChange" | "label" | "placeholder" | "name"
   >;
 
 export default function BaseInput({
@@ -50,6 +51,7 @@ export default function BaseInput({
   type,
   className,
   fullWidth,
+  name,
   ...rest
 }: BaseInputProps) {
   const handleOnChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,7 @@ export default function BaseInput({
       </span>
       <input
         id={id}
+        name={name}
         type={type}
         value={value}
         onChange={handleOnChange}

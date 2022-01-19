@@ -1,13 +1,12 @@
 import { css, cx } from "@linaria/core";
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import theme from "../../../theme";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
 import Card from "../../core/Card";
 import CardContent from "../../core/Card/CardContent";
 import useOnEnter from "../../../hooks/useOnEnter";
 import CenterLayout from "../../layouts/CenterLayout";
-import usePersistentStorage from "../../../hooks/usePersistentStorage";
 import TextInput from "../../core/forms/TextInput";
 import ElevatedCardContainer from "../../core/Card/ElevatedCardContainer";
 
@@ -28,25 +27,27 @@ const classNames = {
   formField: css`
     width: 100%;
   `,
+  loginError: css`
+    margin-top: ${theme.spacing["8px"]};
+    color: ${theme.palette.warning};
+  `,
 };
 
 export default function LoginPage() {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [, setLoggedIn] = usePersistentStorage<boolean>("logged-in");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const submitDisabled = !username.trim() || !password.trim();
-
-  const handleSubmitPressed = () => {
+  const handleSubmitForm = () => {
     if (!submitDisabled) {
-      localStorage.setItem("logged-in", "true");
-      setLoggedIn(true);
-      navigate("/");
+      formRef.current?.submit();
     }
   };
 
-  const handleKeyPress = useOnEnter(handleSubmitPressed);
+  const loginError = Boolean(searchParams.get("error"));
+  const handleKeyPress = useOnEnter(handleSubmitForm);
 
   return (
     <CenterLayout>
@@ -55,9 +56,10 @@ export default function LoginPage() {
           <CardContent className={cx(classNames.cardContent)}>
             <h1>Login</h1>
 
-            <form className={cx(classNames.form)}>
+            <form ref={formRef} className={cx(classNames.form)} method="POST">
               <TextInput
                 id="username"
+                name="username"
                 value={username}
                 onChange={setUsername}
                 placeholder="Username"
@@ -66,6 +68,7 @@ export default function LoginPage() {
               />
               <TextInput
                 id="password"
+                name="password"
                 placeholder="Password"
                 value={password}
                 onChange={setPassword}
@@ -76,12 +79,18 @@ export default function LoginPage() {
 
               <PrimaryButton
                 className={classNames.submitButton}
-                onClick={handleSubmitPressed}
                 disabled={submitDisabled}
+                submit
               >
                 Submit
               </PrimaryButton>
             </form>
+
+            {loginError && (
+              <p className={cx(classNames.loginError)}>
+                Incorrect username/password
+              </p>
+            )}
           </CardContent>
         </Card>
       </ElevatedCardContainer>

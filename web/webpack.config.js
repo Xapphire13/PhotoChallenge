@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
 
+/** @type {import("webpack").Configuration}  */
 const config = {
   entry: "./src/index.tsx",
   output: {
@@ -13,6 +14,25 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
+    proxy: [
+      {
+        context: ["/login"],
+        target: "http://localhost:5001",
+        bypass:
+          /** @type {import("webpack-dev-server").ByPass} */
+          (req) => {
+            if (req.method === "GET") {
+              return "/login";
+            }
+
+            return null;
+          },
+      },
+      {
+        context: ["/graphql"],
+        target: "http://localhost:5001",
+      },
+    ],
   },
   devtool: isProduction ? false : "source-map",
   plugins: [

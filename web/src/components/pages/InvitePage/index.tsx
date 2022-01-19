@@ -47,6 +47,7 @@ export default function InvitePage() {
         <form className={cx(classNames.form)}>
           <TextInput
             id="username"
+            name="username"
             placeholder="Username"
             fullWidth
             autoFocus
@@ -55,6 +56,7 @@ export default function InvitePage() {
           />
           <TextInput
             id="email"
+            name="email"
             placeholder="Email"
             type="email"
             fullWidth
@@ -63,6 +65,7 @@ export default function InvitePage() {
           />
           <TextInput
             id="password"
+            name="password"
             placeholder="Password"
             type="password"
             fullWidth

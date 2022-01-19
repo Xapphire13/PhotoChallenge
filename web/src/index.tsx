@@ -9,6 +9,7 @@ import LoginPage from "./components/pages/LoginPage";
 import SubmitChallengePage from "./components/pages/SubmitChallengePage";
 import InvitePage from "./components/pages/InvitePage";
 import ToastProvider from "./contexts/ToastProvider";
+import UserContextProvider from "./contexts/UserContextProvider";
 
 export const classNames = {
   globals: css`
@@ -64,13 +65,15 @@ export default function App() {
   return (
     <ToastProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/new-challenge" element={<SubmitChallengePage />} />
-          <Route path="/invite/:inviteCode" element={<InvitePage />} />
-          <Route path="*" element={<LandingPage />} />
-        </Routes>
+        <UserContextProvider>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/new-challenge" element={<SubmitChallengePage />} />
+            <Route path="/invite/:inviteCode" element={<InvitePage />} />
+            <Route path="*" element={<LandingPage />} />
+          </Routes>
+        </UserContextProvider>
       </BrowserRouter>
     </ToastProvider>
   );

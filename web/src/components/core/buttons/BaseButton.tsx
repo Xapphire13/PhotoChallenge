@@ -23,29 +23,25 @@ export const classNames = {
 export interface BaseButtonProps extends StylableProps {
   children: React.ReactNode;
   onClick?: (ev: React.MouseEvent) => void;
-  fullWidth?: boolean;
   disabled?: boolean;
   href?: string;
   newTab?: boolean;
+  submit?: boolean;
 }
 
 export default function BaseButton({
   children,
   onClick,
   className,
-  fullWidth,
   disabled,
   href,
   newTab,
+  submit,
 }: BaseButtonProps) {
   if (href) {
     return (
       <TextLink
-        className={cx(
-          classNames.container,
-          fullWidth && classNames.fullWidth,
-          className
-        )}
+        className={cx(classNames.container, className)}
         onClick={disabled ? undefined : onClick}
         href={href}
         newTab={newTab}
@@ -57,14 +53,10 @@ export default function BaseButton({
 
   return (
     <button
-      type="button"
+      type={submit ? "submit" : "button"}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={cx(
-        classNames.container,
-        fullWidth && classNames.fullWidth,
-        className
-      )}
+      className={cx(classNames.container, className)}
     >
       {children}
     </button>

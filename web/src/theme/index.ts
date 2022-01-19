@@ -8,6 +8,7 @@ export default {
     primary: "#F61067",
     primaryText: "#FBAAC8", // Text friendly version of primary
     modalBackdrop: "#FFFFFF44",
+    warning: "#FF2424",
   },
   cornerRadius: {
     small: {
