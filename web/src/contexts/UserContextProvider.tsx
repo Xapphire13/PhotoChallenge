@@ -1,13 +1,30 @@
 import React, { useEffect, useMemo } from "react";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { gql, useQuery } from "@apollo/client";
+import User from "../types/User";
 
 export const UserContext = React.createContext({
   loggedIn: false,
+  user: undefined as User | undefined,
 });
 
 export interface UserContextProviderProps {
   children: React.ReactNode;
+}
+
+const GET_ME_QUERY = gql`
+  query GetMe {
+    me {
+      id
+      username
+      email
+    }
+  }
+`;
+
+interface GetMeQuery {
+  me?: User;
 }
 
 export default function UserContextProvider({
@@ -17,12 +34,17 @@ export default function UserContextProvider({
   const loginPageMatch = useMatch("/login");
   const navigate = useNavigate();
   const loggedIn = !!Cookies.get("loggedIn");
+  const { data, loading } = useQuery<GetMeQuery>(GET_ME_QUERY, {
+    skip: !loggedIn,
+  });
+  const user = data?.me;
 
   const contextValue: React.ContextType<typeof UserContext> = useMemo(
     () => ({
       loggedIn,
+      user,
     }),
-    [loggedIn]
+    [loggedIn, user]
   );
 
   useEffect(() => {
@@ -37,6 +59,8 @@ export default function UserContextProvider({
   }, [location.pathname, location.search, loggedIn, loginPageMatch, navigate]);
 
   return (
-    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
+    <UserContext.Provider value={contextValue}>
+      {loggedIn && loading ? undefined : children}
+    </UserContext.Provider>
   );
 }

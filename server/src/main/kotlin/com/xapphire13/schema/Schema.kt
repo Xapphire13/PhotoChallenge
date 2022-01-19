@@ -13,6 +13,7 @@ import io.ktor.application.install
 fun Application.configureSchema(userStore: UserStore) {
     install(GraphQL) {
         playground = true
+        wrapErrors = true
 
         context { call ->
             val token = call.request.cookies["token"]
@@ -40,11 +41,20 @@ fun Application.configureSchema(userStore: UserStore) {
                     else null
                 }
             }
+
             query("user") {
-                resolver { id: String, ctx: Context ->
+                resolver { id: String ->
                     userStore.getUser(id)
                 }.withArgs {
                     arg<String> {name = "id"; description = "The user ID"}
+                }
+            }
+
+            query("me") {
+                resolver {ctx: Context ->
+                    val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
+
+                    userStore.getUser(requestContext.userId)
                 }
             }
         }

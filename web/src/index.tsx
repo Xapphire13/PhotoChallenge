@@ -3,6 +3,7 @@ import React from "react";
 import { css } from "@linaria/core";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import theme from "./theme";
 import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
@@ -61,21 +62,28 @@ export const classNames = {
   `,
 };
 
+const client = new ApolloClient({
+  uri: `http://${window.location.host}/graphql`,
+  cache: new InMemoryCache(),
+});
+
 export default function App() {
   return (
-    <ToastProvider>
-      <BrowserRouter>
-        <UserContextProvider>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/new-challenge" element={<SubmitChallengePage />} />
-            <Route path="/invite/:inviteCode" element={<InvitePage />} />
-            <Route path="*" element={<LandingPage />} />
-          </Routes>
-        </UserContextProvider>
-      </BrowserRouter>
-    </ToastProvider>
+    <ApolloProvider client={client}>
+      <ToastProvider>
+        <BrowserRouter>
+          <UserContextProvider>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/new-challenge" element={<SubmitChallengePage />} />
+              <Route path="/invite/:inviteCode" element={<InvitePage />} />
+              <Route path="*" element={<LandingPage />} />
+            </Routes>
+          </UserContextProvider>
+        </BrowserRouter>
+      </ToastProvider>
+    </ApolloProvider>
   );
 }
 

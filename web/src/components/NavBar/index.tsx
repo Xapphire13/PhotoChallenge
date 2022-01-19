@@ -1,8 +1,7 @@
 import { css, cx } from "@linaria/core";
-import React from "react";
-import usePersistentStorage from "../../hooks/usePersistentStorage";
+import React, { useContext } from "react";
+import { UserContext } from "../../contexts/UserContextProvider";
 import theme from "../../theme";
-import User from "../../types/User";
 
 const classNames = {
   container: css`
@@ -19,7 +18,7 @@ const classNames = {
 };
 
 export default function NavBar() {
-  const [user] = usePersistentStorage<User>("user");
+  const { user } = useContext(UserContext);
 
   return (
     <div className={cx(classNames.container)}>
