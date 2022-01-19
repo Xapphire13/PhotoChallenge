@@ -28,6 +28,7 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:8.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation("com.auth0:java-jwt:3.18.3")
+    implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

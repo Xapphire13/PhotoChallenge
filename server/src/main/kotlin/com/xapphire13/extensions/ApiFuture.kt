@@ -24,3 +24,7 @@ fun <T> ApiFuture<T>.asDeferred(dispatcher: CoroutineDispatcher = Dispatchers.De
 
     return deferred
 }
+
+suspend fun <T> ApiFuture<T>.await(dispatcher: CoroutineDispatcher = Dispatchers.Default): T {
+    return this.asDeferred(dispatcher).await()
+}
