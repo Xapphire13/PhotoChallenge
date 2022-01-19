@@ -1,11 +1,11 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
-import { v4 as uuid } from "uuid";
 import useToast from "../../hooks/useToast";
 import theme from "../../theme";
 import TertiaryButton from "../core/buttons/TertiaryButton";
 import InlineList from "../core/InlineList";
 import TextLink from "../core/TextLink";
+import useCreateInvitation from "./hooks/useCreateInvitation";
 
 const classNames = {
   container: css`
@@ -17,10 +17,12 @@ const classNames = {
 
 export default function Footer() {
   const { addToast } = useToast();
+  const createInvitation = useCreateInvitation();
 
   const handleInviteClicked = async () => {
-    const inviteId = uuid().split("-")[0]; // TODO, generate backend
-    const inviteLink = `${window.location.origin}/invite/${inviteId}`;
+    const invitation = await createInvitation();
+
+    const inviteLink = `${window.location.origin}/invite/${invitation.id}`;
 
     await navigator.clipboard.writeText(inviteLink);
     addToast({
