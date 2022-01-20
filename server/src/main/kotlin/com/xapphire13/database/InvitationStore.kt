@@ -27,9 +27,9 @@ class InvitationStore(db: Firestore) {
     suspend fun createInvitation(userId: String): InvitationResponse {
         val id = NanoIdUtils.randomNanoId(Random(), "$alphabet${alphabet.uppercase()}".toCharArray(), 10)
 
-        invitationsCollection.document(id).set(object {
-            val createdBy = usersCollection.document(userId)
-        }).await()
+        invitationsCollection.document(id).set(mapOf(
+            "createdBy" to usersCollection.document(userId)
+        )).await(Dispatchers.IO)
 
         return InvitationResponse(
             id = id

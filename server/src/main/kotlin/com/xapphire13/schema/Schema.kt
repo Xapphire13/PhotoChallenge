@@ -5,6 +5,7 @@ import com.apurebase.kgraphql.GraphQL
 import com.apurebase.kgraphql.GraphQLError
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.xapphire13.auth.JWTUtils
+import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UserStore
 import com.xapphire13.models.RequestContext
@@ -12,7 +13,11 @@ import com.xapphire13.models.User
 import io.ktor.application.Application
 import io.ktor.application.install
 
-fun Application.configureSchema(userStore: UserStore, invitationStore: InvitationStore) {
+fun Application.configureSchema(
+    userStore: UserStore,
+    invitationStore: InvitationStore,
+    challengeStore: ChallengeStore
+) {
     install(GraphQL) {
         playground = true
         wrapErrors = true
@@ -71,6 +76,7 @@ fun Application.configureSchema(userStore: UserStore, invitationStore: Invitatio
             }
 
             invitationSchema(invitationStore)
+            challengeSchema(challengeStore)
         }
     }
 }

@@ -2,22 +2,19 @@ package com.xapphire13.database
 
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
+import com.xapphire13.extensions.asDeferred
 import com.xapphire13.extensions.await
 import com.xapphire13.models.User
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
 
 class UserStore(db: Firestore) {
     private val usersCollection = db.collection("users")
 
     suspend fun listUsers(): List<User> {
-        val documents = this.usersCollection.listDocuments()
-        val users = documents.map {
-            val result = it.get().await(Dispatchers.IO)
+        val documents = this.usersCollection.listDocuments().map { it.get().asDeferred() }.awaitAll()
 
-            result.toUser()
-        }
-
-        return users
+        return documents.map { it.toUser() }
     }
 
     suspend fun getUser(id: String): User? {
