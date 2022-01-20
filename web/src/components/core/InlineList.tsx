@@ -25,7 +25,12 @@ export default function InlineList({ children }: InlineListProps) {
         (agg, curr, i) =>
           [
             ...agg,
-            i > 0 ? <div className={cx(classNames.separator)}>•</div> : null,
+            i > 0 ? (
+              // eslint-disable-next-line react/no-array-index-key
+              <div key={`sep-${i}`} className={cx(classNames.separator)}>
+                •
+              </div>
+            ) : null,
             curr,
           ].filter(isNotNull),
         []

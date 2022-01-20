@@ -12,6 +12,7 @@ import ElevatedCardContainer from "../../core/Card/ElevatedCardContainer";
 import CenterLayout from "../../layouts/CenterLayout";
 import FooterLayout from "../../layouts/FooterLayout";
 import Footer from "../../footer";
+import useCurrentChallenge from "./hooks/useCurrentChallenge";
 
 const classNames = {
   colorText: css`
@@ -30,8 +31,44 @@ const classNames = {
   `,
 };
 
+function transformFirstLetter(value: string) {
+  const [first, ...rest] = value;
+
+  return [first?.toLowerCase(), ...rest].join("");
+}
+
+function getTimeRemaining(endsAt: Date) {
+  const now = new Date().getTime();
+  const then = endsAt.getTime();
+
+  return then - now;
+}
+
+const MIN_MS = 1000 * 60;
+const HOURS_MS = MIN_MS * 60;
+
+function formatDuration(durationMs: number) {
+  const hours = Math.floor(durationMs / HOURS_MS);
+  const minutes = Math.floor((durationMs % HOURS_MS) / MIN_MS);
+
+  let builder = "";
+
+  if (hours) {
+    builder += `${hours}${hours === 1 ? "hr" : "hrs"} `;
+  }
+
+  builder += `${minutes}${minutes === 1 ? "min" : "mins"}`;
+
+  return builder;
+}
+
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { currentChallenge, loading: currentChallengeLoading } =
+    useCurrentChallenge();
+  const timeRemaining = currentChallenge?.endsAt
+    ? getTimeRemaining(currentChallenge.endsAt)
+    : null;
 
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
@@ -45,10 +82,16 @@ export default function LandingPage() {
         <CenterLayout>
           <ColumnLayout>
             <p className={cx(classNames.todaysChallenge)}>
-              Today&apos;s challenge is{" "}
-              <span className={cx(classNames.challengeText)}>
-                something shiny
-              </span>
+              {currentChallengeLoading ? (
+                "Loading..."
+              ) : (
+                <>
+                  Today&apos;s challenge is{" "}
+                  <span className={cx(classNames.challengeText)}>
+                    {transformFirstLetter(currentChallenge?.name ?? "")}
+                  </span>
+                </>
+              )}
             </p>
 
             <ElevatedCardContainer>
@@ -56,7 +99,9 @@ export default function LandingPage() {
                 <CardContent>
                   <p>
                     Next challenge in{" "}
-                    <span className={cx(classNames.colorText)}>1hr 42min</span>
+                    <span className={cx(classNames.colorText)}>
+                      {formatDuration(timeRemaining ?? 0)}
+                    </span>
                   </p>
 
                   <SecondaryButton
