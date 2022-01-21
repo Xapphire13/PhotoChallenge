@@ -49,7 +49,12 @@ const HOURS_MS = MIN_MS * 60;
 
 function formatDuration(durationMs: number) {
   const hours = Math.floor(durationMs / HOURS_MS);
-  const minutes = Math.floor((durationMs % HOURS_MS) / MIN_MS);
+  let minutes = Math.ceil((durationMs % HOURS_MS) / MIN_MS);
+
+  // Edge case where we load EXACTLY on the hour
+  if (minutes === 60) {
+    minutes = 59;
+  }
 
   let builder = "";
 
@@ -96,7 +101,7 @@ export default function LandingPage() {
                   <p>
                     Next challenge in{" "}
                     <span className={cx(classNames.colorText)}>
-                      {formatDuration(timeRemaining ?? 0)}
+                      {timeRemaining ? formatDuration(timeRemaining) : "--"}
                     </span>
                   </p>
 
