@@ -15,6 +15,8 @@ import kotlinx.coroutines.awaitAll
 import java.text.DateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.Date
 
 class ChallengeStore(db: Firestore) {
     private val challengesCollection = db.collection("challenges")
@@ -36,8 +38,25 @@ class ChallengeStore(db: Firestore) {
 
     suspend fun getCurrentChallenge(): Challenge? {
         val query = challengesCollection.whereGreaterThan("endsAt", Timestamp.now()).get().await(Dispatchers.IO)
+        var currentChallenge = query.firstOrNull()?.toChallenge()
 
-        return query.firstOrNull()?.toChallenge()
+        if (currentChallenge == null) {
+           val nextChallenge = challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
+
+            if (nextChallenge != null) {
+                val endsAt = Instant.now().plus(1, ChronoUnit.DAYS)
+                nextChallenge.reference.update(
+                    "endsAt",
+                    Timestamp.of(Date.from(endsAt))
+                ).await(Dispatchers.IO)
+
+                currentChallenge = nextChallenge.toChallenge().copy(
+                    endsAt = endsAt.toString()
+                )
+            }
+        }
+
+        return currentChallenge
     }
 
     suspend fun getPastChallenges(): List<Challenge> {
