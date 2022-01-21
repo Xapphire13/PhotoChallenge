@@ -14,7 +14,7 @@ import CenterLayout from "../../layouts/CenterLayout";
 import ColumnLayout from "../../layouts/ColumnLayout";
 import FooterLayout from "../../layouts/FooterLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
-import NavBar from "../../NavBar";
+import NavBar, { GET_FUTURE_CHALLENGES_QUERY } from "../../NavBar";
 
 const classNames = {
   buttonGroup: css`
@@ -42,7 +42,9 @@ const ADD_CHALLENGE_MUTATION = gql`
 `;
 
 export default function SubmitChallengePage() {
-  const [addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION);
+  const [addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION, {
+    refetchQueries: [GET_FUTURE_CHALLENGES_QUERY],
+  });
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
   const navigate = useNavigate();
@@ -100,7 +102,7 @@ export default function SubmitChallengePage() {
                 className={cx(classNames.button)}
                 onClick={handleCancel}
               >
-                Cancel
+                Back
               </SecondaryButton>
               <PrimaryButton
                 className={cx(classNames.button)}

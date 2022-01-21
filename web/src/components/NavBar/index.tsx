@@ -18,7 +18,7 @@ const classNames = {
   `,
 };
 
-const GET_FUTURE_CHALLENGES_QUERY = gql`
+export const GET_FUTURE_CHALLENGES_QUERY = gql`
   query GetFutureChallenges {
     futureChallenges {
       id
@@ -34,7 +34,7 @@ interface GetFutureChallengesQuery {
 
 export default function NavBar() {
   const { user } = useContext(UserContext);
-  const { data, loading } = useQuery<GetFutureChallengesQuery>(
+  const { data } = useQuery<GetFutureChallengesQuery>(
     GET_FUTURE_CHALLENGES_QUERY
   );
 
