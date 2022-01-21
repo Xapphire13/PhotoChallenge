@@ -3,6 +3,7 @@ package com.xapphire13.auth
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.random.Random
+import kotlin.random.nextUInt
 
 class PasswordUtils {
     companion object {
@@ -10,7 +11,7 @@ class PasswordUtils {
             val builder = StringBuilder()
 
             for (i in 1..8) {
-                val randomNumber = Random.nextInt() % 16
+                val randomNumber = (Random.nextUInt() % 16u).toInt()
                 val hex = if (randomNumber == 0) "0" else Integer.toHexString(randomNumber)
 
                 builder.append(hex)
