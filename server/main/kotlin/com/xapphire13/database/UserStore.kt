@@ -41,13 +41,25 @@ class UserStore(db: Firestore) {
             throw Error("Invalid invitation")
         }
 
+        val usernameTaken = usersCollection.whereEqualTo("usernameLower", username.lowercase()).get().await(Dispatchers.IO).size() > 0
+
+        if (usernameTaken) {
+            throw Error("Username already taken")
+        }
+
+        val emailTaken = usersCollection.whereEqualTo("email", email.lowercase()).get().await(Dispatchers.IO).size() > 0
+
+        if (emailTaken) {
+            throw Error("User with email already exists")
+        }
+
         val passwordSalt = PasswordUtils.generateSalt()
         val hashedPassword = PasswordUtils.generateHash(password + passwordSalt)
 
         usersCollection.add(mapOf(
             "username" to username,
             "usernameLower" to username.lowercase(),
-            "email" to email,
+            "email" to email.lowercase(),
             "isAdmin" to false,
             "originalInvitation" to invitation.reference,
             "passwordHash" to hashedPassword,
