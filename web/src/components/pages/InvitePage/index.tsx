@@ -1,10 +1,9 @@
+import { gql, useMutation } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useOnEnter from "../../../hooks/useOnEnter";
-import usePersistentStorage from "../../../hooks/usePersistentStorage";
 import theme from "../../../theme";
-import User from "../../../types/User";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
 import TextInput from "../../core/forms/TextInput";
 import CenterLayout from "../../layouts/CenterLayout";
@@ -21,20 +20,49 @@ const classNames = {
   `,
 };
 
+const CREATE_USER_MUTATION = gql`
+  mutation CreateUser(
+    $username: String!
+    $email: String!
+    $password: String!
+    $invitationCode: String!
+  ) {
+    createUser(
+      username: $username
+      email: $email
+      password: $password
+      invitationCode: $invitationCode
+    ) {
+      success
+    }
+  }
+`;
+
 export default function InvitePage() {
+  const navigate = useNavigate();
+  const { invitationCode } = useParams();
+  const [createUserMutation] = useMutation(CREATE_USER_MUTATION);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const [, saveUser] = usePersistentStorage<User>("user");
 
+  const handleCreateUser = (
+    // eslint-disable-next-line no-shadow
+    username: string,
+    // eslint-disable-next-line no-shadow
+    email: string,
+    // eslint-disable-next-line no-shadow
+    password: string,
+    // eslint-disable-next-line no-shadow
+    invitationCode: string
+  ) =>
+    createUserMutation({
+      variables: { username, email, password, invitationCode },
+    });
   const submitDisabled = !username.trim() || !email.trim() || !password.trim();
-  const handleSubmit = () => {
-    if (!submitDisabled) {
-      saveUser({
-        username,
-        email,
-      });
+  const handleSubmit = async () => {
+    if (!submitDisabled && invitationCode) {
+      await handleCreateUser(username, email, password, invitationCode);
       navigate("/");
     }
   };

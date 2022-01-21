@@ -77,7 +77,7 @@ export default function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/new-challenge" element={<SubmitChallengePage />} />
-              <Route path="/invite/:inviteCode" element={<InvitePage />} />
+              <Route path="/invite/:invitationCode" element={<InvitePage />} />
               <Route path="*" element={<LandingPage />} />
             </Routes>
           </UserContextProvider>

@@ -32,6 +32,7 @@ export default function UserContextProvider({
 }: UserContextProviderProps) {
   const location = useLocation();
   const loginPageMatch = useMatch("/login");
+  const invitePageMatch = useMatch("/invite/:invitationCode");
   const navigate = useNavigate();
   const loggedIn = !!Cookies.get("loggedIn");
   const { data, loading } = useQuery<GetMeQuery>(GET_ME_QUERY, {
@@ -48,7 +49,7 @@ export default function UserContextProvider({
   );
 
   useEffect(() => {
-    if (!loginPageMatch && !loggedIn) {
+    if (!loginPageMatch && !invitePageMatch && !loggedIn) {
       navigate(
         `/login?redir=${encodeURIComponent(
           location.pathname + location.search
@@ -56,7 +57,14 @@ export default function UserContextProvider({
         { replace: true }
       );
     }
-  }, [location.pathname, location.search, loggedIn, loginPageMatch, navigate]);
+  }, [
+    invitePageMatch,
+    location.pathname,
+    location.search,
+    loggedIn,
+    loginPageMatch,
+    navigate,
+  ]);
 
   return (
     <UserContext.Provider value={contextValue}>
