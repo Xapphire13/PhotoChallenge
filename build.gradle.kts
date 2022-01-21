@@ -11,6 +11,17 @@ plugins {
 
 group = "com.xapphire13"
 version = "0.0.1"
+
+kotlin {
+    sourceSets["main"].apply {
+        kotlin.srcDir("server/main/kotlin")
+    }
+
+    sourceSets["test"].apply {
+        kotlin.srcDir("server/test/kotlin")
+    }
+}
+
 application {
     mainClass.set("com.xapphire13.ApplicationKt")
 }

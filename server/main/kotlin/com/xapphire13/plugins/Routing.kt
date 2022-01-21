@@ -65,12 +65,12 @@ fun Application.configureRouting(userStore: UserStore) {
         }
 
         get("/{...}") {
-            val path = Path("../web/dist" + call.request.path())
+            val path = Path("./dist" + call.request.path())
 
             if (path.exists() && path.isRegularFile()) {
                 call.respondFile(path.toFile())
             } else {
-                call.respondFile(File("../web/dist/index.html"))
+                call.respondFile(File("./dist/index.html"))
             }
         }
     }

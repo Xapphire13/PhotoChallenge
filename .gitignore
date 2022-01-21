@@ -1,0 +1,9 @@
+# Web
+node_modules/
+dist/
+
+# Server
+.env
+.idea/
+.gradle/
+build/
