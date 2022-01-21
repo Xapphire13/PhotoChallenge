@@ -9,6 +9,7 @@ import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UserStore
 import com.xapphire13.models.RequestContext
+import com.xapphire13.models.UnitResponse
 import com.xapphire13.models.User
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -72,6 +73,19 @@ fun Application.configureSchema(
                     val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
                     userStore.getUser(requestContext.userId)
+                }
+            }
+
+            mutation("createUser") {
+                resolver { username: String, email: String, password: String, invitationCode: String, ctx: Context ->
+                    val requestContext = ctx.get<RequestContext>()
+
+                    if (requestContext != null) {
+                        throw GraphQLError("You already have an account")
+                    }
+
+                    userStore.createUser(username, email, password, invitationCode)
+                    UnitResponse()
                 }
             }
 
