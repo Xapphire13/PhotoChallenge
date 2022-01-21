@@ -3,9 +3,7 @@ import React from "react";
 
 const classNames = {
   link: css`
-    :visited {
-      color: inherit;
-    }
+    color: inherit;
   `,
 };
 
