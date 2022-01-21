@@ -7,6 +7,7 @@ import com.google.cloud.firestore.Firestore
 import com.xapphire13.extensions.asDeferred
 import com.xapphire13.extensions.await
 import com.xapphire13.models.Challenge
+import com.xapphire13.models.UnitResponse
 import io.ktor.util.date.GMTDate
 import io.ktor.util.date.toGMTDate
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter
 
 class ChallengeStore(db: Firestore) {
     private val challengesCollection = db.collection("challenges")
+    private val usersCollection = db.collection("users")
 
     suspend fun listChallenges(): List<Challenge> {
         val documents = challengesCollection.listDocuments().map {
@@ -42,6 +44,20 @@ class ChallengeStore(db: Firestore) {
         val query = challengesCollection.whereLessThanOrEqualTo("endsAt", Timestamp.now()).get().await(Dispatchers.IO)
 
         return query.documents.map { it.toChallenge() }
+    }
+
+    suspend fun getFutureChallenges(): List<Challenge> {
+        val query = challengesCollection.whereEqualTo("endsAt", null).get().await(Dispatchers.IO)
+
+        return query.documents.map { it.toChallenge() }
+    }
+
+    suspend fun addChallenge(challengeName: String, userId: String) {
+        challengesCollection.add(mapOf(
+            "name" to challengeName,
+            "createdBy" to usersCollection.document(userId),
+            "endsAt" to null
+        )).await(Dispatchers.IO)
     }
 
     private fun DocumentSnapshot.toChallenge() = Challenge(

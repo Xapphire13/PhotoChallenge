@@ -11,12 +11,12 @@ class JWTUtils {
     companion object {
         private val algorithm: Algorithm = Algorithm.HMAC256("secret")
         private val verifier: JWTVerifier = JWT.require(algorithm)
-            .withIssuer("xapphire13")
+            .withIssuer("photo-challenge")
             .build()
 
         fun createToken(userId: String, expiresAt: Date): String {
             return JWT.create()
-                .withIssuer("xapphire13")
+                .withIssuer("photo-challenge")
                 .withSubject(userId)
                 .withIssuedAt(Date.from(Instant.now()))
                 .withExpiresAt(expiresAt)
