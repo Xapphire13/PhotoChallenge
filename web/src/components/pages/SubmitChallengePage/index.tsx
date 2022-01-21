@@ -1,7 +1,9 @@
+import { gql, useMutation } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import useOnEnter from "../../../hooks/useOnEnter";
+import useToast from "../../../hooks/useToast";
 import theme from "../../../theme";
 import ButtonGroup from "../../core/buttons/ButtonGroup";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
@@ -31,14 +33,40 @@ const classNames = {
   `,
 };
 
+const ADD_CHALLENGE_MUTATION = gql`
+  mutation AddChallenge($name: String!) {
+    addChallenge(name: $name) {
+      success
+    }
+  }
+`;
+
 export default function SubmitChallengePage() {
+  const [addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION);
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
   const navigate = useNavigate();
+  const { addToast } = useToast();
 
-  const handleSubmit = () => {
+  const handleAddChallenge = (name: string) =>
+    addChallengeMutation({
+      variables: {
+        name,
+      },
+    });
+  const handleSubmit = async () => {
     if (!submitDisabled) {
-      setChallengeText("");
+      try {
+        await handleAddChallenge(challengeText);
+        addToast({
+          title: "New challenge added!",
+        });
+        setChallengeText("");
+      } catch (err) {
+        addToast({
+          title: "Failed to add challenge",
+        });
+      }
     }
   };
   const handleCancel = () => {

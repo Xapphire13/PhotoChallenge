@@ -1,3 +1,4 @@
+import { gql, useQuery } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/UserContextProvider";
@@ -17,8 +18,25 @@ const classNames = {
   `,
 };
 
+const GET_FUTURE_CHALLENGES_QUERY = gql`
+  query GetFutureChallenges {
+    futureChallenges {
+      id
+    }
+  }
+`;
+
+interface GetFutureChallengesQuery {
+  futureChallenges: {
+    id: string;
+  }[];
+}
+
 export default function NavBar() {
   const { user } = useContext(UserContext);
+  const { data, loading } = useQuery<GetFutureChallengesQuery>(
+    GET_FUTURE_CHALLENGES_QUERY
+  );
 
   return (
     <div className={cx(classNames.container)}>
@@ -32,8 +50,12 @@ export default function NavBar() {
       </div>
 
       <div>
-        <span className={cx(classNames.colorText)}>47</span> challenges in the
-        queue
+        <span className={cx(classNames.colorText)}>
+          {data?.futureChallenges.length == null
+            ? "--"
+            : data.futureChallenges.length}
+        </span>{" "}
+        challenges in the queue
       </div>
     </div>
   );

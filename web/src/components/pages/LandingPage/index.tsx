@@ -82,16 +82,12 @@ export default function LandingPage() {
         <CenterLayout>
           <ColumnLayout>
             <p className={cx(classNames.todaysChallenge)}>
-              {currentChallengeLoading ? (
-                "Loading..."
-              ) : (
-                <>
-                  Today&apos;s challenge is{" "}
-                  <span className={cx(classNames.challengeText)}>
-                    {transformFirstLetter(currentChallenge?.name ?? "")}
-                  </span>
-                </>
-              )}
+              Today&apos;s challenge is{" "}
+              <span className={cx(classNames.challengeText)}>
+                {currentChallenge?.name
+                  ? transformFirstLetter(currentChallenge.name)
+                  : "--"}
+              </span>
             </p>
 
             <ElevatedCardContainer>
