@@ -16,7 +16,7 @@ fun main()  {
     val challengeStore = ChallengeStore(FirestoreDb.db)
 
     embeddedServer(Netty, port = System.getenv("PORT").toInt(), host = "0.0.0.0") {
-        configureRouting(userStore)
         configureSchema(userStore, invitationStore, challengeStore)
+        configureRouting(userStore)
     }.start(wait = true)
 }

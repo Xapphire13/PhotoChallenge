@@ -6,12 +6,22 @@ import com.xapphire13.database.UserStore
 import io.ktor.routing.*
 import io.ktor.application.*
 import io.ktor.features.ContentTransformationException
+import io.ktor.http.content.default
+import io.ktor.http.content.files
+import io.ktor.http.content.static
+import io.ktor.http.content.staticRootFolder
+import io.ktor.request.path
 import io.ktor.request.receiveParameters
 import io.ktor.response.*
 import io.ktor.util.date.toGMTDate
+import java.io.File
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.Date
+import kotlin.io.path.Path
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
 
 fun Application.configureRouting(userStore: UserStore) {
     routing {
@@ -52,6 +62,16 @@ fun Application.configureRouting(userStore: UserStore) {
 
             val redirectPath = call.request.queryParameters["redir"]
             call.respondRedirect(redirectPath ?: "/")
+        }
+
+        get("/{...}") {
+            val path = Path("../web/dist" + call.request.path())
+
+            if (path.exists() && path.isRegularFile()) {
+                call.respondFile(path.toFile())
+            } else {
+                call.respondFile(File("../web/dist/index.html"))
+            }
         }
     }
 }
