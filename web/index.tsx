@@ -63,7 +63,7 @@ export const classNames = {
 };
 
 const client = new ApolloClient({
-  uri: `http://${window.location.host}/graphql`,
+  uri: `${window.location.protocol}//${window.location.host}/graphql`,
   cache: new InMemoryCache(),
 });
 
