@@ -9,7 +9,7 @@ import java.util.Date
 
 class JWTUtils {
     companion object {
-        private val algorithm: Algorithm = Algorithm.HMAC256("secret")
+        private val algorithm: Algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"))
         private val verifier: JWTVerifier = JWT.require(algorithm)
             .withIssuer("photo-challenge")
             .build()
