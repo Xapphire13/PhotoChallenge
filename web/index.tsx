@@ -2,15 +2,12 @@ import "modern-normalize/modern-normalize.css";
 import React from "react";
 import { css } from "@linaria/core";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import theme from "./theme";
-import LandingPage from "./components/pages/LandingPage";
-import LoginPage from "./components/pages/LoginPage";
-import SubmitChallengePage from "./components/pages/SubmitChallengePage";
-import InvitePage from "./components/pages/InvitePage";
 import ToastProvider from "./contexts/ToastProvider";
 import UserContextProvider from "./contexts/UserContextProvider";
+import Routes from "./routes";
 
 export const classNames = {
   globals: css`
@@ -73,13 +70,7 @@ export default function App() {
       <ToastProvider>
         <BrowserRouter>
           <UserContextProvider>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/new-challenge" element={<SubmitChallengePage />} />
-              <Route path="/invite/:invitationCode" element={<InvitePage />} />
-              <Route path="*" element={<LandingPage />} />
-            </Routes>
+            <Routes />
           </UserContextProvider>
         </BrowserRouter>
       </ToastProvider>

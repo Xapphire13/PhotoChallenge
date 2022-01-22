@@ -4,6 +4,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
+const proxyProd = process.env.PROD_PROXY === "true";
+const proxyHost = proxyProd
+  ? "https://daily-photo-challenge.herokuapp.com"
+  : "http://localhost:5001";
 
 /** @type {import("webpack").Configuration}  */
 const config = {
@@ -17,7 +21,7 @@ const config = {
     proxy: [
       {
         context: ["/login"],
-        target: "http://localhost:5001",
+        target: proxyHost,
         bypass:
           /** @type {import("webpack-dev-server").ByPass} */
           (req) => {
@@ -27,10 +31,12 @@ const config = {
 
             return null;
           },
+        changeOrigin: proxyProd,
       },
       {
         context: ["/graphql"],
-        target: "http://localhost:5001",
+        target: proxyHost,
+        changeOrigin: proxyProd,
       },
     ],
   },
