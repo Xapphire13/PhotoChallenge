@@ -4,6 +4,7 @@ import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQLError
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.xapphire13.database.ChallengeStore
+import com.xapphire13.models.FutureChallengeCountResponse
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.UnitResponse
 
@@ -34,9 +35,11 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore) {
         }
     }
 
-    query("futureChallenges") {
+    query("futureChallengeCount") {
         resolver { ->
-            challengeStore.getFutureChallenges()
+            FutureChallengeCountResponse(
+                count = challengeStore.getFutureChallengeCount()
+            )
         }
     }
 

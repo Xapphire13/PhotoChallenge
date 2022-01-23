@@ -4,6 +4,7 @@ import com.google.cloud.Timestamp
 import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
+import com.xapphire13.concurrency.SynchronizedValue
 import com.xapphire13.extensions.asDeferred
 import com.xapphire13.extensions.await
 import com.xapphire13.models.Challenge
@@ -16,6 +17,7 @@ import java.util.Date
 class ChallengeStore(db: Firestore) {
     private val challengesCollection = db.collection("challenges")
     private val usersCollection = db.collection("users")
+    private val futureChallengeCount = SynchronizedValue<Int>()
 
     suspend fun listChallenges(): List<Challenge> {
         val documents = challengesCollection.listDocuments().map {
@@ -49,6 +51,10 @@ class ChallengeStore(db: Firestore) {
                 currentChallenge = nextChallenge.toChallenge().copy(
                     endsAt = endsAt.toString()
                 )
+
+                futureChallengeCount.setValue { prev ->
+                    prev?.minus(1) ?: prev
+                }
             }
         }
 
@@ -61,10 +67,13 @@ class ChallengeStore(db: Firestore) {
         return query.documents.map { it.toChallenge() }
     }
 
-    suspend fun getFutureChallenges(): List<Challenge> {
-        val query = challengesCollection.whereEqualTo("endsAt", null).get().await(Dispatchers.IO)
+    suspend fun getFutureChallengeCount(): Int {
+        val count = futureChallengeCount.getOrSetValue {
+            challengesCollection.whereEqualTo("endsAt", null).get()
+                .await(Dispatchers.IO).documents.count()
+        }
 
-        return query.documents.map { it.toChallenge() }
+        return count
     }
 
     suspend fun addChallenge(challengeName: String, userId: String) {
@@ -75,6 +84,10 @@ class ChallengeStore(db: Firestore) {
                 "endsAt" to null
             )
         ).await(Dispatchers.IO)
+
+        futureChallengeCount.setValue { prev ->
+            prev?.plus(1) ?: prev
+        }
     }
 
     private fun DocumentSnapshot.toChallenge() = Challenge(
