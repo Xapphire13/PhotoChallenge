@@ -23,23 +23,23 @@ const classNames = {
 };
 
 export const GET_FUTURE_CHALLENGES_QUERY = gql`
-  query GetFutureChallenges {
-    futureChallenges {
-      id
+  query GetFutureChallengeCount {
+    futureChallengeCount {
+      count
     }
   }
 `;
 
-interface GetFutureChallengesQuery {
-  futureChallenges: {
-    id: string;
-  }[];
+interface GetFutureChallengeCountQuery {
+  futureChallengeCount: {
+    count: number;
+  };
 }
 
 export default function NavBar() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const { data } = useQuery<GetFutureChallengesQuery>(
+  const { data } = useQuery<GetFutureChallengeCountQuery>(
     GET_FUTURE_CHALLENGES_QUERY
   );
   const profilePageMatch = useMatch(PROFILE_PAGE);
@@ -76,9 +76,9 @@ export default function NavBar() {
 
       <div>
         <span className={cx(classNames.colorText)}>
-          {data?.futureChallenges.length == null
+          {data?.futureChallengeCount.count == null
             ? "--"
-            : data.futureChallenges.length}
+            : data.futureChallengeCount.count}
         </span>{" "}
         challenges in the queue
       </div>
