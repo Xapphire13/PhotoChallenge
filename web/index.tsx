@@ -7,7 +7,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import theme from "./theme";
 import ToastProvider from "./contexts/ToastProvider";
 import UserContextProvider from "./contexts/UserContextProvider";
-import Routes from "./routes";
+import Routes from "./Routes";
 
 export const classNames = {
   globals: css`
