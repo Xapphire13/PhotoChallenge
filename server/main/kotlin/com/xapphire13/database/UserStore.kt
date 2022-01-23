@@ -67,6 +67,11 @@ class UserStore(db: Firestore) {
         )).await(Dispatchers.IO)
     }
 
+    suspend fun setTokenUpdated(id: String) {
+        val document = this.usersCollection.document(id)
+        document.update("jwtUpdated", true).await(Dispatchers.IO)
+    }
+
     private fun DocumentSnapshot.toUser(): User = User(
         id = id,
         username = getString("username")!!,
