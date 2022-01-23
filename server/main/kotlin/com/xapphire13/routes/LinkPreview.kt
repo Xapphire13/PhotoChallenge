@@ -1,6 +1,7 @@
 package com.xapphire13.routes
 
 import com.xapphire13.database.ChallengeStore
+import com.xapphire13.extensions.getNormalizedName
 import com.xapphire13.images.generateLinkPreview
 import io.ktor.application.call
 import io.ktor.html.respondHtml
@@ -47,8 +48,12 @@ fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
             return@get
         }
 
-        val protocol = if (call.request.uri.startsWith("https")) "https://" else "http://"
-        val host =  protocol + call.request.host() + let {
+        val protocol =
+            if (call.request.headers["X-Forwarded-Proto"] == "https" || call.request.uri.startsWith("https"))
+                "https://"
+            else
+                "http://"
+        val host = protocol + call.request.host() + let {
             if (call.request.port() != 80) {
                 ":${call.request.port()}"
             } else {
@@ -58,7 +63,7 @@ fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
 
         call.respondHtml(HttpStatusCode.OK) {
             head {
-                meta(content = "Today's challenge is ${challenge.name}") {
+                meta(content = "Today's challenge is ${challenge.getNormalizedName()}") {
                     attributes["property"] = "og:title"
                 }
                 meta(content = "Sign in to add more challenges and join in on the fun!") {

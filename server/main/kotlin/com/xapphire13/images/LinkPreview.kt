@@ -1,5 +1,6 @@
 package com.xapphire13.images
 
+import com.xapphire13.extensions.getNormalizedName
 import com.xapphire13.models.Challenge
 import java.awt.Color
 import java.awt.Dimension
@@ -33,8 +34,6 @@ private fun Graphics2D.drawLines(lines: List<String>, x: Int, y: Int, canvasDime
         currentY += lineHeight
     }
 }
-
-private fun normalizeChallengeName(text: String) = text.substring(0, 1).lowercase() + text.substring(1)
 
 private const val PADDING = 8
 
@@ -75,7 +74,7 @@ fun generateLinkPreview(challenge: Challenge): BufferedImage {
         color = Color(0xFB, 0xAA, 0xC8)
         drawLines(
             listOf(
-                normalizeChallengeName(challenge.name)
+                challenge.getNormalizedName()
             ),
             PADDING,
             PADDING + appFontLineHeight + fontMetrics.ascent,
@@ -85,7 +84,7 @@ fun generateLinkPreview(challenge: Challenge): BufferedImage {
         font = bigFont
         drawLines(
             listOf(
-                normalizeChallengeName(challenge.name)
+                challenge.getNormalizedName()
             ),
             PADDING,
             PADDING + appFontLineHeight + fontMetrics.ascent,
