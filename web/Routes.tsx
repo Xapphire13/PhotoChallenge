@@ -10,11 +10,19 @@ import InvitePage from "./components/pages/InvitePage";
 import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
 import NotFoundPage from "./components/pages/NotFoundPage";
+import ProfilePage from "./components/pages/ProfilePage";
 import SubmitChallengePage from "./components/pages/SubmitChallengePage";
-import { INVITATION, LOGIN, ROOT, SUBMIT_CHALLENGE } from "./constants/paths";
+import { ENABLE_PROFILE_PAGE } from "./constants/features";
+import {
+  INVITATION_PAGE,
+  LOGIN_PAGE,
+  PROFILE_PAGE,
+  ROOT,
+  SUBMIT_CHALLENGE_PAGE,
+} from "./constants/paths";
 import { UserContext } from "./contexts/UserContextProvider";
 
-const LOGGED_OUT_ONLY_ROUTES = [LOGIN, INVITATION];
+const LOGGED_OUT_ONLY_ROUTES = [LOGIN_PAGE, INVITATION_PAGE];
 
 export default function Routes() {
   const location = useLocation();
@@ -50,9 +58,12 @@ export default function Routes() {
   return (
     <ReactRoutes>
       <Route path={ROOT} element={<LandingPage />} />
-      <Route path={LOGIN} element={<LoginPage />} />
-      <Route path={SUBMIT_CHALLENGE} element={<SubmitChallengePage />} />
-      <Route path={INVITATION} element={<InvitePage />} />
+      <Route path={LOGIN_PAGE} element={<LoginPage />} />
+      <Route path={SUBMIT_CHALLENGE_PAGE} element={<SubmitChallengePage />} />
+      <Route path={INVITATION_PAGE} element={<InvitePage />} />
+      {ENABLE_PROFILE_PAGE && (
+        <Route path={PROFILE_PAGE} element={<ProfilePage />} />
+      )}
       <Route path="*" element={<NotFoundPage />} />
     </ReactRoutes>
   );

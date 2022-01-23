@@ -1,8 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useContext } from "react";
+import { useMatch, useNavigate } from "react-router";
+import { ENABLE_PROFILE_PAGE } from "../../constants/features";
+import { PROFILE_PAGE } from "../../constants/paths";
 import { UserContext } from "../../contexts/UserContextProvider";
 import theme from "../../theme";
+import TextLink from "../core/TextLink";
 
 const classNames = {
   container: css`
@@ -33,10 +37,20 @@ interface GetFutureChallengesQuery {
 }
 
 export default function NavBar() {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const { data } = useQuery<GetFutureChallengesQuery>(
     GET_FUTURE_CHALLENGES_QUERY
   );
+  const profilePageMatch = useMatch(PROFILE_PAGE);
+
+  const handleUsernameButtonPressed = (ev: React.MouseEvent) => {
+    if (!profilePageMatch) {
+      navigate(PROFILE_PAGE);
+    }
+
+    ev.preventDefault();
+  };
 
   return (
     <div className={cx(classNames.container)}>
@@ -44,7 +58,18 @@ export default function NavBar() {
         {user && (
           <>
             Welcome{" "}
-            <span className={cx(classNames.colorText)}>{user.username}</span>
+            {ENABLE_PROFILE_PAGE ? (
+              <TextLink
+                href={PROFILE_PAGE}
+                onClick={handleUsernameButtonPressed}
+              >
+                <span className={cx(classNames.colorText)}>
+                  {user.username}
+                </span>
+              </TextLink>
+            ) : (
+              <span className={cx(classNames.colorText)}>{user.username}</span>
+            )}
           </>
         )}
       </div>

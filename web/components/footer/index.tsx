@@ -4,7 +4,6 @@ import useToast from "../../hooks/useToast";
 import theme from "../../theme";
 import TertiaryButton from "../core/buttons/TertiaryButton";
 import InlineList from "../core/InlineList";
-import TextLink from "../core/TextLink";
 import useCreateInvitation from "./hooks/useCreateInvitation";
 
 const classNames = {
@@ -33,9 +32,12 @@ export default function Footer() {
   return (
     <div className={cx(classNames.container)}>
       <InlineList>
-        <TextLink newTab href="https://github.com/Xapphire13/PhotoChallenge">
+        <TertiaryButton
+          newTab
+          href="https://github.com/Xapphire13/PhotoChallenge"
+        >
           GitHub
-        </TextLink>
+        </TertiaryButton>
         <TertiaryButton onClick={handleInviteClicked}>Invite</TertiaryButton>
       </InlineList>
     </div>
