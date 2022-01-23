@@ -35,18 +35,18 @@ private fun Graphics2D.drawLines(lines: List<String>, x: Int, y: Int, canvasDime
     }
 }
 
-private const val PADDING = 8
+private const val PADDING = 16
 
 fun generateLinkPreview(challenge: Challenge): BufferedImage {
-    val img = BufferedImage(400, 200, BufferedImage.TYPE_INT_RGB)
+    val img = BufferedImage(1200, 630, BufferedImage.TYPE_INT_RGB)
 
     val baseFont: Font =
         Font.createFont(
             Font.TRUETYPE_FONT,
             object {}::class.java.classLoader.getResourceAsStream("Offside-Regular.ttf")
         )
-    val appFont = baseFont.deriveFont(32f)
-    val bigFont = appFont.deriveFont(40f)
+    val appFont = baseFont.deriveFont(96f)
+    val bigFont = appFont.deriveFont(120f)
     val underlined = bigFont.deriveFont(
         mapOf(
             TextAttribute.UNDERLINE to TextAttribute.UNDERLINE_ON
