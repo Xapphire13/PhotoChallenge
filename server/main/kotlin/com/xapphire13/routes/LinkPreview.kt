@@ -54,8 +54,14 @@ fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
             else
                 "http://"
         val host = protocol + call.request.host() + let {
-            if (call.request.port() != 80) {
-                ":${call.request.port()}"
+            val port = if (call.request.headers.contains("X-Forwarded-Port")) {
+                call.request.headers["X-Forwarded-Port"]?.toInt() ?: 80
+            } else {
+                call.request.port()
+            }
+
+            if (port != 80) {
+                ":$port"
             } else {
                 ""
             }
