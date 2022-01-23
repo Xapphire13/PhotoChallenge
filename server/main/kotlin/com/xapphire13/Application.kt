@@ -8,10 +8,6 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.xapphire13.plugins.*
 import com.xapphire13.schema.configureSchema
-import io.ktor.application.call
-import io.ktor.http.Parameters
-import io.ktor.http.formUrlEncode
-import io.ktor.request.path
 
 fun main()  {
     FirestoreDb.initialize()
