@@ -51,7 +51,6 @@ fun Routing.loginRoutes(userStore: UserStore) {
             value = "true",
             expires = tokenExpiresAt.toGMTDate()
         )
-        userStore.setTokenUpdated(user.id)
 
         val redirectPath = call.request.queryParameters["redir"]
         call.respondRedirect(redirectPath ?: "/")

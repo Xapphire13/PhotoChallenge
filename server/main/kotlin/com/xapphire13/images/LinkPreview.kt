@@ -68,7 +68,8 @@ fun generateLinkPreview(challenge: Challenge): BufferedImage {
         drawLines(
             listOf(
                 "Today's challenge is",
-            ), PADDING, PADDING + fontMetrics.ascent, Dimension(img.width - PADDING, img.height - gutterSize - PADDING)
+            ),
+            PADDING, PADDING + fontMetrics.ascent, Dimension(img.width - PADDING, img.height - gutterSize - PADDING)
         )
         font = underlined
         color = Color(0xFB, 0xAA, 0xC8)

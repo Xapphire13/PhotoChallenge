@@ -27,7 +27,7 @@ class ChallengeStore(db: Firestore) {
 
     suspend fun getChallenge(id: String): Challenge? {
         val document = challengesCollection.document(id).get().await(Dispatchers.IO)
-        
+
         return if (document.exists()) document.toChallenge() else null
     }
 
