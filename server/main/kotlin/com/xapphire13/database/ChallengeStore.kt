@@ -7,14 +7,9 @@ import com.google.cloud.firestore.Firestore
 import com.xapphire13.extensions.asDeferred
 import com.xapphire13.extensions.await
 import com.xapphire13.models.Challenge
-import com.xapphire13.models.UnitResponse
-import io.ktor.util.date.GMTDate
-import io.ktor.util.date.toGMTDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
-import java.text.DateFormat
 import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Date
 
@@ -41,7 +36,7 @@ class ChallengeStore(db: Firestore) {
         var currentChallenge = query.firstOrNull()?.toChallenge()
 
         if (currentChallenge == null) {
-           val nextChallenge = challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
+            val nextChallenge = challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
 
             if (nextChallenge != null) {
                 val endsAt = Instant.now().plus(1, ChronoUnit.DAYS)
@@ -72,11 +67,13 @@ class ChallengeStore(db: Firestore) {
     }
 
     suspend fun addChallenge(challengeName: String, userId: String) {
-        challengesCollection.add(mapOf(
-            "name" to challengeName,
-            "createdBy" to usersCollection.document(userId),
-            "endsAt" to null
-        )).await(Dispatchers.IO)
+        challengesCollection.add(
+            mapOf(
+                "name" to challengeName,
+                "createdBy" to usersCollection.document(userId),
+                "endsAt" to null
+            )
+        ).await(Dispatchers.IO)
     }
 
     private fun DocumentSnapshot.toChallenge() = Challenge(

@@ -64,12 +64,12 @@ fun Application.configureSchema(
                 resolver { id: String ->
                     userStore.getUser(id)
                 }.withArgs {
-                    arg<String> {name = "id"; description = "The user ID"}
+                    arg<String> { name = "id"; description = "The user ID" }
                 }
             }
 
             query("me") {
-                resolver {ctx: Context ->
+                resolver { ctx: Context ->
                     val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
                     userStore.getUser(requestContext.userId)

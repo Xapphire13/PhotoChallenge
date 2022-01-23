@@ -1,7 +1,6 @@
 package com.xapphire13.database
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
-import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Firestore
 import com.xapphire13.extensions.await
 import com.xapphire13.models.InvitationResponse
@@ -27,9 +26,11 @@ class InvitationStore(db: Firestore) {
     suspend fun createInvitation(userId: String): InvitationResponse {
         val id = NanoIdUtils.randomNanoId(Random(), "$alphabet${alphabet.uppercase()}".toCharArray(), 10)
 
-        invitationsCollection.document(id).set(mapOf(
-            "createdBy" to usersCollection.document(userId)
-        )).await(Dispatchers.IO)
+        invitationsCollection.document(id).set(
+            mapOf(
+                "createdBy" to usersCollection.document(userId)
+            )
+        ).await(Dispatchers.IO)
 
         return InvitationResponse(
             id = id

@@ -1,6 +1,5 @@
 package com.xapphire13.database
 
-import com.apurebase.kgraphql.GraphQLError
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import com.xapphire13.auth.PasswordUtils
@@ -56,15 +55,17 @@ class UserStore(db: Firestore) {
         val passwordSalt = PasswordUtils.generateSalt()
         val hashedPassword = PasswordUtils.generateHash(password + passwordSalt)
 
-        usersCollection.add(mapOf(
-            "username" to username,
-            "usernameLower" to username.lowercase(),
-            "email" to email.lowercase(),
-            "isAdmin" to false,
-            "originalInvitation" to invitation.reference,
-            "passwordHash" to hashedPassword,
-            "passwordSalt" to passwordSalt
-        )).await(Dispatchers.IO)
+        usersCollection.add(
+            mapOf(
+                "username" to username,
+                "usernameLower" to username.lowercase(),
+                "email" to email.lowercase(),
+                "isAdmin" to false,
+                "originalInvitation" to invitation.reference,
+                "passwordHash" to hashedPassword,
+                "passwordSalt" to passwordSalt
+            )
+        ).await(Dispatchers.IO)
     }
 
     suspend fun setTokenUpdated(id: String) {

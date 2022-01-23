@@ -4,18 +4,18 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.xapphire13.auth.JWTUtils
 import com.xapphire13.auth.PasswordUtils
 import com.xapphire13.database.UserStore
-import io.ktor.routing.*
-import io.ktor.application.*
+import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.features.ContentTransformationException
 import io.ktor.http.Parameters
-import io.ktor.http.content.default
-import io.ktor.http.content.files
-import io.ktor.http.content.static
-import io.ktor.http.content.staticRootFolder
 import io.ktor.http.formUrlEncode
 import io.ktor.request.path
 import io.ktor.request.receiveParameters
-import io.ktor.response.*
+import io.ktor.response.respondFile
+import io.ktor.response.respondRedirect
+import io.ktor.routing.get
+import io.ktor.routing.post
+import io.ktor.routing.routing
 import io.ktor.util.date.toGMTDate
 import java.io.File
 import java.time.Instant
@@ -23,7 +23,6 @@ import java.time.temporal.ChronoUnit
 import java.util.Date
 import kotlin.io.path.Path
 import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
 
 fun Application.configureRouting(userStore: UserStore) {
@@ -32,7 +31,7 @@ fun Application.configureRouting(userStore: UserStore) {
             val requestCookies = call.request.cookies
             val responseCookies = call.response.cookies
 
-            val formParams = try {call.receiveParameters()} catch (ex: ContentTransformationException) {
+            val formParams = try { call.receiveParameters() } catch (ex: ContentTransformationException) {
                 if (requestCookies["token"] != null) responseCookies.appendExpired("token")
                 if (requestCookies["loggedIn"] != null) responseCookies.appendExpired("loggedIn")
                 call.respondRedirect("/login?error=true")

@@ -3,14 +3,19 @@ val kotlin_version: String by project
 val logback_version: String by project
 val kgraphql_version: String by project
 
+group = "com.xapphire13"
+version = "0.0.1"
+
 plugins {
     application
     kotlin("jvm") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
 }
 
-group = "com.xapphire13"
-version = "0.0.1"
+repositories {
+    mavenCentral()
+}
 
 kotlin {
     sourceSets["main"].apply {
@@ -24,10 +29,6 @@ kotlin {
 
 application {
     mainClass.set("com.xapphire13.ApplicationKt")
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {

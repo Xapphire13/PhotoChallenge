@@ -47,7 +47,7 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore) {
             challengeStore.addChallenge(name, requestContext.userId)
             UnitResponse()
         }.withArgs {
-            arg<String> { name = "name"}
+            arg<String> { name = "name" }
         }
     }
 }
