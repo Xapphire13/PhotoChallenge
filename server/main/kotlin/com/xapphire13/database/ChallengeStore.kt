@@ -25,10 +25,10 @@ class ChallengeStore(db: Firestore) {
         return documents.map { it.toChallenge() }
     }
 
-    suspend fun getChallenge(id: String): Challenge {
+    suspend fun getChallenge(id: String): Challenge? {
         val document = challengesCollection.document(id).get().await(Dispatchers.IO)
-
-        return document.toChallenge()
+        
+        return if (document.exists()) document.toChallenge() else null
     }
 
     suspend fun getCurrentChallenge(): Challenge? {
@@ -36,7 +36,8 @@ class ChallengeStore(db: Firestore) {
         var currentChallenge = query.firstOrNull()?.toChallenge()
 
         if (currentChallenge == null) {
-            val nextChallenge = challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
+            val nextChallenge =
+                challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
 
             if (nextChallenge != null) {
                 val endsAt = Instant.now().plus(1, ChronoUnit.DAYS)

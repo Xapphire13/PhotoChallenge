@@ -17,13 +17,16 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
-    sourceSets["main"].apply {
-        kotlin.srcDir("server/main/kotlin")
+sourceSets {
+    main {
+        java.srcDirs("server/main/kotlin")
+        resources {
+            srcDir("server/main/resources")
+        }
     }
 
-    sourceSets["test"].apply {
-        kotlin.srcDir("server/test/kotlin")
+    test {
+        java.srcDir("server/test/kotlin")
     }
 }
 
@@ -34,6 +37,7 @@ application {
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-html-builder:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("com.apurebase:kgraphql:$kgraphql_version")
     implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
