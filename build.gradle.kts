@@ -2,6 +2,8 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val kgraphql_version: String by project
+val kotest_version: String by project
+val mockk_version: String by project
 
 group = "com.xapphire13"
 version = "0.0.1"
@@ -48,9 +50,17 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotest_version")
+    testImplementation("io.kotest:kotest-assertions-core:$kotest_version")
+    testImplementation("io.mockk:mockk:$mockk_version")
+
 }
 
 // "stage" task for Heroku
 task("stage") {
     dependsOn += "shadowJar"
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

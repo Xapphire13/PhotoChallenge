@@ -11,7 +11,8 @@ import com.xapphire13.models.Challenge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 import java.time.Instant
-import java.time.temporal.ChronoUnit
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.util.Date
 
 class ChallengeStore(db: Firestore) {
@@ -42,14 +43,32 @@ class ChallengeStore(db: Firestore) {
                 challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
 
             if (nextChallenge != null) {
-                val endsAt = Instant.now().plus(1, ChronoUnit.DAYS)
+                val nextChallengeDueDate = Instant.now().atZone(ZoneOffset.UTC).let {
+                    if (it.hour >= 15) {
+                        it.plusDays(1)
+                    } else {
+                        it
+                    }
+                }.let {
+                    ZonedDateTime.of(
+                        it.year,
+                        it.monthValue,
+                        it.dayOfMonth,
+                        15,
+                        0,
+                        0,
+                        0,
+                        ZoneOffset.UTC
+                    ).toInstant()
+                }
+
                 nextChallenge.reference.update(
                     "endsAt",
-                    Timestamp.of(Date.from(endsAt))
+                    Timestamp.of(Date.from(nextChallengeDueDate))
                 ).await(Dispatchers.IO)
 
                 currentChallenge = nextChallenge.toChallenge().copy(
-                    endsAt = endsAt.toString()
+                    endsAt = nextChallengeDueDate.toString()
                 )
 
                 futureChallengeCount.setValue { prev ->
