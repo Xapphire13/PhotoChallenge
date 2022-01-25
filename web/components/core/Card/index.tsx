@@ -7,6 +7,7 @@ const classNames = {
   container: css`
     ${theme.cornerRadius.medium}
     border: 1px solid ${theme.palette.background1};
+    background: ${theme.palette.background0};
   `,
 };
 
