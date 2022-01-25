@@ -18,7 +18,7 @@ interface ToastInfo {
 
 /* eslint-disable @typescript-eslint/no-empty-function */
 export const ToastContext = React.createContext({
-  addToast: (toastInfo: Omit<ToastInfo, "id">) => {},
+  addToast: (toastInfo: Omit<ToastInfo, "id">) => "" as string,
   removeToast: (toastId: string) => {},
 });
 /* eslint-enable @typescript-eslint/no-empty-function */
@@ -35,14 +35,18 @@ export default function ToastProvider({ children }: ToastProviderProps) {
 
   const handleAddToast: ToastContextValueType["addToast"] = useCallback(
     (toast) => {
+      const toastId = uuid();
+
       setToasts((prev) => [
         ...prev,
         {
           ...toast,
-          id: uuid(),
+          id: toastId,
           duration: toast.duration ?? 5,
         },
       ]);
+
+      return toastId;
     },
     []
   );

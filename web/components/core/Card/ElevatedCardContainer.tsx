@@ -6,6 +6,7 @@ const classNames = {
   container: css`
     ${theme.cornerRadius.small}
     ${theme.elevation.primary}
+    z-index: 0;
   `,
 };
 

@@ -13,6 +13,8 @@ import CenterLayout from "../../layouts/CenterLayout";
 import FooterLayout from "../../layouts/FooterLayout";
 import Footer from "../../footer";
 import useCurrentChallenge from "./hooks/useCurrentChallenge";
+import ButtonGroup from "../../core/buttons/ButtonGroup";
+import useToast from "../../../hooks/useToast";
 
 const classNames = {
   colorText: css`
@@ -26,8 +28,13 @@ const classNames = {
     text-decoration: underline;
     text-decoration-color: ${theme.palette.primaryText};
   `,
-  submitChallengeButton: css`
-    margin-top: ${theme.spacing["8px"]};
+  buttonGroup: css`
+    margin-top: ${theme.spacing["16px"]};
+    justify-content: stretch;
+  `,
+  button: css`
+    flex-grow: 1;
+    flex-basis: 0;
   `,
 };
 
@@ -74,9 +81,18 @@ export default function LandingPage() {
   const timeRemaining = currentChallenge?.endsAt
     ? getTimeRemaining(currentChallenge.endsAt)
     : null;
+  const { addToast } = useToast();
 
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
+  };
+  const handleShareChallengeClicked = () => {
+    navigator.clipboard.writeText(
+      `${window.location.host}/share/${currentChallenge?.id}`
+    );
+    addToast({
+      title: "Share link copied",
+    });
   };
 
   return (
@@ -104,16 +120,24 @@ export default function LandingPage() {
                       {timeRemaining ? formatDuration(timeRemaining) : "--"}
                     </span>
                   </p>
-
-                  <SecondaryButton
-                    className={cx(classNames.submitChallengeButton)}
-                    onClick={handleAddChallengeClicked}
-                  >
-                    Submit a challenge
-                  </SecondaryButton>
                 </CardContent>
               </Card>
             </ElevatedCardContainer>
+
+            <ButtonGroup className={cx(classNames.buttonGroup)}>
+              <SecondaryButton
+                className={cx(classNames.button)}
+                onClick={handleShareChallengeClicked}
+              >
+                Share
+              </SecondaryButton>
+              <SecondaryButton
+                className={cx(classNames.button)}
+                onClick={handleAddChallengeClicked}
+              >
+                Submit a challenge
+              </SecondaryButton>
+            </ButtonGroup>
           </ColumnLayout>
         </CenterLayout>
 
