@@ -10,8 +10,8 @@
     "watch": "webpack --watch",
     "serve": "webpack serve --history-api-fallback",
     "serve:prod": "PROD_PROXY=true webpack serve --history-api-fallback",
-    "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint": "eslint web",
+    "lint:fix": "eslint --fix web"
   },
   "author": "xapphire13@live.com",
   "license": "MIT",
