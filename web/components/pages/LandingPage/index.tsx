@@ -1,6 +1,7 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
 import { useNavigate } from "react-router";
+import copy from "copy-to-clipboard";
 import NavBar from "../../NavBar";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import theme from "../../../theme";
@@ -89,13 +90,12 @@ export default function LandingPage() {
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
   };
-  const handleShareChallengeClicked = async () => {
-    await navigator.clipboard.writeText(
-      `${window.location.host}/share/${currentChallenge?.id}`
-    );
-    addToast({
-      title: "Share link copied",
-    });
+  const handleShareChallengeClicked = () => {
+    if (copy(`${window.location.host}/share/${currentChallenge?.id}`)) {
+      addToast({
+        title: "Share link copied",
+      });
+    }
   };
 
   return (
