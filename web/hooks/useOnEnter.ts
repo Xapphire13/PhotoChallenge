@@ -3,7 +3,7 @@ export default function useOnEnter(
   { requireModifier }: { requireModifier: boolean } = { requireModifier: false }
 ) {
   return (ev: React.KeyboardEvent) => {
-    if (ev.key === "Enter" && (!requireModifier || ev.ctrlKey || ev.shiftKey)) {
+    if (ev.key === "Enter" && (!requireModifier || ev.ctrlKey || ev.metaKey)) {
       callback();
       ev.preventDefault();
     }

@@ -77,7 +77,7 @@ export default function SubmitChallengePage() {
   const handleCancel = () => {
     navigate(-1);
   };
-  const handleKeyPress = useOnEnter(handleSubmit, { requireModifier: true });
+  const handleKeyDown = useOnEnter(handleSubmit, { requireModifier: true });
 
   return (
     <NavBarLayout>
@@ -95,7 +95,7 @@ export default function SubmitChallengePage() {
               value={challengeText}
               onChange={setChallengeText}
               placeholder="Enter challenge here..."
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               characterLimit={250}
               className={cx(classNames.textarea)}
               autoFocus
