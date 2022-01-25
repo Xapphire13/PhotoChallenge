@@ -6,7 +6,7 @@ export default function useLoading(
     delay?: number;
   } = {}
 ) {
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState(!isLoading);
 
   useEffect(() => {
     if (!showResult) {
