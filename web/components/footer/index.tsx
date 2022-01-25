@@ -20,12 +20,11 @@ export default function Footer() {
 
   const handleInviteClicked = async () => {
     const invitation = await createInvitation();
-
     const inviteLink = `${window.location.origin}/invite/${invitation.id}`;
 
     await navigator.clipboard.writeText(inviteLink);
     addToast({
-      title: "Invite link copied!",
+      title: "Invite link copied",
     });
   };
 
