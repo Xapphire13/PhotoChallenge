@@ -90,10 +90,26 @@ export default function LandingPage() {
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
   };
-  const handleShareChallengeClicked = () => {
-    if (
-      copy(`${window.location.host}/share/challenge/${currentChallenge?.id}`)
-    ) {
+  const handleShareChallengeClicked = async () => {
+    let shared = false;
+    const shareUrl = `${window.location.host}/share/challenge/${currentChallenge?.id}`;
+
+    if (window.location.protocol.startsWith("https") && "share" in navigator) {
+      try {
+        await navigator.share({
+          title: "Daily Photo Challenge",
+          text: `Today's challenge is ${transformFirstLetter(
+            currentChallenge?.name ?? ""
+          )}`,
+          url: shareUrl,
+        });
+        shared = true;
+      } catch (err) {
+        shared = false;
+      }
+    }
+
+    if (!shared && copy(shareUrl)) {
       addToast({
         title: "Share link copied",
       });
