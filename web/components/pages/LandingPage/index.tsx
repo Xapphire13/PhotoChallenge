@@ -89,8 +89,8 @@ export default function LandingPage() {
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
   };
-  const handleShareChallengeClicked = () => {
-    navigator.clipboard.writeText(
+  const handleShareChallengeClicked = async () => {
+    await navigator.clipboard.writeText(
       `${window.location.host}/share/${currentChallenge?.id}`
     );
     addToast({
