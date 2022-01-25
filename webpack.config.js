@@ -2,6 +2,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
 const proxyProd = process.env.PROD_PROXY === "true";
@@ -14,6 +15,7 @@ const config = {
   entry: "./web/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
+    clean: true,
   },
   devServer: {
     open: true,
@@ -46,9 +48,6 @@ const config = {
       title: "Photo Challenge",
       publicPath: "/",
     }),
-
-    new MiniCssExtractPlugin(),
-
     new MiniCssExtractPlugin({
       filename: isProduction ? "styles-[contenthash].css" : "styles.css",
     }),
@@ -90,6 +89,9 @@ const config = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+  },
+  optimization: {
+    minimizer: ["...", new CssMinimizerPlugin()],
   },
 };
 
