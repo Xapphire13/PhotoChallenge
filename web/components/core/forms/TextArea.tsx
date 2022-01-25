@@ -53,76 +53,84 @@ export type TextAreaProps = {
     "value" | "onChange" | "label" | "placeholder" | "height" | "style" | "ref"
   >;
 
-export default function TextArea({
-  id,
-  minRows,
-  maxRows,
-  value = "",
-  onChange,
-  fullWidth,
-  label,
-  placeholder,
-  characterLimit,
-  className,
-  ...rest
-}: TextAreaProps) {
-  const [focused, setFocused] = useState(false);
-  const showCharacterCount = characterLimit && focused;
+const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  (
+    {
+      id,
+      minRows,
+      maxRows,
+      value = "",
+      onChange,
+      fullWidth,
+      label,
+      placeholder,
+      characterLimit,
+      className,
+      ...rest
+    },
+    ref
+  ) => {
+    const [focused, setFocused] = useState(false);
+    const showCharacterCount = characterLimit && focused;
 
-  const handleOnChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let newValue = ev.target.value;
+    const handleOnChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+      let newValue = ev.target.value;
 
-    if (characterLimit && newValue.length > characterLimit) {
-      newValue = newValue.slice(0, characterLimit);
-    }
-
-    if (maxRows) {
-      const lines = newValue.split("\n");
-
-      if (lines.length > maxRows) {
-        const [line1, line2, line3, ...overflowLines] = lines;
-        const overflow = overflowLines.join(" ").trim();
-
-        newValue = [line1, line2, line3 + overflow].join("\n");
+      if (characterLimit && newValue.length > characterLimit) {
+        newValue = newValue.slice(0, characterLimit);
       }
-    }
 
-    onChange?.(newValue);
-  };
+      if (maxRows) {
+        const lines = newValue.split("\n");
 
-  const handleOnFocus = () => setFocused(true);
-  const handleOnBlur = () => setFocused(false);
+        if (lines.length > maxRows) {
+          const [line1, line2, line3, ...overflowLines] = lines;
+          const overflow = overflowLines.join(" ").trim();
 
-  return (
-    <label
-      htmlFor={id}
-      className={cx(classNames.label, fullWidth && classNames.fullWidth)}
-    >
-      <span className={cx(classNames.visiblyHidden)}>
-        {label || placeholder}
-      </span>
-      <TextareaAutosize
-        id={id}
-        placeholder={placeholder}
-        value={value}
-        minRows={minRows}
-        maxRows={maxRows}
-        className={cx(
-          classNames.textarea,
-          fullWidth && classNames.fullWidth,
-          className
+          newValue = [line1, line2, line3 + overflow].join("\n");
+        }
+      }
+
+      onChange?.(newValue);
+    };
+
+    const handleOnFocus = () => setFocused(true);
+    const handleOnBlur = () => setFocused(false);
+
+    return (
+      <label
+        htmlFor={id}
+        className={cx(classNames.label, fullWidth && classNames.fullWidth)}
+      >
+        <span className={cx(classNames.visiblyHidden)}>
+          {label || placeholder}
+        </span>
+        <TextareaAutosize
+          id={id}
+          ref={ref}
+          placeholder={placeholder}
+          value={value}
+          minRows={minRows}
+          maxRows={maxRows}
+          className={cx(
+            classNames.textarea,
+            fullWidth && classNames.fullWidth,
+            className
+          )}
+          onChange={handleOnChange}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
+          {...rest}
+        />
+
+        {showCharacterCount && (
+          <div className={classNames.characterLimit}>
+            {value.length}/{characterLimit}
+          </div>
         )}
-        onChange={handleOnChange}
-        onFocus={handleOnFocus}
-        onBlur={handleOnBlur}
-        {...rest}
-      />
+      </label>
+    );
+  }
+);
 
-      {showCharacterCount && (
-        <div className={classNames.characterLimit}>
-          {value.length}/{characterLimit}
-        </div>
-      )}
-    </label>
-  );
-}
+export default TextArea;

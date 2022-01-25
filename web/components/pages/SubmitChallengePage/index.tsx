@@ -1,6 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { css, cx } from "@linaria/core";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import useOnEnter from "../../../hooks/useOnEnter";
 import useToast from "../../../hooks/useToast";
@@ -42,6 +42,7 @@ const ADD_CHALLENGE_MUTATION = gql`
 `;
 
 export default function SubmitChallengePage() {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION, {
     refetchQueries: [GET_FUTURE_CHALLENGES_QUERY],
   });
@@ -64,6 +65,8 @@ export default function SubmitChallengePage() {
           title: "New challenge added!",
         });
         setChallengeText("");
+
+        textAreaRef.current?.focus();
       } catch (err) {
         addToast({
           title: "Failed to add challenge",
@@ -85,6 +88,7 @@ export default function SubmitChallengePage() {
           <ColumnLayout>
             <h1>Submit a challenge...</h1>
             <TextArea
+              ref={textAreaRef}
               id="challenge-text"
               minRows={1}
               maxRows={3}
