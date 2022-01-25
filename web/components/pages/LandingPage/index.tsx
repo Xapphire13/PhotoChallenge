@@ -91,7 +91,9 @@ export default function LandingPage() {
     navigate("/new-challenge");
   };
   const handleShareChallengeClicked = () => {
-    if (copy(`${window.location.host}/share/${currentChallenge?.id}`)) {
+    if (
+      copy(`${window.location.host}/share/challenge/${currentChallenge?.id}`)
+    ) {
       addToast({
         title: "Share link copied",
       });
