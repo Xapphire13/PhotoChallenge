@@ -92,7 +92,7 @@ export default function LandingPage() {
     navigate("/new-challenge");
   };
   const handleShareChallengeClicked = async () => {
-    const shareUrl = `${window.location.host}/share/challenge/${currentChallenge?.id}`;
+    const shareUrl = `${window.location.protocol}//${window.location.host}/share/challenge/${currentChallenge?.id}`;
 
     if (
       (deviceType === "mobile" || deviceType === "tablet") &&
