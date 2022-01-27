@@ -1,5 +1,4 @@
 import { css, cx } from "@linaria/core";
-import copy from "copy-to-clipboard";
 import React from "react";
 import useToast from "../../hooks/useToast";
 import theme from "../../theme";
@@ -23,11 +22,11 @@ export default function Footer() {
     const invitation = await createInvitation();
     const inviteLink = `${window.location.origin}/invite/${invitation.id}`;
 
-    if (copy(inviteLink)) {
-      addToast({
-        title: "Invite link copied",
-      });
-    }
+    await navigator.clipboard.writeText(inviteLink);
+
+    addToast({
+      title: "Invite link copied",
+    });
   };
 
   return (

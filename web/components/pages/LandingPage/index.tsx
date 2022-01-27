@@ -1,7 +1,6 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
 import { useNavigate } from "react-router";
-import copy from "copy-to-clipboard";
 import NavBar from "../../NavBar";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import theme from "../../../theme";
@@ -18,6 +17,7 @@ import ButtonGroup from "../../core/buttons/ButtonGroup";
 import useToast from "../../../hooks/useToast";
 import Loader from "../../core/Loader";
 import useLoading from "../../../hooks/useLoading";
+import useDeviceType from "../../../hooks/useDeviceType";
 
 const classNames = {
   colorText: css`
@@ -86,34 +86,32 @@ export default function LandingPage() {
     : null;
   const { addToast } = useToast();
   const showLoading = useLoading(currentChallengeLoading);
+  const deviceType = useDeviceType();
 
   const handleAddChallengeClicked = () => {
     navigate("/new-challenge");
   };
   const handleShareChallengeClicked = async () => {
-    let shared = false;
     const shareUrl = `${window.location.host}/share/challenge/${currentChallenge?.id}`;
 
-    if (window.location.protocol.startsWith("https") && "share" in navigator) {
-      try {
-        await navigator.share({
-          title: "Daily Photo Challenge",
-          text: `Today's challenge is ${transformFirstLetter(
-            currentChallenge?.name ?? ""
-          )}`,
-          url: shareUrl,
-        });
-        shared = true;
-      } catch (err) {
-        shared = false;
-      }
+    if (
+      (deviceType === "mobile" || deviceType === "tablet") &&
+      window.location.protocol.startsWith("https") &&
+      "share" in navigator
+    ) {
+      await navigator.share({
+        title: `Today's challenge is ${transformFirstLetter(
+          currentChallenge?.name ?? ""
+        )}`,
+        url: shareUrl,
+      });
+    } else {
+      navigator.clipboard.writeText(shareUrl);
     }
 
-    if (!shared && copy(shareUrl)) {
-      addToast({
-        title: "Share link copied",
-      });
-    }
+    addToast({
+      title: "Share link copied",
+    });
   };
 
   return (
