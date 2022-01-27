@@ -107,11 +107,10 @@ export default function LandingPage() {
       });
     } else {
       navigator.clipboard.writeText(shareUrl);
+      addToast({
+        title: "Share link copied",
+      });
     }
-
-    addToast({
-      title: "Share link copied",
-    });
   };
 
   return (
