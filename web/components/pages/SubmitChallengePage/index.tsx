@@ -1,7 +1,7 @@
-import { gql, useMutation } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { gql, useMutation } from "urql";
 import useOnEnter from "../../../hooks/useOnEnter";
 import useToast from "../../../hooks/useToast";
 import theme from "../../../theme";
@@ -14,7 +14,7 @@ import CenterLayout from "../../layouts/CenterLayout";
 import ColumnLayout from "../../layouts/ColumnLayout";
 import FooterLayout from "../../layouts/FooterLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
-import NavBar, { GET_FUTURE_CHALLENGES_QUERY } from "../../NavBar";
+import NavBar from "../../NavBar";
 
 const classNames = {
   buttonGroup: css`
@@ -43,20 +43,22 @@ const ADD_CHALLENGE_MUTATION = gql`
 
 export default function SubmitChallengePage() {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION, {
-    refetchQueries: [GET_FUTURE_CHALLENGES_QUERY],
-  });
+  const [, addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION);
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
   const navigate = useNavigate();
   const { addToast } = useToast();
 
   const handleAddChallenge = (name: string) =>
-    addChallengeMutation({
-      variables: {
+    addChallengeMutation(
+      {
         name,
       },
-    });
+      {
+        // Causes a refetch of the future challenges query
+        additionalTypenames: ["FutureChallengeCountResponse"],
+      }
+    );
   const handleSubmit = async () => {
     if (!submitDisabled) {
       try {

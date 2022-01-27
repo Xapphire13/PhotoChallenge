@@ -1,7 +1,7 @@
-import { gql, useQuery } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useContext } from "react";
 import { useMatch, useNavigate } from "react-router";
+import { gql, useQuery } from "urql";
 import { ENABLE_PROFILE_PAGE } from "../../constants/features";
 import { PROFILE_PAGE } from "../../constants/paths";
 import { UserContext } from "../../contexts/UserContextProvider";
@@ -39,9 +39,9 @@ interface GetFutureChallengeCountQuery {
 export default function NavBar() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const { data } = useQuery<GetFutureChallengeCountQuery>(
-    GET_FUTURE_CHALLENGES_QUERY
-  );
+  const [{ data }] = useQuery<GetFutureChallengeCountQuery>({
+    query: GET_FUTURE_CHALLENGES_QUERY,
+  });
   const profilePageMatch = useMatch(PROFILE_PAGE);
 
   const handleUsernameButtonPressed = (ev: React.MouseEvent) => {

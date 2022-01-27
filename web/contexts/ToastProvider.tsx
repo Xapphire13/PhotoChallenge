@@ -18,8 +18,8 @@ interface ToastInfo {
 
 /* eslint-disable @typescript-eslint/no-empty-function */
 export const ToastContext = React.createContext({
-  addToast: (toastInfo: Omit<ToastInfo, "id">) => "" as string,
-  removeToast: (toastId: string) => {},
+  addToast: (_toastInfo: Omit<ToastInfo, "id">) => "" as string,
+  removeToast: (_toastId: string) => {},
 });
 /* eslint-enable @typescript-eslint/no-empty-function */
 

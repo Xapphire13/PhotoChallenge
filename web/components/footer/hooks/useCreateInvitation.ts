@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation } from "urql";
 
 const CREATE_INVITATION_MUTATION = gql`
   mutation CreateInvitation {
@@ -17,7 +17,7 @@ interface CreateInvitationMutation {
 }
 
 export default function useCreateInvitation() {
-  const [createInvitation] = useMutation<CreateInvitationMutation>(
+  const [, createInvitation] = useMutation<CreateInvitationMutation>(
     CREATE_INVITATION_MUTATION
   );
 

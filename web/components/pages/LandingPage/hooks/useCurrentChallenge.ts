@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
 import { useMemo } from "react";
+import { gql, useQuery } from "urql";
 
 const GET_CURRENT_CHALLENGE_QUERY = gql`
   query GetCurrentChallenge {
@@ -20,9 +20,9 @@ interface GetCurrentChallengeQuery {
 }
 
 export default function useCurrentChallenge() {
-  const { data, error, loading } = useQuery<GetCurrentChallengeQuery>(
-    GET_CURRENT_CHALLENGE_QUERY
-  );
+  const [{ data, error, fetching }] = useQuery<GetCurrentChallengeQuery>({
+    query: GET_CURRENT_CHALLENGE_QUERY,
+  });
 
   const currentChallenge = useMemo(() => {
     if (data?.currentChallenge) {
@@ -40,6 +40,6 @@ export default function useCurrentChallenge() {
   return {
     currentChallenge,
     error,
-    loading,
+    fetching,
   };
 }

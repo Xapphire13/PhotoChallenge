@@ -1,7 +1,7 @@
-import { gql, useMutation } from "@apollo/client";
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { gql, useMutation } from "urql";
 import useOnEnter from "../../../hooks/useOnEnter";
 import theme from "../../../theme";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
@@ -41,7 +41,7 @@ const CREATE_USER_MUTATION = gql`
 export default function InvitePage() {
   const navigate = useNavigate();
   const { invitationCode } = useParams();
-  const [createUserMutation] = useMutation(CREATE_USER_MUTATION);
+  const [, createUserMutation] = useMutation(CREATE_USER_MUTATION);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,7 +57,10 @@ export default function InvitePage() {
     invitationCode: string
   ) =>
     createUserMutation({
-      variables: { username, email, password, invitationCode },
+      username,
+      email,
+      password,
+      invitationCode,
     });
   const submitDisabled = !username.trim() || !email.trim() || !password.trim();
   const handleSubmit = async () => {

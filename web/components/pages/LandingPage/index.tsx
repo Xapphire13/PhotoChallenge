@@ -79,7 +79,7 @@ function formatDuration(durationMs: number) {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { currentChallenge, loading: currentChallengeLoading } =
+  const { currentChallenge, fetching: currentChallengeLoading } =
     useCurrentChallenge();
   const timeRemaining = currentChallenge?.endsAt
     ? getTimeRemaining(currentChallenge.endsAt)

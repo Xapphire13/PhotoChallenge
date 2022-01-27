@@ -3,7 +3,12 @@ import React from "react";
 import { css } from "@linaria/core";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+  createClient,
+  defaultExchanges,
+  Provider as GraphQlProvider,
+} from "urql";
+import { devtoolsExchange } from "@urql/devtools";
 import theme from "./theme";
 import ToastProvider from "./contexts/ToastProvider";
 import UserContextProvider from "./contexts/UserContextProvider";
@@ -59,14 +64,17 @@ export const classNames = {
   `,
 };
 
-const client = new ApolloClient({
-  uri: `${window.location.protocol}//${window.location.host}/graphql`,
-  cache: new InMemoryCache(),
+const client = createClient({
+  url: `${window.location.protocol}//${window.location.host}/graphql`,
+  exchanges: [
+    ...(process.env.NODE_ENV === "production" ? [] : [devtoolsExchange]),
+    ...defaultExchanges,
+  ],
 });
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
+    <GraphQlProvider value={client}>
       <ToastProvider>
         <BrowserRouter>
           <UserContextProvider>
@@ -74,7 +82,7 @@ export default function App() {
           </UserContextProvider>
         </BrowserRouter>
       </ToastProvider>
-    </ApolloProvider>
+    </GraphQlProvider>
   );
 }
 

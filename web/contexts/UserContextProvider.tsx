@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
-import { gql, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router";
+import { gql, useQuery } from "urql";
 import User from "../types/User";
 import { LOGIN_PAGE } from "../constants/paths";
 
@@ -33,19 +33,20 @@ export default function UserContextProvider({
 }: UserContextProviderProps) {
   const loggedIn = !!Cookies.get("loggedIn");
   const navigate = useNavigate();
-  const { data, loading } = useQuery<GetMeQuery>(GET_ME_QUERY, {
-    skip: !loggedIn,
+  const [{ data, fetching }] = useQuery<GetMeQuery>({
+    query: GET_ME_QUERY,
+    pause: !loggedIn,
   });
   const user = data?.me;
 
   useEffect(() => {
-    if (loggedIn && !loading && user == null) {
+    if (loggedIn && !fetching && user == null) {
       Cookies.remove("loggedIn");
       navigate(
         `${LOGIN_PAGE}?redir=${encodeURIComponent(window.location.pathname)}`
       );
     }
-  }, [loading, loggedIn, navigate, user]);
+  }, [fetching, loggedIn, navigate, user]);
 
   const contextValue: React.ContextType<typeof UserContext> = useMemo(
     () => ({
@@ -57,7 +58,7 @@ export default function UserContextProvider({
 
   return (
     <UserContext.Provider value={contextValue}>
-      {loggedIn && loading ? undefined : children}
+      {loggedIn && fetching ? undefined : children}
     </UserContext.Provider>
   );
 }
