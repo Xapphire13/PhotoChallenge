@@ -13,6 +13,7 @@ import theme from "./theme";
 import ToastProvider from "./contexts/ToastProvider";
 import UserContextProvider from "./contexts/UserContextProvider";
 import Routes from "./Routes";
+import "./ServiceWorker/register";
 
 export const classNames = {
   globals: css`

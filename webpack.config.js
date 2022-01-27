@@ -12,7 +12,10 @@ const proxyHost = proxyProd
 
 /** @type {import("webpack").Configuration}  */
 const config = {
-  entry: "./web/index.tsx",
+  entry: {
+    main: "./web/index.tsx",
+    sw: "./web/ServiceWorker/index.tsx",
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
     clean: true,
