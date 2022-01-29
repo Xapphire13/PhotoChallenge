@@ -33,7 +33,7 @@ export default function UserContextProvider({
 }: UserContextProviderProps) {
   const loggedIn = !!Cookies.get("loggedIn");
   const navigate = useNavigate();
-  const [{ data, fetching, error }] = useQuery<GetMeQuery>({
+  const [{ data, error }] = useQuery<GetMeQuery>({
     query: GET_ME_QUERY,
     pause: !loggedIn,
   });
@@ -63,8 +63,6 @@ export default function UserContextProvider({
   );
 
   return (
-    <UserContext.Provider value={contextValue}>
-      {loggedIn && fetching ? undefined : children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
 }

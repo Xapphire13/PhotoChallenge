@@ -15,8 +15,6 @@ import Footer from "../../footer";
 import useCurrentChallenge from "./hooks/useCurrentChallenge";
 import ButtonGroup from "../../core/buttons/ButtonGroup";
 import useToast from "../../../hooks/useToast";
-import Loader from "../../core/Loader";
-import useLoading from "../../../hooks/useLoading";
 import useDeviceType from "../../../hooks/useDeviceType";
 
 const classNames = {
@@ -79,13 +77,11 @@ function formatDuration(durationMs: number) {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { currentChallenge, fetching: currentChallengeLoading } =
-    useCurrentChallenge();
+  const { currentChallenge } = useCurrentChallenge();
   const timeRemaining = currentChallenge?.endsAt
     ? getTimeRemaining(currentChallenge.endsAt)
     : null;
   const { addToast } = useToast();
-  const showLoading = useLoading(currentChallengeLoading);
   const deviceType = useDeviceType();
 
   const handleAddChallengeClicked = () => {
@@ -120,47 +116,43 @@ export default function LandingPage() {
       <FooterLayout>
         <CenterLayout>
           <ColumnLayout>
-            {showLoading ? (
-              <Loader />
-            ) : (
-              <>
-                <p className={cx(classNames.todaysChallenge)}>
-                  Today&apos;s challenge is{" "}
-                  <span className={cx(classNames.challengeText)}>
-                    {currentChallenge?.name &&
-                      transformFirstLetter(currentChallenge.name)}
-                  </span>
-                </p>
+            <>
+              <p className={cx(classNames.todaysChallenge)}>
+                Today&apos;s challenge is{" "}
+                <span className={cx(classNames.challengeText)}>
+                  {currentChallenge?.name &&
+                    transformFirstLetter(currentChallenge.name)}
+                </span>
+              </p>
 
-                <ElevatedCardContainer>
-                  <Card>
-                    <CardContent>
-                      <p>
-                        Next challenge in{" "}
-                        <span className={cx(classNames.colorText)}>
-                          {timeRemaining && formatDuration(timeRemaining)}
-                        </span>
-                      </p>
-                    </CardContent>
-                  </Card>
-                </ElevatedCardContainer>
+              <ElevatedCardContainer>
+                <Card>
+                  <CardContent>
+                    <p>
+                      Next challenge in{" "}
+                      <span className={cx(classNames.colorText)}>
+                        {timeRemaining && formatDuration(timeRemaining)}
+                      </span>
+                    </p>
+                  </CardContent>
+                </Card>
+              </ElevatedCardContainer>
 
-                <ButtonGroup className={cx(classNames.buttonGroup)}>
-                  <SecondaryButton
-                    className={cx(classNames.button)}
-                    onClick={handleShareChallengeClicked}
-                  >
-                    Share
-                  </SecondaryButton>
-                  <SecondaryButton
-                    className={cx(classNames.button)}
-                    onClick={handleAddChallengeClicked}
-                  >
-                    Submit a challenge
-                  </SecondaryButton>
-                </ButtonGroup>
-              </>
-            )}
+              <ButtonGroup className={cx(classNames.buttonGroup)}>
+                <SecondaryButton
+                  className={cx(classNames.button)}
+                  onClick={handleShareChallengeClicked}
+                >
+                  Share
+                </SecondaryButton>
+                <SecondaryButton
+                  className={cx(classNames.button)}
+                  onClick={handleAddChallengeClicked}
+                >
+                  Submit a challenge
+                </SecondaryButton>
+              </ButtonGroup>
+            </>
           </ColumnLayout>
         </CenterLayout>
 

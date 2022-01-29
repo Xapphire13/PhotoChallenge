@@ -1,10 +1,10 @@
 import { css, cx } from "@linaria/core";
 import React, { useContext } from "react";
 import { useMatch, useNavigate } from "react-router";
-import { gql, useQuery } from "urql";
 import { ENABLE_PROFILE_PAGE } from "../../constants/features";
 import { PROFILE_PAGE } from "../../constants/paths";
 import { UserContext } from "../../contexts/UserContextProvider";
+import useRootQuery from "../../hooks/useRootQuery";
 import theme from "../../theme";
 import TextLink from "../core/TextLink";
 
@@ -22,14 +22,6 @@ const classNames = {
   `,
 };
 
-export const GET_FUTURE_CHALLENGES_QUERY = gql`
-  query GetFutureChallengeCount {
-    futureChallengeCount {
-      count
-    }
-  }
-`;
-
 interface GetFutureChallengeCountQuery {
   futureChallengeCount: {
     count: number;
@@ -37,11 +29,9 @@ interface GetFutureChallengeCountQuery {
 }
 
 export default function NavBar() {
+  const { data } = useRootQuery<GetFutureChallengeCountQuery>();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [{ data }] = useQuery<GetFutureChallengeCountQuery>({
-    query: GET_FUTURE_CHALLENGES_QUERY,
-  });
   const profilePageMatch = useMatch(PROFILE_PAGE);
 
   const handleUsernameButtonPressed = (ev: React.MouseEvent) => {

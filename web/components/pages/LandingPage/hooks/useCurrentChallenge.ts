@@ -1,15 +1,5 @@
 import { useMemo } from "react";
-import { gql, useQuery } from "urql";
-
-const GET_CURRENT_CHALLENGE_QUERY = gql`
-  query GetCurrentChallenge {
-    currentChallenge {
-      id
-      name
-      endsAt
-    }
-  }
-`;
+import useRootQuery from "../../../../hooks/useRootQuery";
 
 interface GetCurrentChallengeQuery {
   currentChallenge: {
@@ -20,9 +10,7 @@ interface GetCurrentChallengeQuery {
 }
 
 export default function useCurrentChallenge() {
-  const [{ data, error, fetching }] = useQuery<GetCurrentChallengeQuery>({
-    query: GET_CURRENT_CHALLENGE_QUERY,
-  });
+  const { data, error, fetching } = useRootQuery<GetCurrentChallengeQuery>();
 
   const currentChallenge = useMemo(() => {
     if (data?.currentChallenge) {
