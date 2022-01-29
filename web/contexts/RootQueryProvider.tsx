@@ -19,14 +19,14 @@ export interface RootQueryProviderProps {
 
 export const ROOT_QUERY = gql`
   query RootQuery {
-    futureChallengeCount {
-      count
-    }
-
     currentChallenge {
       id
       name
       endsAt
+    }
+
+    futureChallengeCount {
+      count
     }
   }
 `;
