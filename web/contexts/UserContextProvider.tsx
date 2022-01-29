@@ -33,20 +33,26 @@ export default function UserContextProvider({
 }: UserContextProviderProps) {
   const loggedIn = !!Cookies.get("loggedIn");
   const navigate = useNavigate();
-  const [{ data, fetching }] = useQuery<GetMeQuery>({
+  const [{ data, fetching, error }] = useQuery<GetMeQuery>({
     query: GET_ME_QUERY,
     pause: !loggedIn,
   });
   const user = data?.me;
 
   useEffect(() => {
-    if (loggedIn && !fetching && user == null) {
+    if (
+      user == null &&
+      error &&
+      error.graphQLErrors.some(({ message }) =>
+        message.includes("Unauthorized")
+      )
+    ) {
       Cookies.remove("loggedIn");
       navigate(
         `${LOGIN_PAGE}?redir=${encodeURIComponent(window.location.pathname)}`
       );
     }
-  }, [fetching, loggedIn, navigate, user]);
+  }, [error, navigate, user]);
 
   const contextValue: React.ContextType<typeof UserContext> = useMemo(
     () => ({
