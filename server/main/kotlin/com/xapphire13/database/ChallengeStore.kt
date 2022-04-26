@@ -39,8 +39,7 @@ class ChallengeStore(db: Firestore) {
         var currentChallenge = query.firstOrNull()?.toChallenge()
 
         if (currentChallenge == null) {
-            val nextChallenge =
-                challengesCollection.whereEqualTo("endsAt", null).limit(1).get().await(Dispatchers.IO).firstOrNull()
+            val nextChallenge = challengesCollection.whereEqualTo("endsAt", null).get().await(Dispatchers.IO).documents.randomOrNull()
 
             if (nextChallenge != null) {
                 val nextChallengeDueDate = Instant.now().atZone(ZoneOffset.UTC).let {

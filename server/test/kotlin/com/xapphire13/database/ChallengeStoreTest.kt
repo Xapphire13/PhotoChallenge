@@ -62,6 +62,10 @@ private fun mockQuery(
         iterator
     }
 
+    every {
+        querySnapshot.documents
+    }.returns(listOf(queryDocumentSnapshot))
+
     matcher().answers {
         val query = mockk<Query>()
 
