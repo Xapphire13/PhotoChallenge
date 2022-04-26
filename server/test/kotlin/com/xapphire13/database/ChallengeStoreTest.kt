@@ -13,7 +13,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.MockKStubScope
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
+import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.Date
@@ -88,6 +90,23 @@ internal class ChallengeStoreTest : DescribeSpec({
                 val firestore = mockk<Firestore>()
                 val collection = mockk<CollectionReference>()
 
+                mockkStatic(Instant::class)
+
+                every {
+                    Instant.now()
+                }.returns(
+                    ZonedDateTime.of(
+                        2022,
+                        1,
+                        24,
+                        0,
+                        0,
+                        0,
+                        0,
+                        ZoneOffset.UTC
+                    ).toInstant()
+                )
+
                 every {
                     firestore.collection(any())
                 }.returns(collection)
@@ -143,8 +162,20 @@ internal class ChallengeStoreTest : DescribeSpec({
                 val challengeStore = ChallengeStore(firestore)
                 challengeStore.getCurrentChallenge()
 
-                // TODO, update to not depend on specific date
-                endsAt.captured shouldBe Timestamp.of(Date.from(ZonedDateTime.of(2022, 1, 24, 15, 0, 0, 0, ZoneOffset.UTC).toInstant()))
+                endsAt.captured shouldBe Timestamp.of(
+                    Date.from(
+                        ZonedDateTime.of(
+                            2022,
+                            1,
+                            24,
+                            15,
+                            0,
+                            0,
+                            0,
+                            ZoneOffset.UTC
+                        ).toInstant()
+                    )
+                )
             }
         }
     }
