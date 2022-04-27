@@ -15,6 +15,7 @@ import ButtonGroup from "../../core/buttons/ButtonGroup";
 import useToast from "../../../hooks/useToast";
 import useDeviceType from "../../../hooks/useDeviceType";
 import MainTabBar from "../../MainTabBar";
+import Interval from "../../core/Interval";
 
 const classNames = {
   colorText: css`
@@ -51,7 +52,8 @@ function getTimeRemaining(endsAt: Date) {
   return then - now;
 }
 
-const MIN_MS = 1000 * 60;
+const ONE_SECOND_MS = 1000;
+const MIN_MS = ONE_SECOND_MS * 60;
 const HOURS_MS = MIN_MS * 60;
 
 function formatDuration(durationMs: number) {
@@ -76,9 +78,6 @@ function formatDuration(durationMs: number) {
 
 export default function LandingPage() {
   const { currentChallenge } = useCurrentChallenge();
-  const timeRemaining = currentChallenge?.endsAt
-    ? getTimeRemaining(currentChallenge.endsAt)
-    : null;
   const { addToast } = useToast();
   const deviceType = useDeviceType();
 
@@ -123,12 +122,19 @@ export default function LandingPage() {
               <ElevatedCardContainer>
                 <Card>
                   <CardContent>
-                    <p>
-                      Next challenge in{" "}
-                      <span className={cx(classNames.colorText)}>
-                        {timeRemaining && formatDuration(timeRemaining)}
-                      </span>
-                    </p>
+                    <Interval interval={ONE_SECOND_MS}>
+                      {() => (
+                        <p>
+                          Next challenge in{" "}
+                          <span className={cx(classNames.colorText)}>
+                            {currentChallenge?.endsAt &&
+                              formatDuration(
+                                getTimeRemaining(currentChallenge.endsAt)
+                              )}
+                          </span>
+                        </p>
+                      )}
+                    </Interval>
                   </CardContent>
                 </Card>
               </ElevatedCardContainer>
