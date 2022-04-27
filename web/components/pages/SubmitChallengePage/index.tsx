@@ -1,19 +1,17 @@
 import { css, cx } from "@linaria/core";
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router";
 import { gql, useMutation } from "urql";
 import useOnEnter from "../../../hooks/useOnEnter";
 import useToast from "../../../hooks/useToast";
 import theme from "../../../theme";
 import ButtonGroup from "../../core/buttons/ButtonGroup";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
-import SecondaryButton from "../../core/buttons/SecondaryButton";
 import TextArea from "../../core/forms/TextArea";
-import Footer from "../../footer";
 import CenterLayout from "../../layouts/CenterLayout";
 import ColumnLayout from "../../layouts/ColumnLayout";
 import FooterLayout from "../../layouts/FooterLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
+import MainTabBar from "../../MainTabBar";
 import NavBar from "../../NavBar";
 
 const classNames = {
@@ -24,7 +22,7 @@ const classNames = {
   textarea: css`
     width: 100%;
 
-    ${theme.responsive.mediumAndAbove} {
+    ${theme.responsive.largeAndAbove} {
       width: 400px;
     }
   `,
@@ -46,7 +44,6 @@ export default function SubmitChallengePage() {
   const [, addChallengeMutation] = useMutation(ADD_CHALLENGE_MUTATION);
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
-  const navigate = useNavigate();
   const { addToast } = useToast();
 
   const handleAddChallenge = (name: string) =>
@@ -76,9 +73,6 @@ export default function SubmitChallengePage() {
       }
     }
   };
-  const handleCancel = () => {
-    navigate(-1);
-  };
   const handleKeyDown = useOnEnter(handleSubmit, { requireModifier: true });
 
   return (
@@ -104,12 +98,6 @@ export default function SubmitChallengePage() {
             />
 
             <ButtonGroup className={cx(classNames.buttonGroup)}>
-              <SecondaryButton
-                className={cx(classNames.button)}
-                onClick={handleCancel}
-              >
-                Back
-              </SecondaryButton>
               <PrimaryButton
                 className={cx(classNames.button)}
                 disabled={submitDisabled}
@@ -121,7 +109,7 @@ export default function SubmitChallengePage() {
           </ColumnLayout>
         </CenterLayout>
 
-        <Footer />
+        <MainTabBar />
       </FooterLayout>
     </NavBarLayout>
   );

@@ -1,6 +1,5 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
-import { useNavigate } from "react-router";
 import NavBar from "../../NavBar";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import theme from "../../../theme";
@@ -11,11 +10,11 @@ import ColumnLayout from "../../layouts/ColumnLayout";
 import ElevatedCardContainer from "../../core/Card/ElevatedCardContainer";
 import CenterLayout from "../../layouts/CenterLayout";
 import FooterLayout from "../../layouts/FooterLayout";
-import Footer from "../../footer";
 import useCurrentChallenge from "./hooks/useCurrentChallenge";
 import ButtonGroup from "../../core/buttons/ButtonGroup";
 import useToast from "../../../hooks/useToast";
 import useDeviceType from "../../../hooks/useDeviceType";
+import MainTabBar from "../../MainTabBar";
 
 const classNames = {
   colorText: css`
@@ -76,7 +75,6 @@ function formatDuration(durationMs: number) {
 }
 
 export default function LandingPage() {
-  const navigate = useNavigate();
   const { currentChallenge } = useCurrentChallenge();
   const timeRemaining = currentChallenge?.endsAt
     ? getTimeRemaining(currentChallenge.endsAt)
@@ -84,9 +82,6 @@ export default function LandingPage() {
   const { addToast } = useToast();
   const deviceType = useDeviceType();
 
-  const handleAddChallengeClicked = () => {
-    navigate("/new-challenge");
-  };
   const handleShareChallengeClicked = async () => {
     const shareUrl = `${window.location.protocol}//${window.location.host}/share/challenge/${currentChallenge?.id}`;
 
@@ -145,18 +140,12 @@ export default function LandingPage() {
                 >
                   Share
                 </SecondaryButton>
-                <SecondaryButton
-                  className={cx(classNames.button)}
-                  onClick={handleAddChallengeClicked}
-                >
-                  Submit a challenge
-                </SecondaryButton>
               </ButtonGroup>
             </>
           </ColumnLayout>
         </CenterLayout>
 
-        <Footer />
+        <MainTabBar />
       </FooterLayout>
     </NavBarLayout>
   );

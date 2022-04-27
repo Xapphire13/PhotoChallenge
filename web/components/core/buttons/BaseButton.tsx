@@ -12,6 +12,7 @@ export const classNames = {
     padding: ${theme.spacing["8px"]};
     cursor: pointer;
     color: ${theme.palette.white};
+    background: none;
 
     :disabled {
       cursor: not-allowed;
@@ -27,6 +28,7 @@ export interface BaseButtonProps extends StylableProps {
   href?: string;
   newTab?: boolean;
   submit?: boolean;
+  accessibilityLabel?: string;
 }
 
 export default function BaseButton({
@@ -37,6 +39,7 @@ export default function BaseButton({
   href,
   newTab,
   submit,
+  accessibilityLabel,
 }: BaseButtonProps) {
   if (href) {
     return (
@@ -45,6 +48,7 @@ export default function BaseButton({
         onClick={disabled ? undefined : onClick}
         href={href}
         newTab={newTab}
+        aria-label={accessibilityLabel}
       >
         {children}
       </TextLink>
@@ -57,6 +61,7 @@ export default function BaseButton({
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       className={cx(classNames.container, className)}
+      aria-label={accessibilityLabel}
     >
       {children}
     </button>

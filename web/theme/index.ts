@@ -1,3 +1,5 @@
+import { LARGE, MEDIUM, SMALL } from "./breakpoints";
+
 export default {
   palette: {
     background0: "#272737",
@@ -64,10 +66,10 @@ export default {
   },
   responsive: {
     /** 1280px or larger  */
-    largeAndAbove: "@media screen and (min-width: 1280px)",
+    extraLargeAndAbove: `@media screen and (min-width: ${LARGE}px)`,
     /** 768px or larger  */
-    mediumAndAbove: "@media screen and (min-width: 768px)",
+    largeAndAbove: `@media screen and (min-width: ${MEDIUM}px)`,
     /** 320px or larger  */
-    smallAndAbove: "@media screen and (min-width: 320px)",
+    mediumAndAbove: `@media screen and (min-width: ${SMALL}px)`,
   },
 };

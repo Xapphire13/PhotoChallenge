@@ -14,7 +14,7 @@ const classNames = {
     display: flex;
     flex-direction: column;
     gap: ${theme.spacing["8px"]};
-    ${theme.responsive.mediumAndAbove} {
+    ${theme.responsive.largeAndAbove} {
       width: 400px;
     }
   `,
