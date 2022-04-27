@@ -10,6 +10,7 @@ const classNames = {
     color: ${theme.palette.white};
     padding: ${theme.spacing["4px"]};
     border-bottom: 2px solid ${theme.palette.background1};
+    ${theme.typography.base.large}
 
     :focus {
       border-bottom: 2px solid ${theme.palette.primary};

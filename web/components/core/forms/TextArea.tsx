@@ -12,6 +12,7 @@ const classNames = {
     border: none;
     color: ${theme.palette.white};
     padding: ${theme.spacing["16px"]} ${theme.spacing["8px"]};
+    ${theme.typography.base.large}
 
     :focus {
       outline: 2px solid ${theme.palette.primary};
