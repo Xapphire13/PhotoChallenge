@@ -1,5 +1,5 @@
 import { css, cx } from "@linaria/core";
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import theme from "../../../theme";
 import StylableProps from "../../../theme/StylableProps";
 import TextLink from "../TextLink";
@@ -21,7 +21,12 @@ export const classNames = {
   `,
 };
 
-export interface BaseButtonProps extends StylableProps {
+export interface BaseButtonProps
+  extends StylableProps,
+    React.DetailedHTMLProps<
+      React.ButtonHTMLAttributes<HTMLButtonElement>,
+      HTMLButtonElement
+    > {
   children: React.ReactNode;
   onClick?: (ev: React.MouseEvent) => void;
   disabled?: boolean;

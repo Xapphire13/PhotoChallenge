@@ -16,6 +16,7 @@ import useToast from "../../../hooks/useToast";
 import useDeviceType from "../../../hooks/useDeviceType";
 import MainTabBar from "../../MainTabBar";
 import Interval from "../../core/Interval";
+import MainMenuLayout from "../../layouts/MainMenuLayout";
 
 const classNames = {
   colorText: css`
@@ -107,52 +108,54 @@ export default function LandingPage() {
     <NavBarLayout>
       <NavBar />
 
-      <FooterLayout>
-        <CenterLayout>
-          <ColumnLayout>
-            <>
-              <p className={cx(classNames.todaysChallenge)}>
-                Today&apos;s challenge is{" "}
-                <span className={cx(classNames.challengeText)}>
-                  {currentChallenge?.name &&
-                    transformFirstLetter(currentChallenge.name)}
-                </span>
-              </p>
+      <MainMenuLayout>
+        <FooterLayout>
+          <CenterLayout>
+            <ColumnLayout>
+              <>
+                <p className={cx(classNames.todaysChallenge)}>
+                  Today&apos;s challenge is{" "}
+                  <span className={cx(classNames.challengeText)}>
+                    {currentChallenge?.name &&
+                      transformFirstLetter(currentChallenge.name)}
+                  </span>
+                </p>
 
-              <ElevatedCardContainer>
-                <Card>
-                  <CardContent>
-                    <Interval interval={ONE_SECOND_MS}>
-                      {() => (
-                        <p>
-                          Next challenge in{" "}
-                          <span className={cx(classNames.colorText)}>
-                            {currentChallenge?.endsAt &&
-                              formatDuration(
-                                getTimeRemaining(currentChallenge.endsAt)
-                              )}
-                          </span>
-                        </p>
-                      )}
-                    </Interval>
-                  </CardContent>
-                </Card>
-              </ElevatedCardContainer>
+                <ElevatedCardContainer>
+                  <Card>
+                    <CardContent>
+                      <Interval interval={ONE_SECOND_MS}>
+                        {() => (
+                          <p>
+                            Next challenge in{" "}
+                            <span className={cx(classNames.colorText)}>
+                              {currentChallenge?.endsAt &&
+                                formatDuration(
+                                  getTimeRemaining(currentChallenge.endsAt)
+                                )}
+                            </span>
+                          </p>
+                        )}
+                      </Interval>
+                    </CardContent>
+                  </Card>
+                </ElevatedCardContainer>
 
-              <ButtonGroup className={cx(classNames.buttonGroup)}>
-                <SecondaryButton
-                  className={cx(classNames.button)}
-                  onClick={handleShareChallengeClicked}
-                >
-                  Share
-                </SecondaryButton>
-              </ButtonGroup>
-            </>
-          </ColumnLayout>
-        </CenterLayout>
+                <ButtonGroup className={cx(classNames.buttonGroup)}>
+                  <SecondaryButton
+                    className={cx(classNames.button)}
+                    onClick={handleShareChallengeClicked}
+                  >
+                    Share
+                  </SecondaryButton>
+                </ButtonGroup>
+              </>
+            </ColumnLayout>
+          </CenterLayout>
 
-        <MainTabBar />
-      </FooterLayout>
+          <MainTabBar />
+        </FooterLayout>
+      </MainMenuLayout>
     </NavBarLayout>
   );
 }

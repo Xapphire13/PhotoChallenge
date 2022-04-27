@@ -14,6 +14,7 @@ import ToastProvider from "./contexts/ToastProvider";
 import UserContextProvider from "./contexts/UserContextProvider";
 import Routes from "./Routes";
 import RootQueryProvider from "./contexts/RootQueryProvider";
+import MainMenuContextProvider from "./contexts/MainMenuContextProvider";
 
 export const classNames = {
   globals: css`
@@ -80,7 +81,9 @@ export default function App() {
         <BrowserRouter>
           <UserContextProvider>
             <RootQueryProvider>
-              <Routes />
+              <MainMenuContextProvider>
+                <Routes />
+              </MainMenuContextProvider>
             </RootQueryProvider>
           </UserContextProvider>
         </BrowserRouter>

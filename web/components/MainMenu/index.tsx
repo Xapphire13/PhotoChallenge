@@ -1,22 +1,24 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
+import { Code, Mail } from "react-feather";
+import useMainMenuContext from "../../hooks/useMainMenuContext";
 import useToast from "../../hooks/useToast";
 import theme from "../../theme";
-import TertiaryButton from "../core/buttons/TertiaryButton";
-import InlineList from "../core/InlineList";
-import useCreateInvitation from "../MainMenu/hooks/useCreateInvitation";
+import Menu from "../core/Menu";
+import MenuItem from "../core/Menu/parts/MenuItem";
+import useCreateInvitation from "./hooks/useCreateInvitation";
 
 const classNames = {
   container: css`
-    display: flex;
-    justify-content: center;
-    margin: ${theme.spacing["8px"]};
+    background-color: ${theme.palette.background0};
+    padding: ${theme.spacing["16px"]};
   `,
 };
 
-export default function Footer() {
+export default function MainMenu() {
   const { addToast } = useToast();
   const createInvitation = useCreateInvitation();
+  const { toggle: toggleMainMenu } = useMainMenuContext();
 
   const handleInviteClicked = async () => {
     const invitation = await createInvitation();
@@ -27,19 +29,24 @@ export default function Footer() {
     addToast({
       title: "Invite link copied",
     });
+    toggleMainMenu();
   };
 
   return (
     <div className={cx(classNames.container)}>
-      <InlineList>
-        <TertiaryButton
+      <Menu>
+        <MenuItem
+          icon={<Code />}
           newTab
           href="https://github.com/Xapphire13/PhotoChallenge"
+          onClick={toggleMainMenu}
         >
           GitHub
-        </TertiaryButton>
-        <TertiaryButton onClick={handleInviteClicked}>Invite</TertiaryButton>
-      </InlineList>
+        </MenuItem>
+        <MenuItem icon={<Mail />} onClick={handleInviteClicked}>
+          Invite
+        </MenuItem>
+      </Menu>
     </div>
   );
 }

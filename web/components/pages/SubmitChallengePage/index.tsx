@@ -10,6 +10,7 @@ import TextArea from "../../core/forms/TextArea";
 import CenterLayout from "../../layouts/CenterLayout";
 import ColumnLayout from "../../layouts/ColumnLayout";
 import FooterLayout from "../../layouts/FooterLayout";
+import MainMenuLayout from "../../layouts/MainMenuLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import MainTabBar from "../../MainTabBar";
 import NavBar from "../../NavBar";
@@ -79,38 +80,40 @@ export default function SubmitChallengePage() {
     <NavBarLayout>
       <NavBar />
 
-      <FooterLayout>
-        <CenterLayout>
-          <ColumnLayout>
-            <h1>Submit a challenge...</h1>
-            <TextArea
-              ref={textAreaRef}
-              id="challenge-text"
-              minRows={1}
-              maxRows={3}
-              value={challengeText}
-              onChange={setChallengeText}
-              placeholder="Enter challenge here..."
-              onKeyDown={handleKeyDown}
-              characterLimit={250}
-              className={cx(classNames.textarea)}
-              autoFocus
-            />
+      <MainMenuLayout>
+        <FooterLayout>
+          <CenterLayout>
+            <ColumnLayout>
+              <h1>Submit a challenge...</h1>
+              <TextArea
+                ref={textAreaRef}
+                id="challenge-text"
+                minRows={1}
+                maxRows={3}
+                value={challengeText}
+                onChange={setChallengeText}
+                placeholder="Enter challenge here..."
+                onKeyDown={handleKeyDown}
+                characterLimit={250}
+                className={cx(classNames.textarea)}
+                autoFocus
+              />
 
-            <ButtonGroup className={cx(classNames.buttonGroup)}>
-              <PrimaryButton
-                className={cx(classNames.button)}
-                disabled={submitDisabled}
-                onClick={handleSubmit}
-              >
-                Submit
-              </PrimaryButton>
-            </ButtonGroup>
-          </ColumnLayout>
-        </CenterLayout>
+              <ButtonGroup className={cx(classNames.buttonGroup)}>
+                <PrimaryButton
+                  className={cx(classNames.button)}
+                  disabled={submitDisabled}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </PrimaryButton>
+              </ButtonGroup>
+            </ColumnLayout>
+          </CenterLayout>
 
-        <MainTabBar />
-      </FooterLayout>
+          <MainTabBar />
+        </FooterLayout>
+      </MainMenuLayout>
     </NavBarLayout>
   );
 }

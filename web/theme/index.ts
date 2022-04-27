@@ -9,7 +9,7 @@ export default {
     faint: "#808080",
     primary: "#F61067",
     primaryText: "#FBAAC8", // Text friendly version of primary
-    modalBackdrop: "#FFFFFF44",
+    modalBackdrop: "rgba(0,0,0,0.6)",
     warning: "#FF2424",
   },
   cornerRadius: {
