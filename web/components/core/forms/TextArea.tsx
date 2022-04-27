@@ -10,12 +10,14 @@ const classNames = {
     resize: none;
     background: ${theme.palette.background1};
     border: none;
+    outline: none;
     color: ${theme.palette.white};
     padding: ${theme.spacing["16px"]} ${theme.spacing["8px"]};
     ${theme.typography.base.large}
 
     :focus {
-      outline: 2px solid ${theme.palette.primary};
+      /* We use box-shadow because Safari doesn't respect outline radius */
+      box-shadow: 0 0 0 2px ${theme.palette.primary};
     }
   `,
   fullWidth: css`
