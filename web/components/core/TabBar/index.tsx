@@ -7,8 +7,7 @@ const classNames = {
   container: css`
     display: flex;
     justify-content: space-between;
-    background-color: ${theme.palette.background1};
-    border-top: 1px solid ${theme.palette.faint};
+    border-top: 1px solid ${theme.palette.background1};
   `,
 };
 

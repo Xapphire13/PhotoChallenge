@@ -13,21 +13,33 @@ const classNames = {
 const StyledBaseButton = styled(BaseButton)`
   flex-grow: 1;
   flex-basis: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing["4px"]};
+  ${theme.typography.base.small}
+  align-items: center;
 `;
 
-export interface TabBarButtonProps extends BaseButtonProps {
+export type TabBarButtonProps = {
+  label: string;
+  icon: React.ComponentType;
   isActive?: boolean;
-}
+} & Omit<BaseButtonProps, "children">;
 
 export default function TabBarButton({
   isActive,
   className,
+  icon: Icon,
+  label,
   ...rest
 }: TabBarButtonProps) {
   return (
     <StyledBaseButton
       {...rest}
       className={cx(className, isActive && classNames.active)}
-    />
+    >
+      <Icon />
+      <div>{label}</div>
+    </StyledBaseButton>
   );
 }

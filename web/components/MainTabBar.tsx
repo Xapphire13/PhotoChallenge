@@ -32,10 +32,8 @@ export default function MainTabBar() {
 
   return (
     <TabBar activeIndex={index} onIndexChange={setIndex}>
-      {TABS.map(({ name, icon: Icon, path }) => (
-        <TabBarButton key={path} accessibilityLabel={name}>
-          <Icon />
-        </TabBarButton>
+      {TABS.map(({ name, icon, path }) => (
+        <TabBarButton key={path} label={name} icon={icon} />
       ))}
     </TabBar>
   );
