@@ -11,6 +11,7 @@ const classNames = {
     display: grid;
     grid-template: 1fr / 1fr;
     flex-grow: 1;
+    overflow: hidden;
   `,
   mainMenu: css`
     position: absolute;

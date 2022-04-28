@@ -21,10 +21,16 @@ export const classNames = {
     :global() {
       @import url("https://fonts.googleapis.com/css2?family=Offside&display=swap");
 
+      html {
+        height: 100%;
+      }
+
       html,
       body,
       #app-root {
-        height: 100%;
+        display: grid;
+        grid-template: 1fr / 1fr;
+        overflow: hidden;
       }
 
       body {

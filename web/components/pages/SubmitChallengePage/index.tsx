@@ -9,11 +9,10 @@ import PrimaryButton from "../../core/buttons/PrimaryButton";
 import TextArea from "../../core/forms/TextArea";
 import CenterLayout from "../../layouts/CenterLayout";
 import ColumnLayout from "../../layouts/ColumnLayout";
-import FooterLayout from "../../layouts/FooterLayout";
 import MainMenuLayout from "../../layouts/MainMenuLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
+import StaticFooterLayout from "../../layouts/StaticFooterLayout";
 import MainTabBar from "../../MainTabBar";
-import NavBar from "../../NavBar";
 
 const classNames = {
   buttonGroup: css`
@@ -78,10 +77,8 @@ export default function SubmitChallengePage() {
 
   return (
     <NavBarLayout>
-      <NavBar />
-
       <MainMenuLayout>
-        <FooterLayout>
+        <StaticFooterLayout>
           <CenterLayout>
             <ColumnLayout>
               <h1>Submit a challenge...</h1>
@@ -112,7 +109,7 @@ export default function SubmitChallengePage() {
           </CenterLayout>
 
           <MainTabBar />
-        </FooterLayout>
+        </StaticFooterLayout>
       </MainMenuLayout>
     </NavBarLayout>
   );

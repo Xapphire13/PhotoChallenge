@@ -1,6 +1,5 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
-import NavBar from "../../NavBar";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import theme from "../../../theme";
 import SecondaryButton from "../../core/buttons/SecondaryButton";
@@ -17,6 +16,7 @@ import useDeviceType from "../../../hooks/useDeviceType";
 import MainTabBar from "../../MainTabBar";
 import Interval from "../../core/Interval";
 import MainMenuLayout from "../../layouts/MainMenuLayout";
+import StaticFooterLayout from "../../layouts/StaticFooterLayout";
 
 const classNames = {
   colorText: css`
@@ -106,10 +106,8 @@ export default function LandingPage() {
 
   return (
     <NavBarLayout>
-      <NavBar />
-
       <MainMenuLayout>
-        <FooterLayout>
+        <StaticFooterLayout>
           <CenterLayout>
             <ColumnLayout>
               <>
@@ -154,7 +152,7 @@ export default function LandingPage() {
           </CenterLayout>
 
           <MainTabBar />
-        </FooterLayout>
+        </StaticFooterLayout>
       </MainMenuLayout>
     </NavBarLayout>
   );
