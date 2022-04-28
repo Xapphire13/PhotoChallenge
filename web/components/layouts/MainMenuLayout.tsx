@@ -19,6 +19,11 @@ const classNames = {
     bottom: 0;
     display: grid;
     grid-template: 1fr / 1fr;
+    width: 100%;
+
+    ${theme.responsive.largeAndAbove} {
+      width: unset;
+    }
   `,
   backdrop: css`
     position: absolute;

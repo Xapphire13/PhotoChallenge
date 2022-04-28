@@ -1,5 +1,5 @@
 import { css, cx } from "@linaria/core";
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 import theme from "../../../theme";
 import StylableProps from "../../../theme/StylableProps";
 import TextLink from "../TextLink";
@@ -13,6 +13,10 @@ export const classNames = {
     cursor: pointer;
     color: ${theme.palette.white};
     background: none;
+
+    :not(:focus-visible) {
+      outline: none;
+    }
 
     :disabled {
       cursor: not-allowed;
