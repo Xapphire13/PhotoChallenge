@@ -7,3 +7,5 @@ export const SUBMIT_CHALLENGE_PAGE = `${ROOT}new-challenge` as const;
 export const INVITATION_PAGE = `${ROOT}invite/:invitationCode` as const;
 
 export const PROFILE_PAGE = `${ROOT}profile` as const;
+
+export const POST_PHOTO_PAGE = `${ROOT}post` as const;

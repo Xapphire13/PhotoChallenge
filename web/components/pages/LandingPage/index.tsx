@@ -10,7 +10,7 @@ import ElevatedCardContainer from "../../core/Card/ElevatedCardContainer";
 import CenterLayout from "../../layouts/CenterLayout";
 import FooterLayout from "../../layouts/FooterLayout";
 import useCurrentChallenge from "./hooks/useCurrentChallenge";
-import ButtonGroup from "../../core/buttons/ButtonGroup";
+import HorizontalButtonGroup from "../../core/buttons/HorizontalButtonGroup";
 import useToast from "../../../hooks/useToast";
 import useDeviceType from "../../../hooks/useDeviceType";
 import MainTabBar from "../../MainTabBar";
@@ -139,14 +139,14 @@ export default function LandingPage() {
                   </Card>
                 </ElevatedCardContainer>
 
-                <ButtonGroup className={cx(classNames.buttonGroup)}>
+                <HorizontalButtonGroup className={cx(classNames.buttonGroup)}>
                   <SecondaryButton
                     className={cx(classNames.button)}
                     onClick={handleShareChallengeClicked}
                   >
                     Share
                   </SecondaryButton>
-                </ButtonGroup>
+                </HorizontalButtonGroup>
               </>
             </ColumnLayout>
           </CenterLayout>

@@ -4,7 +4,7 @@ import { gql, useMutation } from "urql";
 import useOnEnter from "../../../hooks/useOnEnter";
 import useToast from "../../../hooks/useToast";
 import theme from "../../../theme";
-import ButtonGroup from "../../core/buttons/ButtonGroup";
+import HorizontalButtonGroup from "../../core/buttons/HorizontalButtonGroup";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
 import TextArea from "../../core/forms/TextArea";
 import CenterLayout from "../../layouts/CenterLayout";
@@ -96,7 +96,7 @@ export default function SubmitChallengePage() {
                 autoFocus
               />
 
-              <ButtonGroup className={cx(classNames.buttonGroup)}>
+              <HorizontalButtonGroup className={cx(classNames.buttonGroup)}>
                 <PrimaryButton
                   className={cx(classNames.button)}
                   disabled={submitDisabled}
@@ -104,7 +104,7 @@ export default function SubmitChallengePage() {
                 >
                   Submit
                 </PrimaryButton>
-              </ButtonGroup>
+              </HorizontalButtonGroup>
             </ColumnLayout>
           </CenterLayout>
 

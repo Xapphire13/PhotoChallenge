@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Home, Camera, Edit } from "react-feather";
 import { useLocation, useNavigate } from "react-router";
 import { ENABLE_POST_PHOTO_PAGE } from "../constants/features";
-import { ROOT, SUBMIT_CHALLENGE_PAGE } from "../constants/paths";
+import {
+  POST_PHOTO_PAGE,
+  ROOT,
+  SUBMIT_CHALLENGE_PAGE,
+} from "../constants/paths";
 import isNotNull from "../utils/isNotNull";
 import TabBar from "./core/TabBar";
 import TabBarButton from "./core/TabBar/parts/TabBarButton";
@@ -10,7 +14,7 @@ import TabBarButton from "./core/TabBar/parts/TabBarButton";
 const TABS = [
   { name: "Home", icon: Home, path: ROOT },
   ENABLE_POST_PHOTO_PAGE
-    ? { name: "Post photo", icon: Camera, path: "/TODO" }
+    ? { name: "Post photo", icon: Camera, path: POST_PHOTO_PAGE }
     : null,
   { name: "Submit challenge", icon: Edit, path: SUBMIT_CHALLENGE_PAGE },
 ].filter(isNotNull);

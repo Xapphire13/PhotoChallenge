@@ -1,6 +1,7 @@
-import { css } from "@linaria/core";
-import React, { useEffect, useRef } from "react";
+import { css, cx } from "@linaria/core";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import FocusLock from "react-focus-lock";
 
 const classNames = {
   wrapper: css`
@@ -10,6 +11,9 @@ const classNames = {
     left: 0;
     right: 0;
   `,
+  focusLock: css`
+    height: 100%;
+  `,
 };
 
 export interface BaseModalProps {
@@ -18,15 +22,17 @@ export interface BaseModalProps {
 }
 
 export default function BaseModal({ isOpen, children }: BaseModalProps) {
-  const portalRef = useRef<HTMLDivElement>(document.createElement("div"));
+  const [portalRef] = useState<HTMLDivElement>(() =>
+    document.createElement("div")
+  );
 
   useEffect(() => {
-    portalRef.current.className = classNames.wrapper;
-  }, []);
+    portalRef.className = cx(classNames.wrapper);
+  }, [portalRef]);
 
   useEffect(() => {
     if (isOpen) {
-      const portalTarget = portalRef.current;
+      const portalTarget = portalRef;
       document.body.appendChild(portalTarget);
 
       return () => {
@@ -35,11 +41,16 @@ export default function BaseModal({ isOpen, children }: BaseModalProps) {
     }
 
     return () => undefined;
-  }, [isOpen]);
+  }, [isOpen, portalRef]);
 
   if (!isOpen) {
     return null;
   }
 
-  return createPortal(children, portalRef.current);
+  return createPortal(
+    <FocusLock className={cx(classNames.focusLock)} autoFocus={false}>
+      {children}
+    </FocusLock>,
+    portalRef
+  );
 }

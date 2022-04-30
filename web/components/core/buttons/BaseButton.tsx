@@ -13,6 +13,10 @@ export const classNames = {
     cursor: pointer;
     color: ${theme.palette.white};
     background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: ${theme.spacing["8px"]};
 
     :not(:focus-visible) {
       outline: none;
