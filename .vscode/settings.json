@@ -1,3 +1,4 @@
 {
-  "java.jdt.ls.vmargs": "-noverify -Xmx2G -XX:+UseG1GC -XX:+UseStringDeduplication"
+  "java.jdt.ls.vmargs": "-noverify -Xmx2G -XX:+UseG1GC -XX:+UseStringDeduplication",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

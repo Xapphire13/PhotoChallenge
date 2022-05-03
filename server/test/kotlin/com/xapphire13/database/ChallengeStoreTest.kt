@@ -135,13 +135,15 @@ internal class ChallengeStoreTest : DescribeSpec({
                 }.returns(Timestamp.now())
                 every {
                     documentSnapshot.get(any<String>())
-                }.returns(mockk<DocumentReference>().let {
-                    every {
-                        it.id
-                    }.returns("1234")
+                }.returns(
+                    mockk<DocumentReference>().let {
+                        every {
+                            it.id
+                        }.returns("1234")
 
-                    it
-                })
+                        it
+                    }
+                )
                 every {
                     documentSnapshot.id
                 }.returns("1234")

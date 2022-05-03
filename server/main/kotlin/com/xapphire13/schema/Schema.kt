@@ -9,15 +9,16 @@ import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UserStore
 import com.xapphire13.models.RequestContext
-import com.xapphire13.models.UnitResponse
 import com.xapphire13.models.User
+import com.xapphire13.storage.FileStorage
 import io.ktor.application.Application
 import io.ktor.application.install
 
 fun Application.configureSchema(
     userStore: UserStore,
     invitationStore: InvitationStore,
-    challengeStore: ChallengeStore
+    challengeStore: ChallengeStore,
+    fileStorage: FileStorage
 ) {
     install(GraphQL) {
         playground = true
@@ -25,13 +26,14 @@ fun Application.configureSchema(
 
         context { call ->
             val token = call.request.cookies["token"]
-            val verifiedToken = token?.let {
-                try {
-                    JWTUtils.verifyToken(token)
-                } catch (ex: JWTVerificationException) {
-                    null
+            val verifiedToken =
+                token?.let {
+                    try {
+                        JWTUtils.verifyToken(token)
+                    } catch (ex: JWTVerificationException) {
+                        null
+                    }
                 }
-            }
 
             if (verifiedToken != null) {
                 +RequestContext(userId = verifiedToken.subject)
@@ -40,13 +42,9 @@ fun Application.configureSchema(
 
         schema {
             type<User>() {
-                property(User::passwordHash) {
-                    ignore = true
-                }
+                property(User::passwordHash) { ignore = true }
 
-                property(User::passwordSalt) {
-                    ignore = true
-                }
+                property(User::passwordSalt) { ignore = true }
             }
 
             query("users") {
@@ -55,29 +53,35 @@ fun Application.configureSchema(
                 accessRule { ctx: Context ->
                     val requestContext = ctx.get<RequestContext>()
 
-                    if (requestContext == null) GraphQLError("Unauthorized")
-                    else null
+                    if (requestContext == null) GraphQLError("Unauthorized") else null
                 }
             }
 
             query("user") {
-                resolver { id: String ->
-                    userStore.getUser(id)
-                }.withArgs {
-                    arg<String> { name = "id"; description = "The user ID" }
+                resolver { id: String -> userStore.getUser(id) }.withArgs {
+                    arg<String> {
+                        name = "id"
+                        description = "The user ID"
+                    }
                 }
             }
 
             query("me") {
                 resolver { ctx: Context ->
-                    val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
+                    val requestContext =
+                        ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
                     userStore.getUser(requestContext.userId)
                 }
             }
 
             mutation("createUser") {
-                resolver { username: String, email: String, password: String, invitationCode: String, ctx: Context ->
+                resolver {
+                    username: String,
+                    email: String,
+                    password: String,
+                    invitationCode: String,
+                    ctx: Context ->
                     val requestContext = ctx.get<RequestContext>()
 
                     if (requestContext != null) {
@@ -85,12 +89,13 @@ fun Application.configureSchema(
                     }
 
                     userStore.createUser(username, email, password, invitationCode)
-                    UnitResponse()
+                    true
                 }
             }
 
             invitationSchema(invitationStore)
             challengeSchema(challengeStore)
+            fileSchema(fileStorage)
         }
     }
 }

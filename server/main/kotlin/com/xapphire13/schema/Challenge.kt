@@ -6,40 +6,23 @@ import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.xapphire13.database.ChallengeStore
 import com.xapphire13.models.FutureChallengeCountResponse
 import com.xapphire13.models.RequestContext
-import com.xapphire13.models.UnitResponse
 
 fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore) {
-    query("challenges") {
-        resolver { ->
-            challengeStore.listChallenges()
-        }
-    }
+    query("challenges") { resolver { -> challengeStore.listChallenges() } }
 
     query("challenge") {
-        resolver { id: String ->
-            challengeStore.getChallenge(id)
-        }.withArgs {
+        resolver { id: String -> challengeStore.getChallenge(id) }.withArgs {
             arg<String> { name = "id" }
         }
     }
 
-    query("currentChallenge") {
-        resolver { ->
-            challengeStore.getCurrentChallenge()
-        }
-    }
+    query("currentChallenge") { resolver { -> challengeStore.getCurrentChallenge() } }
 
-    query("pastChallenges") {
-        resolver { ->
-            challengeStore.getPastChallenges()
-        }
-    }
+    query("pastChallenges") { resolver { -> challengeStore.getPastChallenges() } }
 
     query("futureChallengeCount") {
         resolver { ->
-            FutureChallengeCountResponse(
-                count = challengeStore.getFutureChallengeCount()
-            )
+            FutureChallengeCountResponse(count = challengeStore.getFutureChallengeCount())
         }
     }
 
@@ -48,9 +31,8 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore) {
             val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
             challengeStore.addChallenge(name, requestContext.userId)
-            UnitResponse()
-        }.withArgs {
-            arg<String> { name = "name" }
+            true
         }
+            .withArgs { arg<String> { name = "name" } }
     }
 }
