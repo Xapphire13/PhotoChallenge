@@ -67,6 +67,10 @@ export default function PostPhotoPage() {
     }
   }, [deviceType, handleSelectFiles]);
 
+  const handleRemoveFile = (file: File) => () => {
+    setFiles((prev) => prev.filter((it) => it !== file));
+  };
+
   useEffect(() => {
     handleAddMore();
   }, [handleAddMore]);
@@ -87,7 +91,11 @@ export default function PostPhotoPage() {
                   <>
                     <ul className={cx(classNames.fileList)}>
                       {files.map((file) => (
-                        <UploadedFile key={file.name} file={file} />
+                        <UploadedFile
+                          key={file.name}
+                          file={file}
+                          onRemove={handleRemoveFile(file)}
+                        />
                       ))}
                     </ul>
 
