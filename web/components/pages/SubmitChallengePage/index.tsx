@@ -33,9 +33,7 @@ const classNames = {
 
 const ADD_CHALLENGE_MUTATION = gql`
   mutation AddChallenge($name: String!) {
-    addChallenge(name: $name) {
-      success
-    }
+    addChallenge(name: $name)
   }
 `;
 

@@ -1,10 +1,18 @@
 import { useCallback } from "react";
+import { gql, useMutation } from "urql";
+
+const CREATE_UPLOAD_URL_MUTATION = gql`
+  mutation CreateUploadUrl {
+    createUploadUrl
+  }
+`;
 
 interface SelectFilesOptions {
   capture?: boolean;
 }
 
 export default function useFileUpload() {
+  const [, createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
   const selectFiles = useCallback(
     ({ capture = false }: SelectFilesOptions = {}) => {
       const input = document.createElement("input");
@@ -45,5 +53,27 @@ export default function useFileUpload() {
     []
   );
 
-  return { selectFiles };
+  const uploadFile = useCallback(
+    async (file: File) => {
+      console.log(`Uploading: ${file.name}`);
+
+      const {
+        data: { createUploadUrl: uploadUrl },
+      } = await createUploadUrl();
+
+      const result = await fetch(uploadUrl, {
+        method: "PUT",
+        body: file,
+      });
+
+      if (result.ok) {
+        console.log(`Finished uploading ${file.name}`);
+      } else {
+        console.log(`Error uploading ${file.name}`);
+      }
+    },
+    [createUploadUrl]
+  );
+
+  return { selectFiles, uploadFile };
 }

@@ -39,7 +39,7 @@ const classNames = {
 };
 
 export default function PostPhotoPage() {
-  const { selectFiles } = useFileUpload();
+  const { selectFiles, uploadFile } = useFileUpload();
   const [uploadSourceSheetOpen, setUploadSourceSheetOpen] = useState(false);
   const deviceType = useDeviceType();
   const [files, setFiles] = useState<File[]>([]);
@@ -54,9 +54,13 @@ export default function PostPhotoPage() {
 
       if (selectedFiles) {
         setFiles((prev) => [...prev, ...selectedFiles]);
+
+        for (const file of selectedFiles) {
+          uploadFile(file);
+        }
       }
     },
-    [selectFiles]
+    [selectFiles, uploadFile]
   );
 
   const handleAddMore = useCallback(() => {
