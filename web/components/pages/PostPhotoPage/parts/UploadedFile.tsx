@@ -62,6 +62,7 @@ const classNames = {
 
 export interface UploadedFileProps {
   file: File;
+  uploadProgress: number;
   onRemove: () => void;
 }
 
@@ -121,8 +122,13 @@ function TouchWrapper({ children, onClick, onRemove }: TouchWrapperProps) {
   );
 }
 
-export default function UploadedFile({ file, onRemove }: UploadedFileProps) {
+export default function UploadedFile({
+  file,
+  onRemove,
+  uploadProgress,
+}: UploadedFileProps) {
   const fileType = getFileType(file);
+  const [objectUrl] = useState(() => URL.createObjectURL(file));
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
   const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
     useState(false);
@@ -158,18 +164,11 @@ export default function UploadedFile({ file, onRemove }: UploadedFileProps) {
         >
           <div className={cx(classNames.preview)}>
             {fileType === "image" && (
-              <img
-                className={cx(classNames.image)}
-                alt=""
-                src={URL.createObjectURL(file)}
-              />
+              <img className={cx(classNames.image)} alt="" src={objectUrl} />
             )}
             {fileType === "video" && (
               //  eslint-disable-next-line jsx-a11y/media-has-caption
-              <video
-                className={cx(classNames.video)}
-                src={URL.createObjectURL(file)}
-              />
+              <video className={cx(classNames.video)} src={objectUrl} />
             )}
           </div>
         </TouchWrapper>
@@ -180,6 +179,8 @@ export default function UploadedFile({ file, onRemove }: UploadedFileProps) {
           placeholder="Optional caption"
           fullWidth
         />
+
+        <div>Upload: {uploadProgress}%</div>
       </li>
 
       <Sheet isOpen={isActionSheetOpen} onClose={handleCloseActionSheet}>

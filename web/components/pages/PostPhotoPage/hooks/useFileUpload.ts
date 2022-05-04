@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { gql, useMutation } from "urql";
+import { fromEvent, Observable } from "rxjs";
 
 const CREATE_UPLOAD_URL_MUTATION = gql`
   mutation CreateUploadUrl {
@@ -55,22 +56,51 @@ export default function useFileUpload() {
 
   const uploadFile = useCallback(
     async (file: File) => {
-      console.log(`Uploading: ${file.name}`);
-
       const {
         data: { createUploadUrl: uploadUrl },
       } = await createUploadUrl();
 
-      const result = await fetch(uploadUrl, {
-        method: "PUT",
-        body: file,
+      // Upload progress not possible with fetch() yet
+      const xhr = new XMLHttpRequest();
+      let uploadProgress: Observable<number> = new Observable();
+      let cancelled = false;
+
+      const promise = new Promise<void>((res, rej) => {
+        let progress = 0;
+        uploadProgress = fromEvent(
+          xhr.upload,
+          "progress",
+          (ev: ProgressEvent) => {
+            if (ev.lengthComputable) {
+              progress = Math.floor((100 * ev.loaded) / ev.total);
+              return progress;
+            }
+
+            return progress;
+          }
+        );
+
+        xhr.addEventListener("loadend", () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            res();
+          } else {
+            rej(new Error(cancelled ? "Upload cancelled" : xhr.statusText));
+          }
+        });
+
+        xhr.open("PUT", uploadUrl);
+        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.send(file);
       });
 
-      if (result.ok) {
-        console.log(`Finished uploading ${file.name}`);
-      } else {
-        console.log(`Error uploading ${file.name}`);
-      }
+      return {
+        promise,
+        uploadProgress,
+        cancel: () => {
+          cancelled = true;
+          xhr.abort();
+        },
+      };
     },
     [createUploadUrl]
   );

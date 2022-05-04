@@ -38,11 +38,17 @@ const classNames = {
   `,
 };
 
+interface Upload {
+  file: File;
+  uploadProgress: number;
+  cancel: () => void;
+}
+
 export default function PostPhotoPage() {
   const { selectFiles, uploadFile } = useFileUpload();
   const [uploadSourceSheetOpen, setUploadSourceSheetOpen] = useState(false);
   const deviceType = useDeviceType();
-  const [files, setFiles] = useState<File[]>([]);
+  const [uploads, setUploads] = useState<Upload[]>([]);
 
   const handleUploadSourceSheetClosed = () => {
     setUploadSourceSheetOpen(false);
@@ -53,11 +59,34 @@ export default function PostPhotoPage() {
       const selectedFiles = await selectFiles({ capture: fromCameraRoll });
 
       if (selectedFiles) {
-        setFiles((prev) => [...prev, ...selectedFiles]);
+        const newFiles = await Promise.all(
+          [...selectedFiles].map(async (file) => {
+            const { uploadProgress, cancel } = await uploadFile(file);
+            uploadProgress.subscribe({
+              next: (value) => {
+                setUploads((prev) =>
+                  prev.map((upload) => {
+                    if (upload.file === file) {
+                      return {
+                        ...upload,
+                        uploadProgress: value,
+                      };
+                    }
 
-        for (const file of selectedFiles) {
-          uploadFile(file);
-        }
+                    return upload;
+                  })
+                );
+              },
+            });
+
+            return {
+              file,
+              cancel,
+              uploadProgress: 0,
+            };
+          })
+        );
+        setUploads((prev) => [...prev, ...newFiles]);
       }
     },
     [selectFiles, uploadFile]
@@ -71,8 +100,9 @@ export default function PostPhotoPage() {
     }
   }, [deviceType, handleSelectFiles]);
 
-  const handleRemoveFile = (file: File) => () => {
-    setFiles((prev) => prev.filter((it) => it !== file));
+  const handleRemoveUpload = (upload: Upload) => () => {
+    upload.cancel();
+    setUploads((prev) => prev.filter((it) => it !== upload));
   };
 
   useEffect(() => {
@@ -86,19 +116,20 @@ export default function PostPhotoPage() {
           <StaticFooterLayout>
             <CenterLayout>
               <div className={cx(classNames.container)}>
-                {files.length === 0 && (
+                {uploads.length === 0 && (
                   <PrimaryButton onClick={handleAddMore}>
                     <PlusSquare /> Choose a file
                   </PrimaryButton>
                 )}
-                {files.length > 0 && (
+                {uploads.length > 0 && (
                   <>
                     <ul className={cx(classNames.fileList)}>
-                      {files.map((file) => (
+                      {uploads.map((upload) => (
                         <UploadedFile
-                          key={file.name}
-                          file={file}
-                          onRemove={handleRemoveFile(file)}
+                          key={upload.file.name}
+                          file={upload.file}
+                          uploadProgress={upload.uploadProgress}
+                          onRemove={handleRemoveUpload(upload)}
                         />
                       ))}
                     </ul>
