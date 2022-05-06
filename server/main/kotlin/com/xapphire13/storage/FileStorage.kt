@@ -15,14 +15,20 @@ class FileStorage(val storage: Storage) {
         val blobId = BlobId.of(System.getenv("FIREBASE_STORAGE_BUCKET"), "$UPLOADS_DIR/$fileName")
         val blobInfo = BlobInfo.newBuilder(blobId).build()
         val signedUrl =
-            storage.signUrl(
-                blobInfo,
-                30,
-                TimeUnit.MINUTES,
-                Storage.SignUrlOption.httpMethod(HttpMethod.PUT),
-                Storage.SignUrlOption.withV4Signature(),
-            )
+                storage.signUrl(
+                        blobInfo,
+                        30,
+                        TimeUnit.MINUTES,
+                        Storage.SignUrlOption.httpMethod(HttpMethod.PUT),
+                        Storage.SignUrlOption.withV4Signature(),
+                )
 
         return signedUrl.toString()
+    }
+
+    fun deleteFile(id: String): Boolean {
+        val blobId = BlobId.of(System.getenv("FIREBASE_STORAGE_BUCKET"), "$UPLOADS_DIR/$id")
+
+        return storage.delete(blobId)
     }
 }
