@@ -14,6 +14,7 @@ import TextInput from "../../../core/forms/TextInput";
 import ModalWithBackdrop from "../../../core/modal/ModalWithBackdrop";
 import Sheet from "../../../core/modal/Sheet";
 import SheetTitle from "../../../core/modal/SheetTitle";
+import ProgressBar from "../../../core/ProgressBar";
 import CenterLayout from "../../../layouts/CenterLayout";
 
 const classNames = {
@@ -57,6 +58,10 @@ const classNames = {
       flex-grow: 1;
       flex-basis: 0px;
     }
+  `,
+  progressBar: css`
+    position: relative;
+    top: -9.5px;
   `,
 };
 
@@ -170,6 +175,11 @@ export default function UploadedFile({
               //  eslint-disable-next-line jsx-a11y/media-has-caption
               <video className={cx(classNames.video)} src={objectUrl} />
             )}
+            {uploadProgress < 100 && (
+              <div className={cx(classNames.progressBar)}>
+                <ProgressBar value={uploadProgress} />
+              </div>
+            )}
           </div>
         </TouchWrapper>
 
@@ -179,8 +189,6 @@ export default function UploadedFile({
           placeholder="Optional caption"
           fullWidth
         />
-
-        <div>Upload: {uploadProgress}%</div>
       </li>
 
       <Sheet isOpen={isActionSheetOpen} onClose={handleCloseActionSheet}>

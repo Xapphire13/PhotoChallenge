@@ -9,6 +9,7 @@ import SecondaryButton from "../../core/buttons/SecondaryButton";
 import VerticalButtonGroup from "../../core/buttons/VerticalButtonGroup";
 import Sheet from "../../core/modal/Sheet";
 import SheetTitle from "../../core/modal/SheetTitle";
+import ProgressBar from "../../core/ProgressBar";
 import CenterLayout from "../../layouts/CenterLayout";
 import MainMenuLayout from "../../layouts/MainMenuLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
@@ -49,6 +50,10 @@ export default function PostPhotoPage() {
   const [uploadSourceSheetOpen, setUploadSourceSheetOpen] = useState(false);
   const deviceType = useDeviceType();
   const [uploads, setUploads] = useState<Upload[]>([]);
+  const uploadPercentage = Math.floor(
+    uploads.reduce((total, current) => total + current.uploadProgress, 0) /
+      uploads.length
+  );
 
   const handleUploadSourceSheetClosed = () => {
     setUploadSourceSheetOpen(false);
@@ -62,8 +67,12 @@ export default function PostPhotoPage() {
         const newFiles = await Promise.all(
           [...selectedFiles].map(async (file) => {
             const { uploadProgress, cancel } = await uploadFile(file);
-            uploadProgress.subscribe({
+            const subscription = uploadProgress.subscribe({
               next: (value) => {
+                if (value === 100) {
+                  subscription.unsubscribe();
+                }
+
                 setUploads((prev) =>
                   prev.map((upload) => {
                     if (upload.file === file) {
@@ -140,7 +149,11 @@ export default function PostPhotoPage() {
                       <SecondaryButton onClick={handleAddMore}>
                         <PlusSquare /> Add more
                       </SecondaryButton>
-                      <PrimaryButton>Submit</PrimaryButton>
+                      <PrimaryButton disabled={uploadPercentage < 100}>
+                        {uploadPercentage < 100
+                          ? `Uploading (${uploadPercentage}%)`
+                          : "Submit"}
+                      </PrimaryButton>
                     </HorizontalButtonGroup>
                   </>
                 )}
