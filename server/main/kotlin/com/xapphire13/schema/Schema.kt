@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.xapphire13.auth.JWTUtils
 import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.InvitationStore
+import com.xapphire13.database.UploadStore
 import com.xapphire13.database.UserStore
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.User
@@ -18,7 +19,8 @@ fun Application.configureSchema(
     userStore: UserStore,
     invitationStore: InvitationStore,
     challengeStore: ChallengeStore,
-    fileStorage: FileStorage
+    fileStorage: FileStorage,
+    uploadStore: UploadStore
 ) {
     install(GraphQL) {
         playground = true
@@ -95,7 +97,7 @@ fun Application.configureSchema(
 
             invitationSchema(invitationStore)
             challengeSchema(challengeStore)
-            fileSchema(fileStorage)
+            fileSchema(fileStorage, uploadStore)
         }
     }
 }
