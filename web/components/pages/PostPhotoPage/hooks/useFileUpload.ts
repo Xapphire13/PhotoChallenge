@@ -4,7 +4,22 @@ import { fromEvent, Observable } from "rxjs";
 
 const CREATE_UPLOAD_URL_MUTATION = gql`
   mutation CreateUploadUrl {
-    createUploadUrl
+    createUploadUrl {
+      id
+      uploadUrl
+    }
+  }
+`;
+
+const REMOVE_FILE_MUTATION = gql`
+  mutation RemoveFile($id: String!) {
+    deleteFile(id: $id)
+  }
+`;
+
+const SUBMIT_UPLOADS_MUTATION = gql`
+  mutation SubmitUploads($uploads: [UploadInput!]!) {
+    submitUploads(uploads: $uploads)
   }
 `;
 
@@ -14,6 +29,8 @@ interface SelectFilesOptions {
 
 export default function useFileUpload() {
   const [, createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
+  const [, removeFileMutation] = useMutation(REMOVE_FILE_MUTATION);
+  const [, submitUploadsMutation] = useMutation(SUBMIT_UPLOADS_MUTATION);
   const selectFiles = useCallback(
     ({ capture = false }: SelectFilesOptions = {}) => {
       const input = document.createElement("input");
@@ -57,7 +74,9 @@ export default function useFileUpload() {
   const uploadFile = useCallback(
     async (file: File) => {
       const {
-        data: { createUploadUrl: uploadUrl },
+        data: {
+          createUploadUrl: { id, uploadUrl },
+        },
       } = await createUploadUrl();
 
       // Upload progress not possible with fetch() yet
@@ -94,6 +113,7 @@ export default function useFileUpload() {
       });
 
       return {
+        id,
         promise,
         uploadProgress,
         cancel: () => {
@@ -105,5 +125,22 @@ export default function useFileUpload() {
     [createUploadUrl]
   );
 
-  return { selectFiles, uploadFile };
+  const removeFile = useCallback(
+    async (id: string) => {
+      await removeFileMutation({ id });
+    },
+    [removeFileMutation]
+  );
+
+  const submitUploads = useCallback(
+    async (uploads: { id: string; caption?: string }[]) => {
+      await submitUploadsMutation({
+        // We map here to remove any extra fields
+        uploads: uploads.map(({ id, caption }) => ({ id, caption })),
+      });
+    },
+    [submitUploadsMutation]
+  );
+
+  return { selectFiles, uploadFile, removeFile, submitUploads };
 }

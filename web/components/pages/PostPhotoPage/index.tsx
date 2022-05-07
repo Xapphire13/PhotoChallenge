@@ -1,7 +1,10 @@
 import { css, cx } from "@linaria/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PlusSquare } from "react-feather";
+import { useNavigate } from "react-router";
+import { ROOT } from "../../../constants/paths";
 import useDeviceType from "../../../hooks/useDeviceType";
+import useToast from "../../../hooks/useToast";
 import theme from "../../../theme";
 import HorizontalButtonGroup from "../../core/buttons/HorizontalButtonGroup";
 import PrimaryButton from "../../core/buttons/PrimaryButton";
@@ -9,7 +12,6 @@ import SecondaryButton from "../../core/buttons/SecondaryButton";
 import VerticalButtonGroup from "../../core/buttons/VerticalButtonGroup";
 import Sheet from "../../core/modal/Sheet";
 import SheetTitle from "../../core/modal/SheetTitle";
-import ProgressBar from "../../core/ProgressBar";
 import CenterLayout from "../../layouts/CenterLayout";
 import MainMenuLayout from "../../layouts/MainMenuLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
@@ -40,13 +42,16 @@ const classNames = {
 };
 
 interface Upload {
+  id: string;
   file: File;
   uploadProgress: number;
+  caption: string | undefined;
   cancel: () => void;
 }
 
 export default function PostPhotoPage() {
-  const { selectFiles, uploadFile } = useFileUpload();
+  const { selectFiles, uploadFile, removeFile, submitUploads } =
+    useFileUpload();
   const [uploadSourceSheetOpen, setUploadSourceSheetOpen] = useState(false);
   const deviceType = useDeviceType();
   const [uploads, setUploads] = useState<Upload[]>([]);
@@ -54,6 +59,9 @@ export default function PostPhotoPage() {
     uploads.reduce((total, current) => total + current.uploadProgress, 0) /
       uploads.length
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const { addToast } = useToast();
 
   const handleUploadSourceSheetClosed = () => {
     setUploadSourceSheetOpen(false);
@@ -66,7 +74,7 @@ export default function PostPhotoPage() {
       if (selectedFiles) {
         const newFiles = await Promise.all(
           [...selectedFiles].map(async (file) => {
-            const { uploadProgress, cancel } = await uploadFile(file);
+            const { uploadProgress, cancel, id } = await uploadFile(file);
             const subscription = uploadProgress.subscribe({
               next: (value) => {
                 if (value === 100) {
@@ -89,9 +97,14 @@ export default function PostPhotoPage() {
             });
 
             return {
+              id,
               file,
-              cancel,
+              cancel: () => {
+                subscription.unsubscribe();
+                cancel();
+              },
               uploadProgress: 0,
+              caption: undefined,
             };
           })
         );
@@ -109,9 +122,41 @@ export default function PostPhotoPage() {
     }
   }, [deviceType, handleSelectFiles]);
 
-  const handleRemoveUpload = (upload: Upload) => () => {
-    upload.cancel();
+  const handleRemoveUpload = (upload: Upload) => async () => {
+    if (upload.uploadProgress < 100) {
+      upload.cancel();
+    } else {
+      await removeFile(upload.id);
+    }
+
     setUploads((prev) => prev.filter((it) => it !== upload));
+  };
+
+  const handleCaptionChanged = (upload: Upload) => (caption: string) => {
+    setUploads((prev) =>
+      prev.map((it) => {
+        if (it === upload) {
+          // eslint-disable-next-line no-param-reassign
+          it.caption = caption;
+        }
+
+        return it;
+      })
+    );
+  };
+
+  const handleOnSubmit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      await submitUploads(uploads);
+      addToast({
+        title: "Success!",
+      });
+      navigate(ROOT);
+    } catch {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -135,10 +180,12 @@ export default function PostPhotoPage() {
                     <ul className={cx(classNames.fileList)}>
                       {uploads.map((upload) => (
                         <UploadedFile
-                          key={upload.file.name}
+                          key={upload.id}
                           file={upload.file}
                           uploadProgress={upload.uploadProgress}
                           onRemove={handleRemoveUpload(upload)}
+                          caption={upload.caption}
+                          onCaptionChange={handleCaptionChanged(upload)}
                         />
                       ))}
                     </ul>
@@ -149,10 +196,15 @@ export default function PostPhotoPage() {
                       <SecondaryButton onClick={handleAddMore}>
                         <PlusSquare /> Add more
                       </SecondaryButton>
-                      <PrimaryButton disabled={uploadPercentage < 100}>
-                        {uploadPercentage < 100
-                          ? `Uploading (${uploadPercentage}%)`
-                          : "Submit"}
+                      <PrimaryButton
+                        disabled={isSubmitting || uploadPercentage < 100}
+                        onClick={handleOnSubmit}
+                      >
+                        {isSubmitting && "Submitting..."}
+                        {!isSubmitting &&
+                          (uploadPercentage < 100
+                            ? `Uploading (${uploadPercentage}%)`
+                            : "Submit")}
                       </PrimaryButton>
                     </HorizontalButtonGroup>
                   </>

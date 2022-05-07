@@ -68,7 +68,9 @@ const classNames = {
 export interface UploadedFileProps {
   file: File;
   uploadProgress: number;
-  onRemove: () => void;
+  caption: string | undefined;
+  onRemove: () => Promise<void>;
+  onCaptionChange: (caption: string) => void;
 }
 
 function getFileType(file: File): "video" | "image" {
@@ -131,12 +133,15 @@ export default function UploadedFile({
   file,
   onRemove,
   uploadProgress,
+  caption,
+  onCaptionChange,
 }: UploadedFileProps) {
   const fileType = getFileType(file);
   const [objectUrl] = useState(() => URL.createObjectURL(file));
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
   const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
     useState(false);
+  const [removingFile, setRemovingFile] = useState(false);
 
   const handlePreviewClicked = () => {
     setIsActionSheetOpen(true);
@@ -155,9 +160,15 @@ export default function UploadedFile({
     setIsConfirmRemoveModalOpen(false);
   };
 
-  const handleConfirmRemoveClicked = () => {
-    setIsConfirmRemoveModalOpen(false);
-    onRemove();
+  const handleConfirmRemoveClicked = async () => {
+    setRemovingFile(true);
+
+    try {
+      await onRemove();
+      setIsConfirmRemoveModalOpen(false);
+    } finally {
+      setRemovingFile(false);
+    }
   };
 
   return (
@@ -187,6 +198,8 @@ export default function UploadedFile({
           id={`${file.name}-caption`}
           name={`${file.name}-caption`}
           placeholder="Optional caption"
+          value={caption}
+          onChange={onCaptionChange}
           fullWidth
         />
       </li>
@@ -219,8 +232,11 @@ export default function UploadedFile({
               <SecondaryButton onClick={handleCancelRemoveClicked}>
                 Cancel
               </SecondaryButton>
-              <PrimaryButton onClick={handleConfirmRemoveClicked}>
-                Yes
+              <PrimaryButton
+                onClick={handleConfirmRemoveClicked}
+                disabled={removingFile}
+              >
+                {removingFile ? "loading" : "Yes"}
               </PrimaryButton>
             </HorizontalButtonGroup>
           </CardContent>
