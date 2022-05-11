@@ -10,8 +10,7 @@ class UploadStore(
     private val fileStorage: FileStorage,
     private val challengeStore: ChallengeStore
 ) {
-    private val uploadsCollection = db.collection("uploads")
-    private val usersCollection = db.collection("users")
+    private val challengeCollection = db.collection("challenges")
 
     suspend fun addUpload(uploadId: String, userId: String, caption: String?) {
         if (fileStorage.getFile(uploadId) == null) {
@@ -20,13 +19,19 @@ class UploadStore(
 
         val currentChallenge = challengeStore.getCurrentChallenge()
 
-        uploadsCollection
+        if (currentChallenge === null) {
+            return
+        }
+
+        val challengeUploads =
+            challengeCollection.document(currentChallenge.id).collection("uploads")
+
+        challengeUploads
             .document(uploadId)
             .set(
                 mapOf(
                     "uploadedBy" to userId,
                     "caption" to caption,
-                    "forChallenge" to currentChallenge?.id
                 )
             )
             .await(Dispatchers.IO)

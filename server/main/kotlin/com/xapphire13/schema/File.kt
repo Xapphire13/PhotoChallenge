@@ -7,6 +7,10 @@ import com.xapphire13.database.UploadStore
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.UploadInput
 import com.xapphire13.storage.FileStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 fun SchemaBuilder.fileSchema(fileStorage: FileStorage, uploadStore: UploadStore) {
     type<UploadInput>()
@@ -32,7 +36,15 @@ fun SchemaBuilder.fileSchema(fileStorage: FileStorage, uploadStore: UploadStore)
         resolver { uploads: List<UploadInput>, ctx: Context ->
             val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
-            uploads.forEach { uploadStore.addUpload(it.id, requestContext.userId, it.caption) }
+            val scope = CoroutineScope(context = Dispatchers.IO)
+
+            uploads
+                .map {
+                    scope.async {
+                        uploadStore.addUpload(it.id, requestContext.userId, it.caption)
+                    }
+                }
+                .awaitAll()
 
             true
         }
