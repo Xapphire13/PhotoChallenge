@@ -2,11 +2,11 @@ package com.xapphire13.schema
 
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQLError
-import com.apurebase.kgraphql.helpers.getFields
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.execution.Execution
 import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.UploadStore
+import com.xapphire13.extensions.getFields
 import com.xapphire13.models.FutureChallengeCountResponse
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.User
@@ -15,12 +15,14 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: U
     query("challenges") { resolver { -> challengeStore.listChallenges() } }
 
     query("challenge") {
-        resolver { id: String, execution: Execution ->
+        resolver { id: String, execution: Execution.Node ->
             val includeUploads = execution.getFields().contains("uploads")
             var challenge = challengeStore.getChallenge(id)
 
             if (includeUploads && challenge !== null) {
-                val includeUser = execution.getFields().contains("uploads.uploadedBy")
+                val uploadNode =
+                        execution.children.find { it is Execution.Node && it.key == "uploads" }
+                val includeUser = uploadNode?.getFields()?.contains("uploadedBy") ?: false
                 val uploads =
                         uploadStore.getUploads(id).map {
                             if (includeUser) {
