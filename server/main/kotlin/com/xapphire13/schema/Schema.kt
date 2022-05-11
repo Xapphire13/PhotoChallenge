@@ -16,11 +16,11 @@ import io.ktor.application.Application
 import io.ktor.application.install
 
 fun Application.configureSchema(
-    userStore: UserStore,
-    invitationStore: InvitationStore,
-    challengeStore: ChallengeStore,
-    fileStorage: FileStorage,
-    uploadStore: UploadStore
+        userStore: UserStore,
+        invitationStore: InvitationStore,
+        challengeStore: ChallengeStore,
+        fileStorage: FileStorage,
+        uploadStore: UploadStore
 ) {
     install(GraphQL) {
         playground = true
@@ -29,13 +29,13 @@ fun Application.configureSchema(
         context { call ->
             val token = call.request.cookies["token"]
             val verifiedToken =
-                token?.let {
-                    try {
-                        JWTUtils.verifyToken(token)
-                    } catch (ex: JWTVerificationException) {
-                        null
+                    token?.let {
+                        try {
+                            JWTUtils.verifyToken(token)
+                        } catch (ex: JWTVerificationException) {
+                            null
+                        }
                     }
-                }
 
             if (verifiedToken != null) {
                 +RequestContext(userId = verifiedToken.subject)
@@ -71,7 +71,7 @@ fun Application.configureSchema(
             query("me") {
                 resolver { ctx: Context ->
                     val requestContext =
-                        ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
+                            ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
                     userStore.getUser(requestContext.userId)
                 }
@@ -79,11 +79,11 @@ fun Application.configureSchema(
 
             mutation("createUser") {
                 resolver {
-                    username: String,
-                    email: String,
-                    password: String,
-                    invitationCode: String,
-                    ctx: Context ->
+                        username: String,
+                        email: String,
+                        password: String,
+                        invitationCode: String,
+                        ctx: Context ->
                     val requestContext = ctx.get<RequestContext>()
 
                     if (requestContext != null) {
@@ -96,7 +96,7 @@ fun Application.configureSchema(
             }
 
             invitationSchema(invitationStore)
-            challengeSchema(challengeStore)
+            challengeSchema(challengeStore, uploadStore)
             fileSchema(fileStorage, uploadStore)
         }
     }
