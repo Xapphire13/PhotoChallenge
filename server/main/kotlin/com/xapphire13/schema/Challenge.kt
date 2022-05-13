@@ -6,38 +6,29 @@ import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.execution.Execution
 import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.UploadStore
-import com.xapphire13.extensions.getFields
+import com.xapphire13.extensions.getChildNodes
 import com.xapphire13.models.FutureChallengeCountResponse
 import com.xapphire13.models.RequestContext
-import com.xapphire13.models.User
 
 fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: UploadStore) {
     query("challenges") { resolver { -> challengeStore.listChallenges() } }
 
     query("challenge") {
         resolver { id: String, execution: Execution.Node ->
-            val includeUploads = execution.getFields().contains("uploads")
+            val uploadsNode = execution.getChildNodes().find { it.key == "uploads" }
             var challenge = challengeStore.getChallenge(id)
 
-            if (includeUploads && challenge !== null) {
-                val uploadNode =
-                        execution.children.find { it is Execution.Node && it.key == "uploads" }
-                val includeUser = uploadNode?.getFields()?.contains("uploadedBy") ?: false
-                val uploads =
-                        uploadStore.getUploads(id).map {
-                            if (includeUser) {
-                                return@map it.copy(uploadedBy = User("", "", "", false, "", ""))
-                            }
-
-                            it
-                        }
+            if (uploadsNode !== null && challenge !== null) {
+                val includeUser = uploadsNode.getChildNodes().any { it.key == "uploadedBy" }
+                val includeUrl = uploadsNode.getChildNodes().any { it.key == "url" }
+                val uploads = uploadStore.getUploads(id, includeUser, includeUrl)
 
                 challenge = challenge.copy(uploads = uploads)
             }
 
             challenge
         }
-                .withArgs { arg<String> { name = "id" } }
+            .withArgs { arg<String> { name = "id" } }
     }
 
     query("currentChallenge") { resolver { -> challengeStore.getCurrentChallenge() } }
@@ -57,6 +48,6 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: U
             challengeStore.addChallenge(name, requestContext.userId)
             true
         }
-                .withArgs { arg<String> { name = "name" } }
+            .withArgs { arg<String> { name = "name" } }
     }
 }

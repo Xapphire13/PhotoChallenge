@@ -20,7 +20,7 @@ fun main() {
     val invitationStore = InvitationStore(FirestoreDb.db)
     val challengeStore = ChallengeStore(FirestoreDb.db)
     val fileStorage = FileStorage(FirebaseStorage.storage)
-    val uploadStore = UploadStore(FirestoreDb.db, fileStorage, challengeStore)
+    val uploadStore = UploadStore(FirestoreDb.db, fileStorage, challengeStore, userStore)
 
     embeddedServer(Netty, port = System.getenv("PORT").toInt(), host = "0.0.0.0") {
         configureSchema(

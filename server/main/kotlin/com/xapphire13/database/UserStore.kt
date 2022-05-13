@@ -23,6 +23,7 @@ class UserStore(db: Firestore) {
         val document = this.usersCollection.document(id)
         val result = document.get().await(Dispatchers.IO)
 
+        // TODO, protect access to privileged fields
         return if (result.exists()) result.toUser() else null
     }
 
