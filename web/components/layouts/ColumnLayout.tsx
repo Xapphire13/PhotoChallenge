@@ -16,9 +16,12 @@ export interface ColumnLayoutProps extends StylableProps {
   children: React.ReactNode;
 }
 
-export default function ColumnLayout({
-  children,
-  className,
-}: ColumnLayoutProps) {
-  return <div className={cx(classNames.container, className)}>{children}</div>;
-}
+const ColumnLayout = React.forwardRef<HTMLDivElement, ColumnLayoutProps>(
+  ({ children, className }, ref) => (
+    <div ref={ref} className={cx(classNames.container, className)}>
+      {children}
+    </div>
+  )
+);
+
+export default ColumnLayout;

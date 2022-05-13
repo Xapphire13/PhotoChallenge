@@ -1,9 +1,7 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
 import theme from "../../theme";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type CSSVar = any;
+import CSSVar from "../../types/CSSVar";
 
 const classNames = {
   container: css`

@@ -11,9 +11,16 @@ const classNames = {
   `,
 };
 
-export default function CenterLayout({
-  children,
-  className,
-}: React.PropsWithChildren<unknown> & StylableProps) {
-  return <div className={cx(classNames.container, className)}>{children}</div>;
-}
+export type CenterLayoutProps = {
+  children: React.ReactNode;
+} & StylableProps;
+
+const CenterLayout = React.forwardRef<HTMLDivElement, CenterLayoutProps>(
+  ({ children, className }, ref) => (
+    <div ref={ref} className={cx(classNames.container, className)}>
+      {children}
+    </div>
+  )
+);
+
+export default CenterLayout;
