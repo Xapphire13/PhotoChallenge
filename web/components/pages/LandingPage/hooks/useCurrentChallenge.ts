@@ -6,6 +6,15 @@ interface GetCurrentChallengeQuery {
     id: string;
     name: string;
     endsAt: string;
+
+    uploads: {
+      id: string;
+      url: string;
+      uploadedBy: {
+        id: string;
+        username: string;
+      };
+    }[];
   };
 }
 

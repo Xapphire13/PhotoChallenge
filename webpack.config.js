@@ -18,8 +18,8 @@ const config = {
     clean: true,
   },
   devServer: {
-    open: true,
-    host: "localhost",
+    // open: true,
+    host: "0.0.0.0",
     proxy: [
       {
         context: ["/login"],

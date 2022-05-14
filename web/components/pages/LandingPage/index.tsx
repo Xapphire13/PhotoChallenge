@@ -1,5 +1,5 @@
 import { css, cx } from "@linaria/core";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import useSize from "@react-hook/size";
 import useIntersectionObserver from "@react-hook/intersection-observer";
 import NavBarLayout from "../../layouts/NavBarLayout";
@@ -19,6 +19,7 @@ import MainMenuLayout from "../../layouts/MainMenuLayout";
 import StaticFooterLayout from "../../layouts/StaticFooterLayout";
 import CSSVar from "../../../types/CSSVar";
 import SwipeDown from "./parts/SwipeDown";
+import Gallery from "../../Gallery";
 
 const classNames = {
   colorText: css`
@@ -43,16 +44,17 @@ const classNames = {
   contentContainer: css`
     display: grid;
     grid-template:
-      "aboveContent" var(--spacer__height, 1fr)
+      "aboveContent" var(--spacer_top__height, 1fr)
       "content" auto
-      "underContent" var(--spacer__height, 1fr)
+      "underContent" var(--spacer_bottom__height, 1fr)
       "uploads" auto
-      / auto;
+      / 100%;
     justify-content: center;
     overflow: auto;
   `,
   content: css`
     grid-area: content;
+    justify-self: center;
   `,
   underContent: css`
     grid-area: underContent;
@@ -70,7 +72,8 @@ const classNames = {
   `,
   uploads: css`
     grid-area: uploads;
-    padding: 1px;
+    position: relative;
+    padding: 1px ${theme.spacing["16px"]} ${theme.spacing["16px"]};
   `,
 };
 
@@ -118,13 +121,24 @@ export default function LandingPage() {
   const contentContainerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const uploadsScrollMarkerRef = useRef<HTMLDivElement>(null);
+  const uploadsBottomScrollMarkerRef = useRef<HTMLDivElement>(null);
   const [, contentContainerHeight] = useSize(contentContainerRef);
   const [, contentHeight] = useSize(contentRef);
   const spacerSize = Math.max(0, contentContainerHeight - contentHeight) / 2;
   const { isIntersecting: uploadsVisible } = useIntersectionObserver(
     uploadsScrollMarkerRef
   );
+  const { isIntersecting: bottomVisible } = useIntersectionObserver(
+    uploadsBottomScrollMarkerRef
+  );
+  const [scroll, setScroll] = useState(0);
   const showScrollDown = !uploadsVisible && spacerSize >= 64 - 16;
+
+  const onScroll = () => {
+    if (!bottomVisible) {
+      setScroll(contentContainerRef.current?.scrollTop ?? 0);
+    }
+  };
 
   const handleShareChallengeClicked = async () => {
     const shareUrl = `${window.location.protocol}//${window.location.host}/share/challenge/${currentChallenge?.id}`;
@@ -155,7 +169,14 @@ export default function LandingPage() {
           <div
             className={cx(classNames.contentContainer)}
             ref={contentContainerRef}
-            style={{ ["--spacer__height" as CSSVar]: `${spacerSize}px` }}
+            style={{
+              ["--spacer_top__height" as CSSVar]: `${spacerSize}px`,
+              ["--spacer_bottom__height" as CSSVar]: `${Math.max(
+                0,
+                spacerSize - scroll
+              )}px`,
+            }}
+            onScroll={onScroll}
           >
             <ColumnLayout className={cx(classNames.content)} ref={contentRef}>
               <p className={cx(classNames.todaysChallenge)}>
@@ -196,18 +217,23 @@ export default function LandingPage() {
               </HorizontalButtonGroup>
             </ColumnLayout>
 
-            <div className={cx(classNames.underContent)}>
-              {showScrollDown && (
-                <div className={classNames.scrollIcon}>
-                  <SwipeDown />
+            {currentChallenge?.uploads.length && (
+              <>
+                <div className={cx(classNames.underContent)}>
+                  {showScrollDown && (
+                    <div className={classNames.scrollIcon}>
+                      <SwipeDown />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            <div className={cx(classNames.uploads)}>
-              <div ref={uploadsScrollMarkerRef} />
-              Photos!
-            </div>
+                <div className={cx(classNames.uploads)}>
+                  <div ref={uploadsScrollMarkerRef} />
+                  <Gallery uploads={currentChallenge.uploads} />
+                  <div ref={uploadsBottomScrollMarkerRef} />
+                </div>
+              </>
+            )}
           </div>
 
           <MainTabBar />

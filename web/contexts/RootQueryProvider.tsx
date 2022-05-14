@@ -23,6 +23,15 @@ export const ROOT_QUERY = gql`
       id
       name
       endsAt
+
+      uploads {
+        id
+        url
+        uploadedBy {
+          id
+          username
+        }
+      }
     }
 
     futureChallengeCount {

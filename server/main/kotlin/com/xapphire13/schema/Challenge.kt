@@ -16,22 +16,37 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: U
     query("challenge") {
         resolver { id: String, execution: Execution.Node ->
             val uploadsNode = execution.getChildNodes().find { it.key == "uploads" }
-            var challenge = challengeStore.getChallenge(id)
+            val challenge = challengeStore.getChallenge(id)
 
             if (uploadsNode !== null && challenge !== null) {
                 val includeUser = uploadsNode.getChildNodes().any { it.key == "uploadedBy" }
                 val includeUrl = uploadsNode.getChildNodes().any { it.key == "url" }
                 val uploads = uploadStore.getUploads(id, includeUser, includeUrl)
 
-                challenge = challenge.copy(uploads = uploads)
+                return@resolver challenge.copy(uploads = uploads)
             }
 
             challenge
         }
-            .withArgs { arg<String> { name = "id" } }
+                .withArgs { arg<String> { name = "id" } }
     }
 
-    query("currentChallenge") { resolver { -> challengeStore.getCurrentChallenge() } }
+    query("currentChallenge") {
+        resolver { execution: Execution.Node ->
+            val uploadsNode = execution.getChildNodes().find { it.key == "uploads" }
+            val challenge = challengeStore.getCurrentChallenge()
+
+            if (uploadsNode !== null && challenge !== null) {
+                val includeUser = uploadsNode.getChildNodes().any { it.key == "uploadedBy" }
+                val includeUrl = uploadsNode.getChildNodes().any { it.key == "url" }
+                val uploads = uploadStore.getUploads(challenge.id, includeUser, includeUrl)
+
+                return@resolver challenge.copy(uploads = uploads)
+            }
+
+            challenge
+        }
+    }
 
     query("pastChallenges") { resolver { -> challengeStore.getPastChallenges() } }
 
@@ -48,6 +63,6 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: U
             challengeStore.addChallenge(name, requestContext.userId)
             true
         }
-            .withArgs { arg<String> { name = "name" } }
+                .withArgs { arg<String> { name = "name" } }
     }
 }
