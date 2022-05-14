@@ -70,11 +70,14 @@ export default function PostPhotoPage() {
   const handleSelectFiles = useCallback(
     (fromCameraRoll: boolean) => async () => {
       const selectedFiles = await selectFiles({ capture: fromCameraRoll });
+      setUploadSourceSheetOpen(false);
 
       if (selectedFiles) {
         const newFiles = await Promise.all(
           [...selectedFiles].map(async (file) => {
-            const { uploadProgress, cancel, id } = await uploadFile(file);
+            const { uploadProgress, cancel, id, promise } = await uploadFile(
+              file
+            );
             const subscription = uploadProgress.subscribe({
               next: (value) => {
                 if (value === 100) {
@@ -94,6 +97,21 @@ export default function PostPhotoPage() {
                   })
                 );
               },
+            });
+
+            promise.then(() => {
+              setUploads((prev) =>
+                prev.map((upload) => {
+                  if (upload.file === file) {
+                    return {
+                      ...upload,
+                      uploadProgress: 100,
+                    };
+                  }
+
+                  return upload;
+                })
+              );
             });
 
             return {
@@ -223,10 +241,10 @@ export default function PostPhotoPage() {
       >
         <SheetTitle>Upload a photo/video</SheetTitle>
         <VerticalButtonGroup>
-          <SecondaryButton onClick={handleSelectFiles(false)}>
+          <SecondaryButton onClick={handleSelectFiles(true)}>
             Take photo
           </SecondaryButton>
-          <SecondaryButton onClick={handleSelectFiles(true)}>
+          <SecondaryButton onClick={handleSelectFiles(false)}>
             Choose from camera roll
           </SecondaryButton>
         </VerticalButtonGroup>

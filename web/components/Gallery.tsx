@@ -1,5 +1,6 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
+import theme from "../theme";
 import Card from "./core/Card";
 import useCurrentChallenge from "./pages/LandingPage/hooks/useCurrentChallenge";
 
@@ -7,6 +8,8 @@ const classNames = {
   container: css`
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: ${theme.spacing["16px"]};
   `,
   uploadCard: css`
     width: 450px;
@@ -15,7 +18,7 @@ const classNames = {
   upload: css`
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
   `,
 };
 
