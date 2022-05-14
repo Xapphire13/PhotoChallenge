@@ -1,7 +1,6 @@
 import { css, cx } from "@linaria/core";
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "react-feather";
-import theme from "../../../../theme";
 
 const classNames = {
   container: css`
@@ -14,12 +13,14 @@ const classNames = {
     justify-content: flex-start;
     top: -16px;
     bottom: 16px;
-    transition: color 400ms ease-out;
+    opacity: 0.05;
+    transition: opacity 1000ms ease-in;
   `,
   middleChevron: css`
     display: flex;
     flex-direction: column;
-    transition: color 400ms ease-out;
+    opacity: 0.05;
+    transition: opacity 1000ms ease-in;
   `,
   bottomChevron: css`
     position: absolute;
@@ -28,15 +29,17 @@ const classNames = {
     justify-content: flex-end;
     top: 16px;
     bottom: -16px;
-    transition: color 400ms ease-out;
+    opacity: 0.05;
+    transition: opacity 1000ms ease-in;
   `,
   active: css`
-    color: ${theme.palette.primary};
+    transition: none;
+    opacity: 1;
   `,
 };
 
-const NUM_FRAMES = 6;
-const SPEED = 400;
+const NUM_FRAMES = 18;
+const SPEED = 100;
 
 export default function SwipeDown() {
   const [frame, setFrame] = useState(0);
