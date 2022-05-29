@@ -3,7 +3,6 @@ import { ComponentMeta } from "@storybook/react";
 import Gallery from "..";
 
 export default {
-  title: "Gallery",
   component: Gallery,
 } as ComponentMeta<typeof Gallery>;
 

@@ -1,3 +1,5 @@
+import RenderWrapper from "./RenderWrapper";
+
 const theme = require("../web/theme/index");
 
 export const parameters = {
@@ -22,3 +24,5 @@ export const parameters = {
     ],
   },
 };
+
+export const decorators = [RenderWrapper];

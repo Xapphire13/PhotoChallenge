@@ -5,6 +5,7 @@ import StylableProps from "../../../theme/StylableProps";
 
 const classNames = {
   container: css`
+    position: relative;
     ${theme.cornerRadius.medium}
     border: 1px solid ${theme.palette.background1};
     background: ${theme.palette.background0};
@@ -16,6 +17,12 @@ export interface CardProps extends StylableProps {
   children: React.ReactNode;
 }
 
-export default function Card({ children, className }: CardProps) {
-  return <div className={cx(classNames.container, className)}>{children}</div>;
-}
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ children, className }, ref) => (
+    <div ref={ref} className={cx(classNames.container, className)}>
+      {children}
+    </div>
+  )
+);
+
+export default Card;

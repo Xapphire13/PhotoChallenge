@@ -3,8 +3,8 @@ import useSize from "@react-hook/size";
 import React, { useRef } from "react";
 import theme from "../../theme";
 import CSSVar from "../../types/CSSVar";
-import Card from "../core/Card";
 import useCurrentChallenge from "../pages/LandingPage/hooks/useCurrentChallenge";
+import GalleryCard from "./GalleryCard";
 
 const classNames = {
   container: css`
@@ -12,15 +12,6 @@ const classNames = {
     justify-content: center;
     flex-wrap: wrap;
     gap: ${theme.spacing["8px"]};
-  `,
-  uploadCard: css`
-    width: var(--gallery--upload-card-size, 450px);
-    height: var(--gallery--upload-card-size, 450px);
-  `,
-  upload: css`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   `,
 };
 
@@ -43,13 +34,11 @@ export default function Gallery({ uploads }: GalleryProps) {
       style={{ ["--gallery--upload-card-size" as CSSVar]: `${cardWidth}px` }}
     >
       {uploads.map((upload) => (
-        <Card key={upload.id} className={cx(classNames.uploadCard)}>
-          <img
-            className={cx(classNames.upload)}
-            src={upload.url}
-            alt={`Uploaded by ${upload.uploadedBy.username}`}
-          />
-        </Card>
+        <GalleryCard
+          key={upload.id}
+          src={upload.url}
+          uploadedBy={upload.uploadedBy}
+        />
       ))}
     </div>
   );
