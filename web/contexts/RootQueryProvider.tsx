@@ -11,7 +11,7 @@ export const RootQueryContext = React.createContext({
   error: undefined as CombinedError | undefined,
 });
 
-type ContextType = React.ContextType<typeof RootQueryContext>;
+export type RootQueryContextType = React.ContextType<typeof RootQueryContext>;
 
 export interface RootQueryProviderProps {
   children: React.ReactNode;
@@ -51,7 +51,7 @@ export default function RootQueryProvider({
   });
   const showLoading = useLoading((loggedIn && !user) || fetching);
 
-  const value = useMemo<ContextType>(
+  const value = useMemo<RootQueryContextType>(
     () => ({
       data,
       fetching,

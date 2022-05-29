@@ -6,7 +6,7 @@ export const FeatureProviderContext = React.createContext({
   loading: false,
 });
 
-type FeatureProviderContextType = React.ContextType<
+export type FeatureProviderContextType = React.ContextType<
   typeof FeatureProviderContext
 >;
 

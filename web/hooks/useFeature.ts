@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { FeatureProviderContext } from "../contexts/FeatureProvider";
 
-type Feature = "groups" | "post-photo-page" | "profile-page";
+export type Feature = "groups" | "post-photo-page" | "profile-page";
 
 export default function useFeature(featureId: Feature) {
   const featureProviderContext = useContext(FeatureProviderContext);

@@ -10,6 +10,8 @@ export const UserContext = React.createContext({
   user: undefined as User | undefined,
 });
 
+export type UserContextType = React.ContextType<typeof UserContext>;
+
 export interface UserContextProviderProps {
   children: React.ReactNode;
 }
@@ -54,7 +56,7 @@ export default function UserContextProvider({
     }
   }, [error, navigate, user]);
 
-  const contextValue: React.ContextType<typeof UserContext> = useMemo(
+  const contextValue = useMemo<UserContextType>(
     () => ({
       loggedIn,
       user,
