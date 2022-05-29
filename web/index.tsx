@@ -15,6 +15,7 @@ import UserContextProvider from "./contexts/UserContextProvider";
 import Routes from "./Routes";
 import RootQueryProvider from "./contexts/RootQueryProvider";
 import MainMenuContextProvider from "./contexts/MainMenuContextProvider";
+import FeatureProvider from "./contexts/FeatureProvider";
 
 export const classNames = {
   globals: css`
@@ -87,9 +88,11 @@ export default function App() {
         <BrowserRouter>
           <UserContextProvider>
             <RootQueryProvider>
-              <MainMenuContextProvider>
-                <Routes />
-              </MainMenuContextProvider>
+              <FeatureProvider>
+                <MainMenuContextProvider>
+                  <Routes />
+                </MainMenuContextProvider>
+              </FeatureProvider>
             </RootQueryProvider>
           </UserContextProvider>
         </BrowserRouter>

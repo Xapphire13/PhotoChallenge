@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import { Menu, X } from "react-feather";
 import { useMatch, useNavigate } from "react-router";
 import FocusLock from "react-focus-lock";
-import { ENABLE_PROFILE_PAGE } from "../../constants/features";
 import { PROFILE_PAGE } from "../../constants/paths";
 import { UserContext } from "../../contexts/UserContextProvider";
 import useMainMenuContext from "../../hooks/useMainMenuContext";
@@ -12,6 +11,7 @@ import theme from "../../theme";
 import IconButton from "../core/buttons/IconButton";
 import TextLink from "../core/TextLink";
 import GroupDetails from "./GroupDetails";
+import useFeature from "../../hooks/useFeature";
 
 const classNames = {
   container: css`
@@ -45,6 +45,7 @@ export default function NavBar() {
   const profilePageMatch = useMatch(PROFILE_PAGE);
   const { toggle: toggleMainMenu, isOpen: mainMenuIsOpen } =
     useMainMenuContext();
+  const [enableProfilePage] = useFeature("profile-page");
 
   const handleUsernameButtonPressed = (ev: React.MouseEvent) => {
     if (!profilePageMatch) {
@@ -70,7 +71,7 @@ export default function NavBar() {
         {user && (
           <div>
             Welcome{" "}
-            {ENABLE_PROFILE_PAGE ? (
+            {enableProfilePage ? (
               <TextLink
                 href={PROFILE_PAGE}
                 onClick={handleUsernameButtonPressed}

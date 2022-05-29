@@ -14,10 +14,6 @@ import PostPhotoPage from "./components/pages/PostPhotoPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import SubmitChallengePage from "./components/pages/SubmitChallengePage";
 import {
-  ENABLE_POST_PHOTO_PAGE,
-  ENABLE_PROFILE_PAGE,
-} from "./constants/features";
-import {
   INVITATION_PAGE,
   LOGIN_PAGE,
   POST_PHOTO_PAGE,
@@ -26,6 +22,7 @@ import {
   SUBMIT_CHALLENGE_PAGE,
 } from "./constants/paths";
 import { UserContext } from "./contexts/UserContextProvider";
+import useFeature from "./hooks/useFeature";
 
 const LOGGED_OUT_ONLY_ROUTES = [LOGIN_PAGE, INVITATION_PAGE];
 
@@ -33,6 +30,8 @@ export default function Routes() {
   const location = useLocation();
   const navigate = useNavigate();
   const { loggedIn } = useContext(UserContext);
+  const [enablePostPhotoPage] = useFeature("post-photo-page");
+  const [enableProfilePage] = useFeature("profile-page");
 
   useEffect(() => {
     const loggedOutOnlyMatches = matchRoutes(
@@ -66,10 +65,10 @@ export default function Routes() {
       <Route path={LOGIN_PAGE} element={<LoginPage />} />
       <Route path={SUBMIT_CHALLENGE_PAGE} element={<SubmitChallengePage />} />
       <Route path={INVITATION_PAGE} element={<InvitePage />} />
-      {ENABLE_PROFILE_PAGE && (
+      {enableProfilePage && (
         <Route path={PROFILE_PAGE} element={<ProfilePage />} />
       )}
-      {ENABLE_POST_PHOTO_PAGE && (
+      {enablePostPhotoPage && (
         <Route path={POST_PHOTO_PAGE} element={<PostPhotoPage />} />
       )}
       <Route path="*" element={<NotFoundPage />} />

@@ -1,7 +1,7 @@
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
 import { ChevronDown } from "react-feather";
-import { ENABLE_GROUPS } from "../../constants/features";
+import useFeature from "../../hooks/useFeature";
 import theme from "../../theme";
 import SmallIconButton from "../core/buttons/SmallIconButton";
 import GroupPicker from "./GroupPicker";
@@ -34,6 +34,7 @@ export default function GroupDetails({
   groupName,
 }: GroupDetailsProps) {
   const [groupPickerOpen, setGroupPickerOpen] = useState(false);
+  const [enableGroups] = useFeature("groups");
 
   const handleGroupPickerToggled = () => {
     setGroupPickerOpen((prev) => !prev);
@@ -43,7 +44,7 @@ export default function GroupDetails({
 
   return (
     <div className={cx(classNames.container)}>
-      {ENABLE_GROUPS && (
+      {enableGroups && (
         <SmallIconButton
           accessibilityLabel=""
           aria-expanded={groupPickerOpen}
