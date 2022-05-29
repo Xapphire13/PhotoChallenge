@@ -217,23 +217,24 @@ export default function LandingPage() {
               </HorizontalButtonGroup>
             </ColumnLayout>
 
-            {currentChallenge?.uploads.length && (
-              <>
-                <div className={cx(classNames.underContent)}>
-                  {showScrollDown && (
-                    <div className={classNames.scrollIcon}>
-                      <SwipeDown />
-                    </div>
-                  )}
-                </div>
+            {currentChallenge?.uploads.length != null &&
+              currentChallenge.uploads.length > 0 && (
+                <>
+                  <div className={cx(classNames.underContent)}>
+                    {showScrollDown && (
+                      <div className={classNames.scrollIcon}>
+                        <SwipeDown />
+                      </div>
+                    )}
+                  </div>
 
-                <div className={cx(classNames.uploads)}>
-                  <div ref={uploadsScrollMarkerRef} />
-                  <Gallery uploads={currentChallenge.uploads} />
-                  <div ref={uploadsBottomScrollMarkerRef} />
-                </div>
-              </>
-            )}
+                  <div className={cx(classNames.uploads)}>
+                    <div ref={uploadsScrollMarkerRef} />
+                    <Gallery uploads={currentChallenge.uploads} />
+                    <div ref={uploadsBottomScrollMarkerRef} />
+                  </div>
+                </>
+              )}
           </div>
 
           <MainTabBar />
