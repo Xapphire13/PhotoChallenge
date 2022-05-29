@@ -27,6 +27,7 @@ export const ROOT_QUERY = gql`
       uploads {
         id
         url
+        caption
         uploadedBy {
           id
           username

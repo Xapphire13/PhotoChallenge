@@ -10,6 +10,7 @@ interface GetCurrentChallengeQuery {
     uploads: {
       id: string;
       url: string;
+      caption?: string;
       uploadedBy: {
         id: string;
         username: string;

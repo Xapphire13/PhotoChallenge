@@ -14,3 +14,13 @@ export function Default() {
     />
   );
 }
+
+export function WithCaption() {
+  return (
+    <GalleryCard
+      src="https://picsum.photos/seed/1/450"
+      uploadedBy={{ id: "1", username: "Xapphire13" }}
+      caption="Super cool stuff"
+    />
+  );
+}

@@ -22,9 +22,15 @@ export interface GalleryCardProps {
     id: string;
     username: string;
   };
+
+  caption?: string;
 }
 
-export default function GalleryCard({ src, uploadedBy }: GalleryCardProps) {
+export default function GalleryCard({
+  src,
+  uploadedBy,
+  caption,
+}: GalleryCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const hoveredOrFocused = useHoverOrFocus(cardRef);
 
@@ -35,7 +41,9 @@ export default function GalleryCard({ src, uploadedBy }: GalleryCardProps) {
         src={src}
         alt={`Uploaded by ${uploadedBy.username}`}
       />
-      {hoveredOrFocused && <CardOverlay uploadedBy={uploadedBy} />}
+      {hoveredOrFocused && (
+        <CardOverlay uploadedBy={uploadedBy} caption={caption} />
+      )}
     </Card>
   );
 }

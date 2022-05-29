@@ -134,10 +134,15 @@ export default function useFileUpload() {
 
   const submitUploads = useCallback(
     async (uploads: { id: string; caption?: string }[]) => {
-      await submitUploadsMutation({
-        // We map here to remove any extra fields
-        uploads: uploads.map(({ id, caption }) => ({ id, caption })),
-      });
+      await submitUploadsMutation(
+        {
+          // We map here to remove any extra fields
+          uploads: uploads.map(({ id, caption }) => ({ id, caption })),
+        },
+        {
+          additionalTypenames: ["Challenge"], // Refetch the current challenge
+        }
+      );
     },
     [submitUploadsMutation]
   );

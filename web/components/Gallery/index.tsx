@@ -38,6 +38,7 @@ export default function Gallery({ uploads }: GalleryProps) {
           key={upload.id}
           src={upload.url}
           uploadedBy={upload.uploadedBy}
+          caption={upload.caption}
         />
       ))}
     </div>

@@ -26,12 +26,15 @@ const classNames = {
 
 export interface CardOverlayProps {
   uploadedBy: { id: string; username: string };
+  caption?: string;
 }
 
-export default function CardOverlay({ uploadedBy }: CardOverlayProps) {
+export default function CardOverlay({ uploadedBy, caption }: CardOverlayProps) {
   return (
     <div className={cx(classNames.container)}>
-      <div className={cx(classNames.overlay)}>by {uploadedBy.username}</div>
+      <div className={cx(classNames.overlay)}>
+        {caption && `${caption} - `}by {uploadedBy.username}
+      </div>
     </div>
   );
 }
