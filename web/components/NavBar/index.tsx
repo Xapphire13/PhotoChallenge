@@ -11,6 +11,7 @@ import useRootQuery from "../../hooks/useRootQuery";
 import theme from "../../theme";
 import IconButton from "../core/buttons/IconButton";
 import TextLink from "../core/TextLink";
+import GroupDetails from "./GroupDetails";
 
 const classNames = {
   container: css`
@@ -85,14 +86,10 @@ export default function NavBar() {
         )}
       </div>
 
-      <div>
-        <span className={cx(classNames.colorText)}>
-          {data?.futureChallengeCount.count == null
-            ? "--"
-            : data.futureChallengeCount.count}
-        </span>{" "}
-        challenges in the queue
-      </div>
+      <GroupDetails
+        groupName="#fam-bam"
+        futureChallengeCount={data?.futureChallengeCount.count ?? "--"}
+      />
     </div>
   );
 }
