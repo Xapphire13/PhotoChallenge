@@ -3,12 +3,14 @@ package com.xapphire13.schema
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
 import com.apurebase.kgraphql.GraphQLError
+import com.apurebase.kgraphql.schema.execution.Execution
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.xapphire13.auth.JWTUtils
 import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UploadStore
 import com.xapphire13.database.UserStore
+import com.xapphire13.extensions.getChildNodes
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.User
 import com.xapphire13.storage.FileStorage
@@ -69,11 +71,13 @@ fun Application.configureSchema(
             }
 
             query("me") {
-                resolver { ctx: Context ->
+                resolver { ctx: Context, execution: Execution.Node ->
                     val requestContext =
                         ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
-                    userStore.getUser(requestContext.userId)
+                    val featuresNode = execution.getChildNodes().find { it.key == "features" }
+
+                    userStore.getUser(requestContext.userId, fetchFeatures = featuresNode !== null)
                 }
             }
 

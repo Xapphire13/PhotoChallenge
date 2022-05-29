@@ -9,7 +9,7 @@ import com.xapphire13.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 
-class UserStore(db: Firestore) {
+class UserStore(db: Firestore, private val featureStore: FeatureStore) {
     private val usersCollection = db.collection("users")
     private val invitationsCollection = db.collection("invitations")
 
@@ -19,12 +19,20 @@ class UserStore(db: Firestore) {
         return documents.map { it.toUser() }
     }
 
-    suspend fun getUser(id: String): User? {
+    suspend fun getUser(id: String, fetchFeatures: Boolean = false): User? {
         val document = this.usersCollection.document(id)
         val result = document.get().await(Dispatchers.IO)
 
         // TODO, protect access to privileged fields
-        return if (result.exists()) result.toUser() else null
+        val user = if (result.exists()) result.toUser() else null
+
+        return if (user != null && fetchFeatures) {
+            val features = this.featureStore.listFeatures().filter { it.userIds.contains(user.id) }
+
+            user.copy(
+                features = features.map { it.id }
+            )
+        } else user
     }
 
     suspend fun getUserByUsername(username: String): User? {

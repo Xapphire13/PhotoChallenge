@@ -6,5 +6,6 @@ data class User(
     val email: String,
     val isAdmin: Boolean,
     val passwordHash: String,
-    val passwordSalt: String
+    val passwordSalt: String,
+    val features: List<String> = emptyList()
 )

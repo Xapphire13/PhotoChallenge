@@ -1,6 +1,7 @@
 package com.xapphire13
 
 import com.xapphire13.database.ChallengeStore
+import com.xapphire13.database.FeatureStore
 import com.xapphire13.database.FirestoreDb
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UploadStore
@@ -16,7 +17,8 @@ fun main() {
     FirestoreDb.initialize()
     FirebaseStorage.initialize()
 
-    val userStore = UserStore(FirestoreDb.db)
+    val featureStore = FeatureStore(FirestoreDb.db)
+    val userStore = UserStore(FirestoreDb.db, featureStore)
     val invitationStore = InvitationStore(FirestoreDb.db)
     val challengeStore = ChallengeStore(FirestoreDb.db)
     val fileStorage = FileStorage(FirebaseStorage.storage)
