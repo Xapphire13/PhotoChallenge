@@ -1,12 +1,14 @@
 import { css, cx } from "@linaria/core";
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp } from "react-feather";
+import { ChevronDown } from "react-feather";
 import { ENABLE_GROUPS } from "../../constants/features";
 import theme from "../../theme";
 import SmallIconButton from "../core/buttons/SmallIconButton";
+import GroupPicker from "./GroupPicker";
 
 const classNames = {
   container: css`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -37,6 +39,8 @@ export default function GroupDetails({
     setGroupPickerOpen((prev) => !prev);
   };
 
+  const handleCloseGroupPicker = () => setGroupPickerOpen(false);
+
   return (
     <div className={cx(classNames.container)}>
       {ENABLE_GROUPS && (
@@ -47,11 +51,7 @@ export default function GroupDetails({
         >
           <div className={cx(classNames.groupName)}>
             {groupName}
-            {groupPickerOpen ? (
-              <ChevronUp size={16} />
-            ) : (
-              <ChevronDown size={16} />
-            )}
+            <ChevronDown size={16} />
           </div>
         </SmallIconButton>
       )}
@@ -59,6 +59,12 @@ export default function GroupDetails({
         <span className={cx(classNames.colorText)}>{futureChallengeCount}</span>{" "}
         challenges in the queue
       </div>
+
+      <GroupPicker
+        currentGroup={groupName}
+        isOpen={groupPickerOpen}
+        onClose={handleCloseGroupPicker}
+      />
     </div>
   );
 }

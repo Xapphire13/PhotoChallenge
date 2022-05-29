@@ -87,7 +87,7 @@ export default function NavBar() {
       </div>
 
       <GroupDetails
-        groupName="#fam-bam"
+        groupName="#default"
         futureChallengeCount={data?.futureChallengeCount.count ?? "--"}
       />
     </div>
