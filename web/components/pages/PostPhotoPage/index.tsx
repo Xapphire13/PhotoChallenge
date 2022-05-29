@@ -78,6 +78,7 @@ export default function PostPhotoPage() {
             const { uploadProgress, cancel, id, promise } = await uploadFile(
               file
             );
+
             const subscription = uploadProgress.subscribe({
               next: (value) => {
                 if (value === 100) {
@@ -126,6 +127,7 @@ export default function PostPhotoPage() {
             };
           })
         );
+
         setUploads((prev) => [...prev, ...newFiles]);
       }
     },

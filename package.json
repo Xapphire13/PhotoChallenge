@@ -42,7 +42,7 @@
     "react-textarea-autosize": "^8.3.3",
     "rxjs": "^7.5.5",
     "ua-parser-js": "^1.0.2",
-    "urql": "^2.0.6",
+    "urql": "^2.2.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

@@ -113,7 +113,7 @@ export default function useFileUpload() {
       });
 
       return {
-        id,
+        id: id as string,
         promise,
         uploadProgress,
         cancel: () => {
