@@ -1,8 +1,8 @@
 import { css, cx } from "@linaria/core";
 import React from "react";
-import theme from "../theme";
-import Card from "./core/Card";
-import useCurrentChallenge from "./pages/LandingPage/hooks/useCurrentChallenge";
+import theme from "../../theme";
+import Card from "../core/Card";
+import useCurrentChallenge from "../pages/LandingPage/hooks/useCurrentChallenge";
 
 const classNames = {
   container: css`

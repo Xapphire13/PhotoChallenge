@@ -10,6 +10,7 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
+    "plugin:storybook/recommended",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -21,7 +22,12 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint", "jsx-a11y"],
   rules: {
-    "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        extensions: [".tsx"],
+      },
+    ],
     quotes: [2, "double"],
     "import/extensions": [2, "never"],
     "import/no-unresolved": "off",
