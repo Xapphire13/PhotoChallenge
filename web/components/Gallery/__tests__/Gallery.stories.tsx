@@ -10,18 +10,11 @@ export default {
 export function Default() {
   return (
     <Gallery
-      uploads={[
-        {
-          id: "1",
-          uploadedBy: { id: "1", username: "Xapphire13" },
-          url: "https://picsum.photos/seed/1/450",
-        },
-        {
-          id: "2",
-          uploadedBy: { id: "1", username: "Xapphire13" },
-          url: "https://picsum.photos/seed/2/450",
-        },
-      ]}
+      uploads={new Array(10).fill(null).map((_, i) => ({
+        id: String(i),
+        uploadedBy: { id: "1", username: "Xapphire13" },
+        url: `https://picsum.photos/seed/${i + 1}/450`,
+      }))}
     />
   );
 }

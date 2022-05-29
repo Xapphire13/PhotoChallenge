@@ -1,6 +1,8 @@
 import { css, cx } from "@linaria/core";
-import React from "react";
+import useSize from "@react-hook/size";
+import React, { useRef } from "react";
 import theme from "../../theme";
+import CSSVar from "../../types/CSSVar";
 import Card from "../core/Card";
 import useCurrentChallenge from "../pages/LandingPage/hooks/useCurrentChallenge";
 
@@ -9,11 +11,11 @@ const classNames = {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: ${theme.spacing["16px"]};
+    gap: ${theme.spacing["8px"]};
   `,
   uploadCard: css`
-    width: 450px;
-    height: 450px;
+    width: var(--gallery--upload-card-size, 450px);
+    height: var(--gallery--upload-card-size, 450px);
   `,
   upload: css`
     width: 100%;
@@ -29,8 +31,17 @@ export interface GalleryProps {
 }
 
 export default function Gallery({ uploads }: GalleryProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth] = useSize(containerRef);
+
+  const cardWidth = Math.min(containerWidth, 450);
+
   return (
-    <div className={cx(classNames.container)}>
+    <div
+      ref={containerRef}
+      className={cx(classNames.container)}
+      style={{ ["--gallery--upload-card-size" as CSSVar]: `${cardWidth}px` }}
+    >
       {uploads.map((upload) => (
         <Card key={upload.id} className={cx(classNames.uploadCard)}>
           <img

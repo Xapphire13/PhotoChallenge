@@ -1,3 +1,5 @@
+const theme = require("../web/theme/index");
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -6,4 +8,17 @@ export const parameters = {
       date: /Date$/,
     },
   },
-}
+  backgrounds: {
+    default: "dark",
+    values: [
+      {
+        name: "dark",
+        value: theme.default.palette.background0,
+      },
+      {
+        name: "light",
+        value: "#FFF",
+      },
+    ],
+  },
+};
