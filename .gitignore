@@ -1,6 +1,7 @@
 # Web
 node_modules/
 dist/
+build-storybook.log
 
 # Server
 .env
