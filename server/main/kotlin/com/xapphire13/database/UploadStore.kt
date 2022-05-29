@@ -45,7 +45,11 @@ class UploadStore(
             .await(Dispatchers.IO)
     }
 
-    suspend fun getUploads(challengeId: String, fetchUser: Boolean = false, fetchUrl: Boolean = false): List<Upload> {
+    suspend fun getUploads(
+        challengeId: String,
+        fetchUser: Boolean = false,
+        fetchUrl: Boolean = false
+    ): List<Upload> {
         val challengeUploads =
             challengeCollection
                 .document(challengeId)
@@ -55,30 +59,36 @@ class UploadStore(
                 .awaitAll()
 
         return challengeUploads.map {
-            it.toUpload().let { upload ->
-                val userId = it.getString("uploadedBy")
-                if (fetchUser && userId !== null) {
-                    return@let upload.copy(uploadedBy = userStore.getUser(userId))
+            it.toUpload()
+                .let { upload ->
+                    val userId = it.getString("uploadedBy")
+                    if (fetchUser && userId !== null) {
+                        return@let upload.copy(uploadedBy = userStore.getUser(userId))
+                    }
+
+                    upload
                 }
+                .let { upload ->
+                    if (fetchUrl) {
+                        val blob = fileStorage.getFile(upload.id)
+                        val downloadUrl =
+                            blob?.signUrl(
+                                30,
+                                TimeUnit.MINUTES,
+                                Storage.SignUrlOption.httpMethod(
+                                    HttpMethod.GET
+                                ),
+                                Storage.SignUrlOption.withV4Signature()
+                            )
+                                ?.toString()
 
-                upload
-            }.let { upload ->
-                if (fetchUrl) {
-                    val blob = fileStorage.getFile(upload.id)
-                    val downloadUrl = blob?.signUrl(
-                        30,
-                        TimeUnit.MINUTES,
-                        Storage.SignUrlOption.httpMethod(HttpMethod.GET),
-                        Storage.SignUrlOption.withV4Signature()
-                    )?.toString()
+                        return@let upload.copy(url = downloadUrl)
+                    }
 
-                    return@let upload.copy(url = downloadUrl)
+                    upload
                 }
-
-                upload
-            }
         }
     }
 
-    private fun DocumentSnapshot.toUpload() = Upload(id = id)
+    private fun DocumentSnapshot.toUpload() = Upload(id = id, caption = this.getString("caption"))
 }

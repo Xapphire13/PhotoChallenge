@@ -28,7 +28,7 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: U
 
             challenge
         }
-                .withArgs { arg<String> { name = "id" } }
+            .withArgs { arg<String> { name = "id" } }
     }
 
     query("currentChallenge") {
@@ -63,6 +63,6 @@ fun SchemaBuilder.challengeSchema(challengeStore: ChallengeStore, uploadStore: U
             challengeStore.addChallenge(name, requestContext.userId)
             true
         }
-                .withArgs { arg<String> { name = "name" } }
+            .withArgs { arg<String> { name = "name" } }
     }
 }
