@@ -4,12 +4,14 @@ import com.google.cloud.Timestamp
 import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
-import com.xapphire13.concurrency.SynchronizedValue
 import com.xapphire13.extensions.asDeferred
 import com.xapphire13.extensions.await
 import com.xapphire13.models.Challenge
+import io.github.reactivecircus.cache4k.Cache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -18,7 +20,8 @@ import java.util.Date
 class ChallengeStore(db: Firestore) {
     private val groupsCollection = db.collection("groups")
     private val usersCollection = db.collection("users")
-    private val futureChallengeCount = SynchronizedValue<Int>()
+    private val futureChallengeCountCache = Cache.Builder().build<String, Int>()
+    private val futureChallengeCountCacheSemaphore = Semaphore(1)
 
     suspend fun listChallenges(groupId: String): List<Challenge> {
         val challengesCollection = groupsCollection.document(groupId).collection("challenges")
@@ -89,7 +92,11 @@ class ChallengeStore(db: Firestore) {
                 currentChallenge =
                     nextChallenge.toChallenge(groupId).copy(endsAt = nextChallengeDueDate.toString())
 
-                futureChallengeCount.setValue { prev -> prev?.minus(1) ?: prev }
+                this.futureChallengeCountCacheSemaphore.withPermit {
+                    this.futureChallengeCountCache.get(groupId)?.let { prev ->
+                        this.futureChallengeCountCache.put(groupId, prev.minus(1))
+                    }
+                }
             }
         }
 
@@ -109,8 +116,8 @@ class ChallengeStore(db: Firestore) {
 
     suspend fun getFutureChallengeCount(groupId: String): Int {
         val challengesCollection = groupsCollection.document(groupId).collection("challenges")
-        val count =
-            futureChallengeCount.getOrSetValue {
+        val count = this.futureChallengeCountCacheSemaphore.withPermit {
+            this.futureChallengeCountCache.get(groupId) {
                 challengesCollection
                     .whereEqualTo("endsAt", null)
                     .get()
@@ -118,6 +125,7 @@ class ChallengeStore(db: Firestore) {
                     .documents
                     .count()
             }
+        }
 
         return count
     }
@@ -134,7 +142,11 @@ class ChallengeStore(db: Firestore) {
             )
             .await(Dispatchers.IO)
 
-        futureChallengeCount.setValue { prev -> prev?.plus(1) ?: prev }
+        this.futureChallengeCountCacheSemaphore.withPermit {
+            this.futureChallengeCountCache.get(groupId)?.let {prev ->
+                this.futureChallengeCountCache.put(groupId, prev.plus(1))
+            }
+        }
     }
 
     private fun DocumentSnapshot.toChallenge(groupId: String) =
