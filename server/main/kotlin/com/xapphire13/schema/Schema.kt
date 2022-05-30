@@ -49,7 +49,7 @@ fun Application.configureSchema(
             fileSchema(fileStorage, uploadStore)
             groupSchema(groupStore, challengeStore, userStore)
             uploadSchema(userStore, fileStorage)
-            userSchema(userStore, featureStore)
+            userSchema(userStore, featureStore, groupStore)
         }
     }
 }

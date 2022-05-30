@@ -4,11 +4,13 @@ import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQLError
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.xapphire13.database.FeatureStore
+import com.xapphire13.database.GroupStore
 import com.xapphire13.database.UserStore
+import com.xapphire13.models.Group
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.User
 
-fun SchemaBuilder.userSchema(userStore: UserStore, featureStore: FeatureStore) {
+fun SchemaBuilder.userSchema(userStore: UserStore, featureStore: FeatureStore, groupStore: GroupStore) {
     type<User> {
         property(User::passwordHash) { ignore = true }
         property(User::passwordSalt) { ignore = true }
@@ -16,6 +18,12 @@ fun SchemaBuilder.userSchema(userStore: UserStore, featureStore: FeatureStore) {
         property<List<String>>("features") {
             resolver { parent ->
                 featureStore.listFeatures().filter { it.userIds.contains(parent.id) }.map { it.id }
+            }
+        }
+
+        property<List<Group>>("groups") {
+            resolver { parent ->
+                groupStore.listGroups().filter { it.userIds.contains(parent.id) }
             }
         }
     }
