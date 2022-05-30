@@ -34,7 +34,7 @@ const classNames = {
 
 const ADD_CHALLENGE_MUTATION = gql`
   mutation AddChallenge($groupId: String!, $name: String!) {
-    addChallenge(groupId: $groupIdm, name: $name)
+    addChallenge(groupId: $groupId, name: $name)
   }
 `;
 
