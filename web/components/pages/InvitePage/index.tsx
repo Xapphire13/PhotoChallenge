@@ -18,6 +18,9 @@ const classNames = {
       width: 400px;
     }
   `,
+  error: css`
+    color: ${theme.palette.warning};
+  `,
 };
 
 const CREATE_USER_MUTATION = gql`
@@ -43,6 +46,7 @@ export default function InvitePage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleCreateUser = (
     // eslint-disable-next-line no-shadow
@@ -63,7 +67,23 @@ export default function InvitePage() {
   const submitDisabled = !username.trim() || !email.trim() || !password.trim();
   const handleSubmit = async () => {
     if (!submitDisabled && invitationCode) {
-      await handleCreateUser(username, email, password, invitationCode);
+      setError(null);
+      const result = await handleCreateUser(
+        username,
+        email,
+        password,
+        invitationCode
+      );
+
+      if (result.error) {
+        setError(
+          JSON.parse(result.error.networkError?.message ?? "")
+            .errors?.map((it: any) => it.message)
+            ?.join(" ")
+        );
+        throw result.error;
+      }
+
       navigate("/");
     }
   };
@@ -106,6 +126,7 @@ export default function InvitePage() {
             Submit
           </PrimaryButton>
         </form>
+        {error && <p className={cx(classNames.error)}>{error}</p>}
       </ColumnLayout>
     </CenterLayout>
   );

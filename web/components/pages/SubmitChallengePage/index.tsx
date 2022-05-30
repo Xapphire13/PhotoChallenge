@@ -54,7 +54,7 @@ export default function SubmitChallengePage() {
       },
       {
         // Causes a refetch of the future challenges query
-        additionalTypenames: ["FutureChallengeCountResponse"],
+        additionalTypenames: ["Group"],
       }
     );
   const handleSubmit = async () => {
