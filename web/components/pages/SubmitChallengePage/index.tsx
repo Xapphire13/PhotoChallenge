@@ -1,5 +1,6 @@
 import { css, cx } from "@linaria/core";
 import React, { useRef, useState } from "react";
+import { useParams } from "react-router";
 import { gql, useMutation } from "urql";
 import useOnEnter from "../../../hooks/useOnEnter";
 import useToast from "../../../hooks/useToast";
@@ -32,8 +33,8 @@ const classNames = {
 };
 
 const ADD_CHALLENGE_MUTATION = gql`
-  mutation AddChallenge($name: String!) {
-    addChallenge(name: $name)
+  mutation AddChallenge($groupId: String!, $name: String!) {
+    addChallenge(groupId: $groupIdm, name: $name)
   }
 `;
 
@@ -43,11 +44,13 @@ export default function SubmitChallengePage() {
   const [challengeText, setChallengeText] = useState("");
   const submitDisabled = !challengeText.trim();
   const { addToast } = useToast();
+  const { groupId = "" } = useParams();
 
   const handleAddChallenge = (name: string) =>
     addChallengeMutation(
       {
         name,
+        groupId,
       },
       {
         // Causes a refetch of the future challenges query
