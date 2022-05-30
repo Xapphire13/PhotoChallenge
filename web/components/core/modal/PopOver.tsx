@@ -1,5 +1,6 @@
 import { css, cx } from "@linaria/core";
-import React, { useLayoutEffect, useState } from "react";
+import useEvent from "@react-hook/event";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
 import theme from "../../../theme";
 import CSSVar from "../../../types/CSSVar";
@@ -35,6 +36,7 @@ export default function PopOver({
   onClose,
   anchorElement,
 }: PopOverProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [top, setTop] = useState(0);
 
   useLayoutEffect(() => {
@@ -43,21 +45,28 @@ export default function PopOver({
     }
   }, [anchorElement]);
 
+  useEvent(window, "mouseup", (ev) => {
+    if (
+      ev.target instanceof Element &&
+      !containerRef.current?.contains(ev.target)
+    ) {
+      onClose();
+    }
+  });
+
   if (!isOpen) {
     return null;
   }
 
   return (
-    <>
-      <div className={cx(classNames.overlay)} onClick={onClose} aria-hidden />
-      <div
-        className={cx(classNames.container)}
-        style={{
-          ["--popover--top" as CSSVar]: `${top}px`,
-        }}
-      >
-        <FocusLock>{children}</FocusLock>
-      </div>
-    </>
+    <div
+      ref={containerRef}
+      className={cx(classNames.container)}
+      style={{
+        ["--popover--top" as CSSVar]: `${top}px`,
+      }}
+    >
+      <FocusLock>{children}</FocusLock>
+    </div>
   );
 }
