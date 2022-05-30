@@ -1,39 +1,21 @@
 import { useMemo } from "react";
 import useRootQuery from "../../../../hooks/useRootQuery";
 
-interface GetCurrentChallengeQuery {
-  currentChallenge: {
-    id: string;
-    name: string;
-    endsAt: string;
-
-    uploads: {
-      id: string;
-      url: string;
-      caption?: string;
-      uploadedBy: {
-        id: string;
-        username: string;
-      };
-    }[];
-  };
-}
-
 export default function useCurrentChallenge() {
-  const { data, error, fetching } = useRootQuery<GetCurrentChallengeQuery>();
+  const { data, error, fetching } = useRootQuery();
 
   const currentChallenge = useMemo(() => {
-    if (data?.currentChallenge) {
-      const endsAt = new Date(data.currentChallenge.endsAt);
+    if (data?.group?.currentChallenge) {
+      const endsAt = new Date(data.group.currentChallenge.endsAt);
 
       return {
-        ...data.currentChallenge,
+        ...data.group.currentChallenge,
         endsAt,
       };
     }
 
     return null;
-  }, [data?.currentChallenge]);
+  }, [data?.group?.currentChallenge]);
 
   return {
     currentChallenge,

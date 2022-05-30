@@ -12,15 +12,17 @@ import LoginPage from "./components/pages/LoginPage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import PostPhotoPage from "./components/pages/PostPhotoPage";
 import ProfilePage from "./components/pages/ProfilePage";
+import RootPage from "./components/pages/RootPage";
 import SubmitChallengePage from "./components/pages/SubmitChallengePage";
 import {
+  GROUP_LANDING_PAGE,
   INVITATION_PAGE,
   LOGIN_PAGE,
   POST_PHOTO_PAGE,
   PROFILE_PAGE,
   ROOT,
   SUBMIT_CHALLENGE_PAGE,
-} from "./constants/paths";
+} from "./utils/paths";
 import { UserContext } from "./contexts/UserContextProvider";
 import useFeature from "./hooks/useFeature";
 
@@ -61,8 +63,9 @@ export default function Routes() {
 
   return (
     <ReactRoutes>
-      <Route path={ROOT} element={<LandingPage />} />
+      <Route path={ROOT} element={<RootPage />} />
       <Route path={LOGIN_PAGE} element={<LoginPage />} />
+      <Route path={GROUP_LANDING_PAGE} element={<LandingPage />} />
       <Route path={SUBMIT_CHALLENGE_PAGE} element={<SubmitChallengePage />} />
       <Route path={INVITATION_PAGE} element={<InvitePage />} />
       {enableProfilePage && (

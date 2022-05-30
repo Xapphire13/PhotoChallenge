@@ -1,8 +1,8 @@
 import { css, cx } from "@linaria/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PlusSquare } from "react-feather";
-import { useNavigate } from "react-router";
-import { ROOT } from "../../../constants/paths";
+import { useNavigate, useParams } from "react-router";
+import { getGroupLandingPagePath, ROOT } from "../../../utils/paths";
 import useDeviceType from "../../../hooks/useDeviceType";
 import useToast from "../../../hooks/useToast";
 import theme from "../../../theme";
@@ -62,6 +62,7 @@ export default function PostPhotoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { groupId = "" } = useParams();
 
   const handleUploadSourceSheetClosed = () => {
     setUploadSourceSheetOpen(false);
@@ -173,7 +174,7 @@ export default function PostPhotoPage() {
       addToast({
         title: "Success!",
       });
-      navigate(ROOT);
+      navigate(getGroupLandingPagePath(groupId));
     } catch {
       setIsSubmitting(false);
     }

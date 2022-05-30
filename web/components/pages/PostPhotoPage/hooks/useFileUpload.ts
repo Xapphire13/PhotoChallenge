@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { gql, useMutation } from "urql";
 import { fromEvent, Observable } from "rxjs";
+import { useParams } from "react-router";
 
 const CREATE_UPLOAD_URL_MUTATION = gql`
   mutation CreateUploadUrl {
@@ -18,8 +19,8 @@ const REMOVE_FILE_MUTATION = gql`
 `;
 
 const SUBMIT_UPLOADS_MUTATION = gql`
-  mutation SubmitUploads($uploads: [UploadInput!]!) {
-    submitUploads(uploads: $uploads)
+  mutation SubmitUploads($groupId: String!, $uploads: [UploadInput!]!) {
+    submitUploads(groupId: $groupId, uploads: $uploads)
   }
 `;
 
@@ -28,6 +29,7 @@ interface SelectFilesOptions {
 }
 
 export default function useFileUpload() {
+  const { groupId = "" } = useParams();
   const [, createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
   const [, removeFileMutation] = useMutation(REMOVE_FILE_MUTATION);
   const [, submitUploadsMutation] = useMutation(SUBMIT_UPLOADS_MUTATION);
@@ -138,13 +140,14 @@ export default function useFileUpload() {
         {
           // We map here to remove any extra fields
           uploads: uploads.map(({ id, caption }) => ({ id, caption })),
+          groupId,
         },
         {
           additionalTypenames: ["Challenge"], // Refetch the current challenge
         }
       );
     },
-    [submitUploadsMutation]
+    [groupId, submitUploadsMutation]
   );
 
   return { selectFiles, uploadFile, removeFile, submitUploads };

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
 import { gql, useQuery } from "urql";
 import User from "../types/User";
-import { LOGIN_PAGE } from "../constants/paths";
+import { LOGIN_PAGE } from "../utils/paths";
 
 export const UserContext = React.createContext({
   loggedIn: false,

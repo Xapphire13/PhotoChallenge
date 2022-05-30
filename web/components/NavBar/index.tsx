@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Menu, X } from "react-feather";
 import { useMatch, useNavigate } from "react-router";
 import FocusLock from "react-focus-lock";
-import { PROFILE_PAGE } from "../../constants/paths";
+import { PROFILE_PAGE } from "../../utils/paths";
 import { UserContext } from "../../contexts/UserContextProvider";
 import useMainMenuContext from "../../hooks/useMainMenuContext";
 import useRootQuery from "../../hooks/useRootQuery";
@@ -32,14 +32,8 @@ const classNames = {
   `,
 };
 
-interface GetFutureChallengeCountQuery {
-  futureChallengeCount: {
-    count: number;
-  };
-}
-
 export default function NavBar() {
-  const { data } = useRootQuery<GetFutureChallengeCountQuery>();
+  const { data } = useRootQuery();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const profilePageMatch = useMatch(PROFILE_PAGE);
@@ -89,7 +83,7 @@ export default function NavBar() {
 
       <GroupDetails
         groupName="#default"
-        futureChallengeCount={data?.futureChallengeCount.count ?? "--"}
+        futureChallengeCount={data?.group?.futureChallengeCount ?? "--"}
       />
     </div>
   );
