@@ -1,5 +1,6 @@
 package com.xapphire13.database
 
+import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import com.xapphire13.extensions.asDeferred
@@ -11,6 +12,7 @@ import kotlinx.coroutines.awaitAll
 
 class GroupStore(db: Firestore) {
     private val groupsCollection = db.collection("groups")
+    private val usersCollection = db.collection("users")
 
     suspend fun listGroups(): List<Group> {
         return this.groupsCollection.listDocuments().map { it.get().asDeferred() }.awaitAll().map { it.toGroup() }
@@ -22,7 +24,17 @@ class GroupStore(db: Firestore) {
         return if (document.exists()) document.toGroup() else null
     }
 
+    suspend fun addUserToGroup(groupId: String, userId: String) {
+        val group = groupsCollection.document(groupId)
+        val user = usersCollection.document(userId)
+
+        // TODO make concurrent safe
+        val existingUsers = (group.get().await().get("users") as? List<*>)?.filterIsInstance<DocumentReference>() ?: emptyList()
+
+        group.update("users", existingUsers.filter { it.id !== user.id }.plus(user))
+    }
+
     private fun DocumentSnapshot.toGroup(): Group {
-        return Group(id = this.id, userIds = this.get("users") as? List<String> ?: emptyList(), frequency = this.getString("frequency")?.let { Frequency.valueOf(it) } ?: Frequency.DAILY, name = this.getString("name") ?: "")
+        return Group(id = this.id, userIds = (this.get("users") as? List<*>)?.filterIsInstance<DocumentReference>()?.map { it.id } ?: emptyList(), frequency = this.getString("frequency")?.let { Frequency.valueOf(it) } ?: Frequency.DAILY, name = this.getString("name") ?: "")
     }
 }

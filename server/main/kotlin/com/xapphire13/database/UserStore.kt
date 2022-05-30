@@ -1,5 +1,6 @@
 package com.xapphire13.database
 
+import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import com.xapphire13.auth.PasswordUtils
@@ -9,7 +10,7 @@ import com.xapphire13.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 
-class UserStore(db: Firestore, private val featureStore: FeatureStore) {
+class UserStore(db: Firestore, private val groupStore: GroupStore) {
     private val usersCollection = db.collection("users")
     private val invitationsCollection = db.collection("invitations")
 
@@ -57,7 +58,7 @@ class UserStore(db: Firestore, private val featureStore: FeatureStore) {
         val passwordSalt = PasswordUtils.generateSalt()
         val hashedPassword = PasswordUtils.generateHash(password + passwordSalt)
 
-        usersCollection.add(
+        val newUser = usersCollection.add(
             mapOf(
                 "username" to username,
                 "usernameLower" to username.lowercase(),
@@ -68,6 +69,8 @@ class UserStore(db: Firestore, private val featureStore: FeatureStore) {
                 "passwordSalt" to passwordSalt
             )
         ).await(Dispatchers.IO)
+
+        this.groupStore.addUserToGroup((invitation.get("group") as DocumentReference).id, newUser.id)
     }
 
     private fun DocumentSnapshot.toUser(): User = User(

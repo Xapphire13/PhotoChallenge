@@ -1,5 +1,6 @@
 package com.xapphire13.database
 
+import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import com.xapphire13.extensions.asDeferred
@@ -15,6 +16,7 @@ class UploadStore(
     private val challengeStore: ChallengeStore,
 ) {
     private val groupsCollection = db.collection("groups")
+    private val usersCollection = db.collection("users")
 
     suspend fun addUpload(groupId: String, uploadId: String, userId: String, caption: String?) {
         if (fileStorage.getFile(uploadId) == null) {
@@ -34,7 +36,7 @@ class UploadStore(
             .document(uploadId)
             .set(
                 mapOf(
-                    "uploadedBy" to userId,
+                    "uploadedBy" to usersCollection.document(userId),
                     "caption" to caption,
                 )
             )
@@ -56,28 +58,8 @@ class UploadStore(
 
         return challengeUploads.map {
             it.toUpload()
-
-            // .let { upload ->
-            //     if (fetchUrl) {
-            //         val blob = fileStorage.getFile(upload.id)
-            //         val downloadUrl =
-            //             blob?.signUrl(
-            //                 30,
-            //                 TimeUnit.MINUTES,
-            //                 Storage.SignUrlOption.httpMethod(
-            //                     HttpMethod.GET
-            //                 ),
-            //                 Storage.SignUrlOption.withV4Signature()
-            //             )
-            //                 ?.toString()
-            //
-            //         return@let upload.copy(url = downloadUrl)
-            //     }
-            //
-            //     upload
-            // }
         }
     }
 
-    private fun DocumentSnapshot.toUpload() = Upload(id = id, caption = this.getString("caption"), uploadedById = this.getString("uploadedBy") ?: "")
+    private fun DocumentSnapshot.toUpload() = Upload(id = id, caption = this.getString("caption"), uploadedById = (this.get("uploadedBy") as DocumentReference).id)
 }

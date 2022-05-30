@@ -8,11 +8,11 @@ import com.xapphire13.models.RequestContext
 
 fun SchemaBuilder.invitationSchema(invitationStore: InvitationStore) {
     mutation("createInvitation") {
-        resolver { ctx: Context ->
+        resolver { groupId: String, ctx: Context ->
             val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
             val existingInvitation = invitationStore.getInvitationsForUser(requestContext.userId)
 
-            existingInvitation ?: invitationStore.createInvitation(requestContext.userId)
+            existingInvitation ?: invitationStore.createInvitation(requestContext.userId, groupId)
         }
     }
 }

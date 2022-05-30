@@ -1,5 +1,6 @@
 package com.xapphire13.database
 
+import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Firestore
 import com.xapphire13.extensions.asDeferred
 import com.xapphire13.models.Feature
@@ -14,7 +15,7 @@ class FeatureStore(db: Firestore) {
         return documents.map {
             Feature(
                 id = it.id,
-                userIds = it.get("users") as? List<String> ?: emptyList()
+                userIds = (it.get("users") as? List<*>)?.filterIsInstance<DocumentReference>()?.map { user -> user.id } ?: emptyList()
             )
         }
     }

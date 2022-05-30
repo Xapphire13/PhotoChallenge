@@ -19,12 +19,12 @@ fun main() {
     FirebaseStorage.initialize()
 
     val featureStore = FeatureStore(FirestoreDb.db)
-    val userStore = UserStore(FirestoreDb.db, featureStore)
+    val groupStore = GroupStore(FirestoreDb.db)
     val invitationStore = InvitationStore(FirestoreDb.db)
     val challengeStore = ChallengeStore(FirestoreDb.db)
+    val userStore = UserStore(FirestoreDb.db, groupStore)
     val fileStorage = FileStorage(FirebaseStorage.storage)
     val uploadStore = UploadStore(FirestoreDb.db, fileStorage, challengeStore)
-    val groupStore = GroupStore(FirestoreDb.db)
 
     embeddedServer(Netty, port = System.getenv("PORT").toInt(), host = "0.0.0.0") {
         configureSchema(
