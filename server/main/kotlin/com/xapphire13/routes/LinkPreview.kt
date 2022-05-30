@@ -77,7 +77,7 @@ fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
                 meta(content = "Sign in to add more challenges and join in on the fun!") {
                     attributes["property"] = "og:description"
                 }
-                meta(content = "$host/og/$challengeId") {
+                meta(content = "$host/og/$groupId/$challengeId") {
                     attributes["property"] = "og:image"
                 }
             }
@@ -85,7 +85,7 @@ fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
             body {
                 script(type = "text/javascript") {
                     unsafe {
-                        +"document.location = \"/\";"
+                        +"document.location = \"/$groupId\";"
                     }
                 }
             }

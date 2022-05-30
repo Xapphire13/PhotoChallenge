@@ -23,6 +23,6 @@ class GroupStore(db: Firestore) {
     }
 
     private fun DocumentSnapshot.toGroup(): Group {
-        return Group(id = this.id, userIds = this.get("users") as? List<String> ?: emptyList(), frequency = this.getString("frequency")?.let { Frequency.valueOf(it) } ?: Frequency.DAILY)
+        return Group(id = this.id, userIds = this.get("users") as? List<String> ?: emptyList(), frequency = this.getString("frequency")?.let { Frequency.valueOf(it) } ?: Frequency.DAILY, name = this.getString("name") ?: "")
     }
 }
