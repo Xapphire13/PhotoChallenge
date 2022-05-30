@@ -25,13 +25,13 @@ const classNames = {
 };
 
 export interface GroupDetailsProps {
-  groupName: string;
+  currentGroup: { id: string; name: string };
   futureChallengeCount: number | "--";
 }
 
 export default function GroupDetails({
   futureChallengeCount,
-  groupName,
+  currentGroup,
 }: GroupDetailsProps) {
   const [groupPickerOpen, setGroupPickerOpen] = useState(false);
   const [enableGroups] = useFeature("groups");
@@ -51,7 +51,7 @@ export default function GroupDetails({
           onClick={handleGroupPickerToggled}
         >
           <div className={cx(classNames.groupName)}>
-            {groupName}
+            #{currentGroup.name}
             <ChevronDown size={16} />
           </div>
         </SmallIconButton>
@@ -62,7 +62,7 @@ export default function GroupDetails({
       </div>
 
       <GroupPicker
-        currentGroup={groupName}
+        currentGroup={currentGroup}
         isOpen={groupPickerOpen}
         onClose={handleCloseGroupPicker}
       />

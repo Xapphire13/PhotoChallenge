@@ -1,5 +1,5 @@
 import { css, cx } from "@linaria/core";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useSize from "@react-hook/size";
 import useIntersectionObserver from "@react-hook/intersection-observer";
 import { useParams } from "react-router";
@@ -22,6 +22,7 @@ import CSSVar from "../../../types/CSSVar";
 import SwipeDown from "./parts/SwipeDown";
 import Gallery from "../../Gallery";
 import { createShareUrl } from "../../../utils/paths";
+import usePersistentStorage from "../../../hooks/usePersistentStorage";
 
 const classNames = {
   colorText: css`
@@ -136,6 +137,7 @@ export default function LandingPage() {
   );
   const [scroll, setScroll] = useState(0);
   const showScrollDown = !uploadsVisible && spacerSize >= 64 - 16;
+  const [, saveGroupId] = usePersistentStorage("groupId");
 
   const onScroll = () => {
     if (!bottomVisible) {
@@ -164,6 +166,10 @@ export default function LandingPage() {
       });
     }
   };
+
+  useEffect(() => {
+    saveGroupId(groupId);
+  }, [groupId, saveGroupId]);
 
   return (
     <NavBarLayout>

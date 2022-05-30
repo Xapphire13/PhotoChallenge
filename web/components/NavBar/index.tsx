@@ -81,10 +81,12 @@ export default function NavBar() {
         )}
       </div>
 
-      <GroupDetails
-        groupName={`#${data?.group?.name ?? "--"}`}
-        futureChallengeCount={data?.group?.futureChallengeCount ?? "--"}
-      />
+      {data?.group && (
+        <GroupDetails
+          currentGroup={data.group}
+          futureChallengeCount={data?.group?.futureChallengeCount ?? "--"}
+        />
+      )}
     </div>
   );
 }
