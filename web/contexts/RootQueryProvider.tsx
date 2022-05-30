@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { useMatch, useParams } from "react-router";
 import { CombinedError, gql, useQuery } from "urql";
 import Loader from "../components/core/Loader";
@@ -6,6 +6,7 @@ import CenterLayout from "../components/layouts/CenterLayout";
 import useLoading from "../hooks/useLoading";
 import useUserContext from "../hooks/useUserContext";
 import { GROUP_LANDING_PAGE } from "../utils/paths";
+import { FeatureProviderContext } from "./FeatureProvider";
 
 interface RootQuery {
   group:
@@ -77,6 +78,7 @@ export default function RootQueryProvider({
   children,
 }: RootQueryProviderProps) {
   const { loggedIn, user } = useUserContext();
+  const { loading: featuresLoading } = useContext(FeatureProviderContext);
   const match = useMatch(GROUP_LANDING_PAGE);
   const groupId = match?.params.groupId;
   const [{ data, fetching, error }] = useQuery<RootQuery>({
@@ -86,7 +88,9 @@ export default function RootQueryProvider({
     },
     pause: !loggedIn || !user || !groupId,
   });
-  const showLoading = useLoading((loggedIn && !user) || fetching);
+  const showLoading = useLoading(
+    (loggedIn && !user) || fetching || featuresLoading
+  );
 
   const value = useMemo<RootQueryContextType>(
     () => ({

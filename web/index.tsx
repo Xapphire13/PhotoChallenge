@@ -87,13 +87,13 @@ export default function App() {
       <ToastProvider>
         <BrowserRouter>
           <UserContextProvider>
-            <RootQueryProvider>
-              <FeatureProvider>
+            <FeatureProvider>
+              <RootQueryProvider>
                 <MainMenuContextProvider>
                   <Routes />
                 </MainMenuContextProvider>
-              </FeatureProvider>
-            </RootQueryProvider>
+              </RootQueryProvider>
+            </FeatureProvider>
           </UserContextProvider>
         </BrowserRouter>
       </ToastProvider>
