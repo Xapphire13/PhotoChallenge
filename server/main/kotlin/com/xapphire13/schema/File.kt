@@ -33,7 +33,7 @@ fun SchemaBuilder.fileSchema(fileStorage: FileStorage, uploadStore: UploadStore)
     }
 
     mutation("submitUploads") {
-        resolver { uploads: List<UploadInput>, ctx: Context ->
+        resolver { groupId: String, uploads: List<UploadInput>, ctx: Context ->
             val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
             val scope = CoroutineScope(context = Dispatchers.IO)
@@ -41,7 +41,7 @@ fun SchemaBuilder.fileSchema(fileStorage: FileStorage, uploadStore: UploadStore)
             uploads
                 .map {
                     scope.async {
-                        uploadStore.addUpload(it.id, requestContext.userId, it.caption)
+                        uploadStore.addUpload(groupId, it.id, requestContext.userId, it.caption)
                     }
                 }
                 .awaitAll()

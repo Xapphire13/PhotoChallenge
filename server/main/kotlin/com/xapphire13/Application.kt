@@ -3,6 +3,7 @@ package com.xapphire13
 import com.xapphire13.database.ChallengeStore
 import com.xapphire13.database.FeatureStore
 import com.xapphire13.database.FirestoreDb
+import com.xapphire13.database.GroupStore
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UploadStore
 import com.xapphire13.database.UserStore
@@ -22,7 +23,8 @@ fun main() {
     val invitationStore = InvitationStore(FirestoreDb.db)
     val challengeStore = ChallengeStore(FirestoreDb.db)
     val fileStorage = FileStorage(FirebaseStorage.storage)
-    val uploadStore = UploadStore(FirestoreDb.db, fileStorage, challengeStore, userStore)
+    val uploadStore = UploadStore(FirestoreDb.db, fileStorage, challengeStore)
+    val groupStore = GroupStore(FirestoreDb.db)
 
     embeddedServer(Netty, port = System.getenv("PORT").toInt(), host = "0.0.0.0") {
         configureSchema(
@@ -30,7 +32,9 @@ fun main() {
             invitationStore,
             challengeStore,
             fileStorage,
-            uploadStore
+            uploadStore,
+            groupStore,
+            featureStore
         )
         configureRouting(userStore, challengeStore)
     }

@@ -25,9 +25,10 @@ import kotlinx.html.unsafe
 import javax.imageio.ImageIO
 
 fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
-    get("/og/{challengeId}") {
+    get("/og/{groupId}/{challengeId}") {
+        val groupId = call.parameters["groupId"] ?: throw Error("No group ID found")
         val challengeId = call.parameters["challengeId"] ?: throw Error("No challenge ID found")
-        val challenge = challengeStore.getChallenge(challengeId) ?: let {
+        val challenge = challengeStore.getChallenge(groupId, challengeId) ?: let {
             call.respond(HttpStatusCode.NotFound)
             return@get
         }
@@ -41,9 +42,10 @@ fun Routing.linkPreviewRoutes(challengeStore: ChallengeStore) {
         }
     }
 
-    get("/share/challenge/{challengeId}") {
+    get("/share/challenge/{groupId}/{challengeId}") {
+        val groupId = call.parameters["groupId"] ?: throw Error("No group ID found")
         val challengeId = call.parameters["challengeId"] ?: throw Error("No challenge ID found")
-        val challenge = challengeStore.getChallenge(challengeId) ?: let {
+        val challenge = challengeStore.getChallenge(groupId, challengeId) ?: let {
             call.respond(HttpStatusCode.NotFound)
             return@get
         }

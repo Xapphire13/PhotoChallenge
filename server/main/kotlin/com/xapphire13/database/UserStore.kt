@@ -19,20 +19,12 @@ class UserStore(db: Firestore, private val featureStore: FeatureStore) {
         return documents.map { it.toUser() }
     }
 
-    suspend fun getUser(id: String, fetchFeatures: Boolean = false): User? {
+    suspend fun getUser(id: String): User? {
         val document = this.usersCollection.document(id)
         val result = document.get().await(Dispatchers.IO)
 
         // TODO, protect access to privileged fields
-        val user = if (result.exists()) result.toUser() else null
-
-        return if (user != null && fetchFeatures) {
-            val features = this.featureStore.listFeatures().filter { it.userIds.contains(user.id) }
-
-            user.copy(
-                features = features.map { it.id }
-            )
-        } else user
+        return if (result.exists()) result.toUser() else null
     }
 
     suspend fun getUserByUsername(username: String): User? {

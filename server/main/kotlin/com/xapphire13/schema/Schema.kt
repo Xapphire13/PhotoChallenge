@@ -1,18 +1,15 @@
 package com.xapphire13.schema
 
-import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
-import com.apurebase.kgraphql.GraphQLError
-import com.apurebase.kgraphql.schema.execution.Execution
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.xapphire13.auth.JWTUtils
 import com.xapphire13.database.ChallengeStore
+import com.xapphire13.database.FeatureStore
+import com.xapphire13.database.GroupStore
 import com.xapphire13.database.InvitationStore
 import com.xapphire13.database.UploadStore
 import com.xapphire13.database.UserStore
-import com.xapphire13.extensions.getChildNodes
 import com.xapphire13.models.RequestContext
-import com.xapphire13.models.User
 import com.xapphire13.storage.FileStorage
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -22,7 +19,9 @@ fun Application.configureSchema(
     invitationStore: InvitationStore,
     challengeStore: ChallengeStore,
     fileStorage: FileStorage,
-    uploadStore: UploadStore
+    uploadStore: UploadStore,
+    groupStore: GroupStore,
+    featureStore: FeatureStore
 ) {
     install(GraphQL) {
         playground = true
@@ -45,63 +44,12 @@ fun Application.configureSchema(
         }
 
         schema {
-            type<User>() {
-                property(User::passwordHash) { ignore = true }
-
-                property(User::passwordSalt) { ignore = true }
-            }
-
-            query("users") {
-                resolver { -> userStore.listUsers() }
-
-                accessRule { ctx: Context ->
-                    val requestContext = ctx.get<RequestContext>()
-
-                    if (requestContext == null) GraphQLError("Unauthorized") else null
-                }
-            }
-
-            query("user") {
-                resolver { id: String -> userStore.getUser(id) }.withArgs {
-                    arg<String> {
-                        name = "id"
-                        description = "The user ID"
-                    }
-                }
-            }
-
-            query("me") {
-                resolver { ctx: Context, execution: Execution.Node ->
-                    val requestContext =
-                        ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
-
-                    val featuresNode = execution.getChildNodes().find { it.key == "features" }
-
-                    userStore.getUser(requestContext.userId, fetchFeatures = featuresNode !== null)
-                }
-            }
-
-            mutation("createUser") {
-                resolver {
-                    username: String,
-                    email: String,
-                    password: String,
-                    invitationCode: String,
-                    ctx: Context ->
-                    val requestContext = ctx.get<RequestContext>()
-
-                    if (requestContext != null) {
-                        throw GraphQLError("You already have an account")
-                    }
-
-                    userStore.createUser(username, email, password, invitationCode)
-                    true
-                }
-            }
-
             invitationSchema(invitationStore)
             challengeSchema(challengeStore, uploadStore)
             fileSchema(fileStorage, uploadStore)
+            groupSchema(groupStore, challengeStore, userStore)
+            uploadSchema(userStore, fileStorage)
+            userSchema(userStore, featureStore)
         }
     }
 }

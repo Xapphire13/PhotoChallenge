@@ -16,33 +16,36 @@ import java.time.ZonedDateTime
 import java.util.Date
 
 class ChallengeStore(db: Firestore) {
-    private val challengesCollection = db.collection("challenges")
+    private val groupsCollection = db.collection("groups")
     private val usersCollection = db.collection("users")
     private val futureChallengeCount = SynchronizedValue<Int>()
 
-    suspend fun listChallenges(): List<Challenge> {
+    suspend fun listChallenges(groupId: String): List<Challenge> {
+        val challengesCollection = groupsCollection.document(groupId).collection("challenges")
         val documents =
             challengesCollection
                 .listDocuments()
                 .map { it.get().asDeferred(Dispatchers.IO) }
                 .awaitAll()
 
-        return documents.map { it.toChallenge() }
+        return documents.map { it.toChallenge(groupId) }
     }
 
-    suspend fun getChallenge(id: String): Challenge? {
+    suspend fun getChallenge(groupId: String, id: String): Challenge? {
+        val challengesCollection = groupsCollection.document(groupId).collection("challenges")
         val document = challengesCollection.document(id).get().await(Dispatchers.IO)
 
-        return if (document.exists()) document.toChallenge() else null
+        return if (document.exists()) document.toChallenge(groupId) else null
     }
 
-    suspend fun getCurrentChallenge(): Challenge? {
+    suspend fun getCurrentChallenge(groupId: String): Challenge? {
+        val challengesCollection = groupsCollection.document(groupId).collection("challenges")
         val query =
             challengesCollection
                 .whereGreaterThan("endsAt", Timestamp.now())
                 .get()
                 .await(Dispatchers.IO)
-        var currentChallenge = query.firstOrNull()?.toChallenge()
+        var currentChallenge = query.firstOrNull()?.toChallenge(groupId)
 
         if (currentChallenge == null) {
             val nextChallenge =
@@ -84,7 +87,7 @@ class ChallengeStore(db: Firestore) {
                     .await(Dispatchers.IO)
 
                 currentChallenge =
-                    nextChallenge.toChallenge().copy(endsAt = nextChallengeDueDate.toString())
+                    nextChallenge.toChallenge(groupId).copy(endsAt = nextChallengeDueDate.toString())
 
                 futureChallengeCount.setValue { prev -> prev?.minus(1) ?: prev }
             }
@@ -93,17 +96,19 @@ class ChallengeStore(db: Firestore) {
         return currentChallenge
     }
 
-    suspend fun getPastChallenges(): List<Challenge> {
+    suspend fun getPastChallenges(groupId: String): List<Challenge> {
+        val challengesCollection = groupsCollection.document(groupId).collection("challenges")
         val query =
             challengesCollection
                 .whereLessThanOrEqualTo("endsAt", Timestamp.now())
                 .get()
                 .await(Dispatchers.IO)
 
-        return query.documents.map { it.toChallenge() }
+        return query.documents.map { it.toChallenge(groupId) }
     }
 
-    suspend fun getFutureChallengeCount(): Int {
+    suspend fun getFutureChallengeCount(groupId: String): Int {
+        val challengesCollection = groupsCollection.document(groupId).collection("challenges")
         val count =
             futureChallengeCount.getOrSetValue {
                 challengesCollection
@@ -117,7 +122,8 @@ class ChallengeStore(db: Firestore) {
         return count
     }
 
-    suspend fun addChallenge(challengeName: String, userId: String) {
+    suspend fun addChallenge(groupId: String, challengeName: String, userId: String) {
+        val challengesCollection = groupsCollection.document(groupId).collection("challenges")
         challengesCollection
             .add(
                 mapOf(
@@ -131,9 +137,10 @@ class ChallengeStore(db: Firestore) {
         futureChallengeCount.setValue { prev -> prev?.plus(1) ?: prev }
     }
 
-    private fun DocumentSnapshot.toChallenge() =
+    private fun DocumentSnapshot.toChallenge(groupId: String) =
         Challenge(
             id,
+            groupId,
             name = getString("name")!!,
             createdBy = (get("createdBy") as DocumentReference).id,
             endsAt =
