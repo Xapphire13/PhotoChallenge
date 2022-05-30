@@ -10,6 +10,9 @@ import { GROUP_LANDING_PAGE } from "../utils/paths";
 interface RootQuery {
   group:
     | {
+        id: string;
+        name: string;
+
         currentChallenge: {
           id: string;
           name: string;
@@ -46,6 +49,9 @@ export interface RootQueryProviderProps {
 export const ROOT_QUERY = gql`
   query RootQuery($groupId: String!) {
     group(id: $groupId) {
+      id
+      name
+
       currentChallenge {
         id
         name

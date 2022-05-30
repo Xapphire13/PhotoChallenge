@@ -2,6 +2,7 @@ import { css, cx } from "@linaria/core";
 import React, { useRef, useState } from "react";
 import useSize from "@react-hook/size";
 import useIntersectionObserver from "@react-hook/intersection-observer";
+import { useParams } from "react-router";
 import NavBarLayout from "../../layouts/NavBarLayout";
 import theme from "../../../theme";
 import SecondaryButton from "../../core/buttons/SecondaryButton";
@@ -20,6 +21,7 @@ import StaticFooterLayout from "../../layouts/StaticFooterLayout";
 import CSSVar from "../../../types/CSSVar";
 import SwipeDown from "./parts/SwipeDown";
 import Gallery from "../../Gallery";
+import { createShareUrl } from "../../../utils/paths";
 
 const classNames = {
   colorText: css`
@@ -116,6 +118,7 @@ function formatDuration(durationMs: number) {
 
 export default function LandingPage() {
   const { currentChallenge } = useCurrentChallenge();
+  const { groupId } = useParams();
   const { addToast } = useToast();
   const deviceType = useDeviceType();
   const contentContainerRef = useRef<HTMLDivElement>(null);
@@ -141,7 +144,7 @@ export default function LandingPage() {
   };
 
   const handleShareChallengeClicked = async () => {
-    const shareUrl = `${window.location.protocol}//${window.location.host}/share/challenge/${currentChallenge?.id}`;
+    const shareUrl = createShareUrl(groupId ?? "", currentChallenge?.id ?? "");
 
     if (
       (deviceType === "mobile" || deviceType === "tablet") &&
