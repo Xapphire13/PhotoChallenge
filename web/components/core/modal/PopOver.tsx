@@ -40,6 +40,12 @@ export default function PopOver({
     }
   });
 
+  useEvent(window, "keyup", (ev) => {
+    if (ev.key === "Escape") {
+      onClose();
+    }
+  });
+
   useEffect(() => {
     if (isOpen) {
       const handle = window.setInterval(() => {
