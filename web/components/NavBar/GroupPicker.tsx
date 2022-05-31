@@ -29,12 +29,14 @@ export interface GroupPickerProps {
   currentGroup: { id: string; name: string };
   isOpen: boolean;
   onClose: () => void;
+  anchorElement: React.RefObject<HTMLElement>;
 }
 
 export default function GroupPicker({
   isOpen,
   onClose,
   currentGroup,
+  anchorElement,
 }: GroupPickerProps) {
   const { groups, fetching } = useGroupsForUser();
   const navigate = useNavigate();
@@ -45,24 +47,12 @@ export default function GroupPicker({
   };
 
   return (
-    <PopOver isOpen={isOpen} onClose={onClose}>
+    <PopOver isOpen={isOpen} onClose={onClose} anchorElement={anchorElement}>
       <div className={cx(classNames.container)}>
-        <SmallIconButton
-          accessibilityLabel=""
-          aria-expanded={isOpen}
-          onClick={onClose}
-        >
-          <div className={cx(classNames.groupName)}>
-            #{currentGroup.name}
-            <ChevronUp size={16} />
-          </div>
-        </SmallIconButton>
-
         {fetching && "Loading..."}
 
         {!fetching && (
           <Menu>
-            <Divider />
             {groups
               .filter(({ id }) => id !== currentGroup.id)
               .map(({ id, name }) => (

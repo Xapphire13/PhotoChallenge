@@ -1,6 +1,6 @@
 import { css, cx } from "@linaria/core";
-import React, { useState } from "react";
-import { ChevronDown } from "react-feather";
+import React, { useRef, useState } from "react";
+import { ChevronDown, ChevronUp } from "react-feather";
 import useFeature from "../../hooks/useFeature";
 import theme from "../../theme";
 import SmallIconButton from "../core/buttons/SmallIconButton";
@@ -35,9 +35,12 @@ export default function GroupDetails({
 }: GroupDetailsProps) {
   const [groupPickerOpen, setGroupPickerOpen] = useState(false);
   const [enableGroups] = useFeature("groups");
+  const pickerButtonRef = useRef<HTMLDivElement>(null);
 
-  const handleGroupPickerToggled = () => {
+  const handleGroupPickerToggled = (ev: React.MouseEvent) => {
     setGroupPickerOpen((prev) => !prev);
+
+    ev.stopPropagation();
   };
 
   const handleCloseGroupPicker = () => setGroupPickerOpen(false);
@@ -45,16 +48,22 @@ export default function GroupDetails({
   return (
     <div className={cx(classNames.container)}>
       {enableGroups && (
-        <SmallIconButton
-          accessibilityLabel=""
-          aria-expanded={groupPickerOpen}
-          onClick={handleGroupPickerToggled}
-        >
-          <div className={cx(classNames.groupName)}>
-            #{currentGroup.name}
-            <ChevronDown size={16} />
-          </div>
-        </SmallIconButton>
+        <div ref={pickerButtonRef}>
+          <SmallIconButton
+            accessibilityLabel=""
+            aria-expanded={groupPickerOpen}
+            onClick={handleGroupPickerToggled}
+          >
+            <div className={cx(classNames.groupName)}>
+              #{currentGroup.name}
+              {groupPickerOpen ? (
+                <ChevronUp size={16} />
+              ) : (
+                <ChevronDown size={16} />
+              )}
+            </div>
+          </SmallIconButton>
+        </div>
       )}
       <div>
         <span className={cx(classNames.colorText)}>{futureChallengeCount}</span>{" "}
@@ -65,6 +74,7 @@ export default function GroupDetails({
         currentGroup={currentGroup}
         isOpen={groupPickerOpen}
         onClose={handleCloseGroupPicker}
+        anchorElement={pickerButtonRef}
       />
     </div>
   );

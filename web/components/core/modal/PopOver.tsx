@@ -1,25 +1,18 @@
 import { css, cx } from "@linaria/core";
 import useEvent from "@react-hook/event";
-import React, { useLayoutEffect, useRef, useState } from "react";
-import FocusLock from "react-focus-lock";
+import React, { useEffect, useRef } from "react";
 import theme from "../../../theme";
-import CSSVar from "../../../types/CSSVar";
+import BaseModal from "./BaseModal";
 
 const classNames = {
-  overlay: css`
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 255, 0);
-  `,
   container: css`
     position: absolute;
-    top: var(--popover--top, 0);
     background-color: ${theme.palette.background1};
     ${theme.cornerRadius.medium}
     overflow: hidden;
+    top: -9999px;
+    left: -9999px;
+    pointer-events: all;
   `,
 };
 
@@ -27,25 +20,18 @@ export interface PopOverProps {
   isOpen: boolean;
   children: React.ReactNode;
   onClose: () => void;
-  anchorElement?: React.RefObject<HTMLElement>;
+  anchorElement: React.RefObject<HTMLElement>;
 }
 
 export default function PopOver({
   isOpen,
   children,
   onClose,
-  anchorElement,
+  anchorElement: anchorElementRef,
 }: PopOverProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [top, setTop] = useState(0);
 
-  useLayoutEffect(() => {
-    if (anchorElement?.current) {
-      setTop(anchorElement.current.clientHeight);
-    }
-  }, [anchorElement]);
-
-  useEvent(window, "mouseup", (ev) => {
+  useEvent(window, "click", (ev) => {
     if (
       ev.target instanceof Element &&
       !containerRef.current?.contains(ev.target)
@@ -54,19 +40,34 @@ export default function PopOver({
     }
   });
 
-  if (!isOpen) {
-    return null;
-  }
+  useEffect(() => {
+    if (isOpen) {
+      const handle = window.setInterval(() => {
+        const anchorElement = anchorElementRef.current;
+        const containerElement = containerRef.current;
+
+        if (anchorElement && containerElement) {
+          const anchorBounds = anchorElement.getBoundingClientRect();
+          const containerBounds = containerElement.getBoundingClientRect();
+
+          containerElement.style.top = `${anchorBounds.bottom}px`;
+          containerElement.style.left = `${
+            anchorBounds.left + anchorBounds.width - containerBounds.width
+          }px`;
+        }
+      }, 1000 / 60);
+
+      return () => window.clearInterval(handle);
+    }
+
+    return () => undefined;
+  }, [anchorElementRef, isOpen]);
 
   return (
-    <div
-      ref={containerRef}
-      className={cx(classNames.container)}
-      style={{
-        ["--popover--top" as CSSVar]: `${top}px`,
-      }}
-    >
-      <FocusLock>{children}</FocusLock>
-    </div>
+    <BaseModal isOpen={isOpen} clickThroughWrapper>
+      <div ref={containerRef} className={cx(classNames.container)}>
+        {children}
+      </div>
+    </BaseModal>
   );
 }

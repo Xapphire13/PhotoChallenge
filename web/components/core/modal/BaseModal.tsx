@@ -11,6 +11,9 @@ const classNames = {
     left: 0;
     right: 0;
   `,
+  wrapper_clickThrough: css`
+    pointer-events: none;
+  `,
   focusLock: css`
     height: 100%;
   `,
@@ -19,16 +22,24 @@ const classNames = {
 export interface BaseModalProps {
   isOpen: boolean;
   children: React.ReactNode;
+  clickThroughWrapper?: boolean;
 }
 
-export default function BaseModal({ isOpen, children }: BaseModalProps) {
+export default function BaseModal({
+  isOpen,
+  children,
+  clickThroughWrapper = false,
+}: BaseModalProps) {
   const [portalRef] = useState<HTMLDivElement>(() =>
     document.createElement("div")
   );
 
   useEffect(() => {
-    portalRef.className = cx(classNames.wrapper);
-  }, [portalRef]);
+    portalRef.className = cx(
+      classNames.wrapper,
+      clickThroughWrapper && classNames.wrapper_clickThrough
+    );
+  }, [clickThroughWrapper, portalRef]);
 
   useEffect(() => {
     if (isOpen) {
