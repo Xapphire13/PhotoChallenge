@@ -4,9 +4,11 @@ import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQLError
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.xapphire13.database.UploadStore
+import com.xapphire13.models.CreateUploadUrlResponse
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.UploadInput
 import com.xapphire13.storage.FileStorage
+import com.xapphire13.utils.generateId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,7 +21,9 @@ fun SchemaBuilder.fileSchema(fileStorage: FileStorage, uploadStore: UploadStore)
         resolver { ctx: Context ->
             ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
 
-            fileStorage.createUploadUrl()
+            val id = generateId()
+
+            CreateUploadUrlResponse(id, uploadUrl = "/upload/challenge/$id")
         }
     }
 

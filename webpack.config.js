@@ -40,6 +40,11 @@ const config = {
         target: proxyHost,
         changeOrigin: proxyProd,
       },
+      {
+        context: ["/upload"],
+        target: proxyHost,
+        changeOrigin: proxyProd,
+      },
     ],
   },
   devtool: isProduction ? false : "source-map",

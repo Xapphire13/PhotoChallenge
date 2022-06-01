@@ -36,7 +36,7 @@ fun main() {
             groupStore,
             featureStore
         )
-        configureRouting(userStore, challengeStore)
+        configureRouting(userStore, challengeStore, fileStorage)
     }
         .start(wait = true)
 }

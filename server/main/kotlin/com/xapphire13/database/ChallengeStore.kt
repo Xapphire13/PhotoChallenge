@@ -143,7 +143,7 @@ class ChallengeStore(db: Firestore) {
             .await(Dispatchers.IO)
 
         this.futureChallengeCountCacheSemaphore.withPermit {
-            this.futureChallengeCountCache.get(groupId)?.let {prev ->
+            this.futureChallengeCountCache.get(groupId)?.let { prev ->
                 this.futureChallengeCountCache.put(groupId, prev.plus(1))
             }
         }
