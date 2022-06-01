@@ -10,7 +10,7 @@ fun Application.configureRouting(userStore: UserStore, challengeStore: Challenge
     routing {
         loginRoutes(userStore)
         linkPreviewRoutes(challengeStore)
-        imageRoutes(fileStorage)
+        uploadRoutes(fileStorage)
         appRoutes()
     }
 }

@@ -16,27 +16,32 @@ import io.ktor.routing.put
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-fun Routing.imageRoutes(fileStorage: FileStorage) {
+fun Routing.uploadRoutes(fileStorage: FileStorage) {
     put("/upload/{uploadType}/{id}") {
         call.parameters["uploadType"]?.let { UploadType.valueOf(it.uppercase()) }
             ?: throw BadRequestException("No upload type provided")
         val id = call.parameters["id"] ?: throw BadRequestException("No id provided")
         val originalContentType =
-            call.request.headers["content-type"]?.let { ContentType.parse(it) } ?: throw BadRequestException("Content type not provided")
-        var newImageBytes: ByteArray
-
-        if (!originalContentType.match(ContentType.Image.Any)) {
-            throw UnsupportedMediaTypeException(originalContentType)
-        }
+            call.request.headers["content-type"]?.let { ContentType.parse(it) }
+                ?: throw BadRequestException("Content type not provided")
 
         withContext(Dispatchers.IO) {
-            call.receiveStream().use { stream ->
-                val image = ImmutableImage.loader().fromStream(stream)
-                newImageBytes = image.bound(2000, 2000).bytes(JpegWriter())
+            when {
+                originalContentType.match(ContentType.Image.Any) -> {
+                    call.receiveStream().use { stream ->
+                        val image = ImmutableImage.loader().fromStream(stream)
+                        val newImageBytes = image.bound(2000, 2000).bytes(JpegWriter())
+                        fileStorage.uploadFile(id, "image/jpeg", newImageBytes)
+                    }
+                }
+                originalContentType.match(ContentType.Video.Any) -> {
+                    call.receiveStream().use { stream ->
+                        fileStorage.uploadFile(id, originalContentType.toString(), stream)
+                    }
+                }
+                else -> throw UnsupportedMediaTypeException(originalContentType)
             }
         }
-
-        fileStorage.uploadFile(id, "image/jpeg", newImageBytes)
 
         call.respond(HttpStatusCode.Created)
     }

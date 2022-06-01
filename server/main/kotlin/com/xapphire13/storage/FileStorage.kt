@@ -4,6 +4,7 @@ import com.google.cloud.storage.Blob
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
+import java.io.InputStream
 
 private const val UPLOADS_DIR = "uploads"
 
@@ -25,5 +26,12 @@ class FileStorage(private val storage: Storage) {
         val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
 
         storage.create(blobInfo, content)
+    }
+
+    fun uploadFile(id: String, contentType: String, content: InputStream) {
+        val blobId = BlobId.of(System.getenv("FIREBASE_STORAGE_BUCKET"), "$UPLOADS_DIR/$id")
+        val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
+
+        storage.createFrom(blobInfo, content)
     }
 }
