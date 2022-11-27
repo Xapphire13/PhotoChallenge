@@ -4,7 +4,7 @@ web/dist/
 web/build-storybook.log
 
 # Server
-server/.env
+.env
 server/.idea/
 server/.gradle/
 server/build/

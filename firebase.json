@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "ignore": ["**", "firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "photo-challenge",
+          "region": "us-central1"
+        }
+      }
+    ]
+  }
+}

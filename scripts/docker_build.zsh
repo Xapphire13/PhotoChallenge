@@ -1,1 +1,1 @@
-docker build -t photo_challenge .
+docker build -t photo-challenge .
