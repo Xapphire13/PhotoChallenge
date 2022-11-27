@@ -20,11 +20,11 @@ repositories { mavenCentral() }
 
 sourceSets {
     main {
-        java.srcDirs("server/main/kotlin")
-        resources { srcDir("server/main/resources") }
+        java.srcDirs("src/main/kotlin")
+        resources { srcDir("src/main/resources") }
     }
 
-    test { java.srcDir("server/test/kotlin") }
+    test { java.srcDir("src/test/kotlin") }
 }
 
 application { mainClass.set("com.xapphire13.ApplicationKt") }

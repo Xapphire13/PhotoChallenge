@@ -7,12 +7,12 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const isProduction = process.env.NODE_ENV === "production";
 const proxyProd = process.env.PROD_PROXY === "true";
 const proxyHost = proxyProd
-  ? "https://daily-photo-challenge.herokuapp.com"
+  ? "https://daily-photo-challenge.herokuapp.com" // TODO update
   : "http://localhost:5001";
 
 /** @type {import("webpack").Configuration}  */
 const config = {
-  entry: "./web/index.tsx",
+  entry: "./src/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
     clean: true,
