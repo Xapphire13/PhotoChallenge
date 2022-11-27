@@ -57,3 +57,5 @@ dependencies {
 task("stage") { dependsOn += "shadowJar" }
 
 tasks.withType<Test> { useJUnitPlatform() }
+
+tasks.withType<Copy> { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
