@@ -1,0 +1,2 @@
+SCRIPT_NAME=$(echo $1 | sed "s/:/_/g")
+./scripts/$SCRIPT_NAME.zsh

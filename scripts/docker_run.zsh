@@ -1,0 +1,1 @@
+docker run -p 5050:5050 --env-file .env --name photo-challenge photo_challenge

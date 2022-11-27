@@ -5,6 +5,7 @@ import com.google.cloud.firestore.Firestore
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.FirestoreClient
+import java.util.*
 
 class FirestoreDb {
     companion object {
@@ -13,7 +14,7 @@ class FirestoreDb {
         fun initialize() {
             val credentials =
                 GoogleCredentials.fromStream(
-                    System.getenv("FIREBASE_CREDENTIALS").byteInputStream()
+                    Base64.getDecoder().decode(System.getenv("FIREBASE_CREDENTIALS")).inputStream()
                 )
             val options =
                 FirebaseOptions.builder()
