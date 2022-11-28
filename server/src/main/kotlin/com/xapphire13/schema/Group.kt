@@ -1,9 +1,7 @@
 package com.xapphire13.schema
 
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
-import com.xapphire13.database.ChallengeStore
-import com.xapphire13.database.GroupStore
-import com.xapphire13.database.UserStore
+import com.xapphire13.database.*
 import com.xapphire13.models.Challenge
 import com.xapphire13.models.Frequency
 import com.xapphire13.models.Group

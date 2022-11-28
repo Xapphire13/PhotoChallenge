@@ -7,13 +7,9 @@ import com.google.cloud.storage.StorageOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.FirestoreClient
-import com.xapphire13.database.ChallengeStore
-import com.xapphire13.database.FeatureStore
-import com.xapphire13.database.GroupStore
-import com.xapphire13.database.InvitationStore
-import com.xapphire13.database.UploadStore
-import com.xapphire13.database.UserStore
+import com.xapphire13.database.*
 import com.xapphire13.storage.FileStorage
+import com.xapphire13.storage.FirebaseFileStorage
 import org.koin.dsl.module
 import java.util.Base64
 
@@ -46,11 +42,11 @@ val productionModule = module {
             .service
     }
 
-    single<FeatureStore> { FeatureStore(get()) }
-    single<GroupStore> { GroupStore(get()) }
-    single<InvitationStore> { InvitationStore(get()) }
-    single<ChallengeStore> { ChallengeStore(get()) }
-    single<UserStore> { UserStore(get(), get()) }
-    single<FileStorage> { FileStorage(get()) }
-    single<UploadStore> { UploadStore(get(), get(), get()) }
+    single<FeatureStore> { FirebaseFeatureStore(get()) }
+    single<GroupStore> { FirebaseGroupStore(get()) }
+    single<InvitationStore> { FirebaseInvitationStore(get()) }
+    single<ChallengeStore> { FirebaseChallengeStore(get()) }
+    single<UserStore> { FirebaseUserStore(get(), get()) }
+    single<FileStorage> { FirebaseFileStorage(get()) }
+    single<UploadStore> { FirebaseUploadStore(get(), get(), get()) }
 }

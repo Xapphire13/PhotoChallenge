@@ -163,7 +163,7 @@ internal class ChallengeStoreTest : DescribeSpec({
                     documentSnapshot
                 }
 
-                val challengeStore = ChallengeStore(firestore)
+                val challengeStore = FirebaseChallengeStore(firestore)
                 challengeStore.getCurrentChallenge("")
 
                 endsAt.captured shouldBe Timestamp.of(

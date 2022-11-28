@@ -7,5 +7,4 @@ data class User(
     val isAdmin: Boolean,
     val passwordHash: String,
     val passwordSalt: String,
-    val features: List<String> = emptyList()
 )

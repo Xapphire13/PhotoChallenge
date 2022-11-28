@@ -1,5 +1,6 @@
 package com.xapphire13
 
+import com.xapphire13.modules.mockModule
 import com.xapphire13.modules.productionModule
 import com.xapphire13.routes.configureRouting
 import com.xapphire13.schema.configureSchema
@@ -13,7 +14,7 @@ fun main() {
     embeddedServer(Netty, port = System.getenv("PORT").toInt(), host = "0.0.0.0") {
         install(Koin) {
             slf4jLogger()
-            modules(productionModule)
+            modules(if (System.getenv().containsKey("TEST")) mockModule else productionModule)
         }
         configureSchema()
         configureRouting()

@@ -10,7 +10,7 @@ fun SchemaBuilder.invitationSchema(invitationStore: InvitationStore) {
     mutation("createInvitation") {
         resolver { groupId: String, ctx: Context ->
             val requestContext = ctx.get<RequestContext>() ?: throw GraphQLError("Unauthorized")
-            val existingInvitation = invitationStore.getInvitationsForUser(requestContext.userId)
+            val existingInvitation = invitationStore.getInvitationsForUser(requestContext.userId).firstOrNull { it.groupId === groupId }
 
             existingInvitation ?: invitationStore.createInvitation(requestContext.userId, groupId)
         }

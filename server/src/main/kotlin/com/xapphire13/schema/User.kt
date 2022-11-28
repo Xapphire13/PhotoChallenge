@@ -3,9 +3,7 @@ package com.xapphire13.schema
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQLError
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
-import com.xapphire13.database.FeatureStore
-import com.xapphire13.database.GroupStore
-import com.xapphire13.database.UserStore
+import com.xapphire13.database.*
 import com.xapphire13.models.Group
 import com.xapphire13.models.RequestContext
 import com.xapphire13.models.User

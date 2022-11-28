@@ -3,15 +3,11 @@ package com.xapphire13.schema
 import com.apurebase.kgraphql.GraphQL
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.xapphire13.auth.JWTUtils
-import com.xapphire13.database.ChallengeStore
-import com.xapphire13.database.FeatureStore
-import com.xapphire13.database.GroupStore
-import com.xapphire13.database.InvitationStore
-import com.xapphire13.database.UploadStore
-import com.xapphire13.database.UserStore
+import com.xapphire13.database.*
 import com.xapphire13.models.RequestContext
 import com.xapphire13.storage.FileStorage
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import org.koin.ktor.ext.inject
 
 fun Application.configureSchema() {
