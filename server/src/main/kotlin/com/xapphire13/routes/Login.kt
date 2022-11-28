@@ -3,13 +3,15 @@ package com.xapphire13.routes
 import com.xapphire13.auth.JWTUtils
 import com.xapphire13.auth.PasswordUtils
 import com.xapphire13.database.UserStore
-import io.ktor.application.call
-import io.ktor.features.ContentTransformationException
-import io.ktor.request.receiveParameters
-import io.ktor.response.respondRedirect
-import io.ktor.routing.Routing
-import io.ktor.routing.post
-import io.ktor.util.date.toGMTDate
+import io.ktor.http.CookieEncoding
+import io.ktor.server.application.call
+import io.ktor.server.request.ContentTransformationException
+import io.ktor.server.request.receiveParameters
+import io.ktor.server.response.respondRedirect
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.post
+import io.ktor.server.util.toGMTDate
+import io.ktor.util.date.GMTDate
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.Date
@@ -22,8 +24,20 @@ fun Routing.loginRoutes(userStore: UserStore) {
         val formParams = try {
             call.receiveParameters()
         } catch (ex: ContentTransformationException) {
-            if (requestCookies["token"] != null) responseCookies.appendExpired("token")
-            if (requestCookies["loggedIn"] != null) responseCookies.appendExpired("loggedIn")
+            if (requestCookies["token"] != null) responseCookies.append(
+                "token",
+                "",
+                CookieEncoding.URI_ENCODING,
+                0L,
+                GMTDate()
+            )
+            if (requestCookies["loggedIn"] != null) responseCookies.append(
+                "loggedIn",
+                "",
+                CookieEncoding.URI_ENCODING,
+                0L,
+                GMTDate(),
+            )
             call.respondRedirect("/login?error=true")
             return@post
         }
@@ -32,8 +46,20 @@ fun Routing.loginRoutes(userStore: UserStore) {
         val user = userStore.getUserByUsername(username)
 
         if (user == null || !PasswordUtils.verifyPassword(password, user.passwordSalt, user.passwordHash)) {
-            if (requestCookies["token"] != null) responseCookies.appendExpired("token")
-            if (requestCookies["loggedIn"] != null) responseCookies.appendExpired("loggedIn")
+            if (requestCookies["token"] != null) responseCookies.append(
+                "token",
+                "",
+                CookieEncoding.URI_ENCODING,
+                0L,
+                GMTDate()
+            )
+            if (requestCookies["loggedIn"] != null) responseCookies.append(
+                "loggedIn",
+                "",
+                CookieEncoding.URI_ENCODING,
+                0L,
+                GMTDate(),
+            )
             call.respondRedirect("/login?error=true")
             return@post
         }

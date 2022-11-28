@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val kgraphql_version: String by project
 val kotest_version: String by project
 val mockk_version: String by project
+val koin_version: String by project
 
 group = "com.xapphire13"
 
@@ -39,18 +42,23 @@ dependencies {
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
     implementation("com.google.cloud:google-cloud-storage")
     implementation("com.google.firebase:firebase-admin:8.1.0")
-    implementation("io.ktor:ktor-html-builder:$ktor_version")
+    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation("io.github.reactivecircus.cache4k:cache4k:0.6.0")
     implementation("com.sksamuel.scrimage:scrimage-core:4.0.31")
+    implementation("io.insert-koin:koin-core:$koin_version")
+    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
 
     testImplementation("io.kotest:kotest-assertions-core:$kotest_version")
     testImplementation("io.kotest:kotest-runner-junit5:$kotest_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("io.mockk:mockk:$mockk_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("io.insert-koin:koin-test:$koin_version")
+    testImplementation("io.insert-koin:koin-test-junit5:$koin_version")
 }
 
 // "stage" task for Heroku
@@ -59,3 +67,7 @@ task("stage") { dependsOn += "shadowJar" }
 tasks.withType<Test> { useJUnitPlatform() }
 
 tasks.withType<Copy> { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
+}

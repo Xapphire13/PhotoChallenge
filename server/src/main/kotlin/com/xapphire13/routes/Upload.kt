@@ -4,15 +4,13 @@ import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.nio.JpegWriter
 import com.xapphire13.models.UploadType
 import com.xapphire13.storage.FileStorage
-import io.ktor.application.call
-import io.ktor.features.BadRequestException
-import io.ktor.features.UnsupportedMediaTypeException
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receiveStream
-import io.ktor.response.respond
-import io.ktor.routing.Routing
-import io.ktor.routing.put
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

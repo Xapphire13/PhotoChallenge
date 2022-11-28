@@ -11,18 +11,18 @@ import com.xapphire13.database.UploadStore
 import com.xapphire13.database.UserStore
 import com.xapphire13.models.RequestContext
 import com.xapphire13.storage.FileStorage
-import io.ktor.application.Application
-import io.ktor.application.install
+import io.ktor.server.application.*
+import org.koin.ktor.ext.inject
 
-fun Application.configureSchema(
-    userStore: UserStore,
-    invitationStore: InvitationStore,
-    challengeStore: ChallengeStore,
-    fileStorage: FileStorage,
-    uploadStore: UploadStore,
-    groupStore: GroupStore,
-    featureStore: FeatureStore
-) {
+fun Application.configureSchema() {
+    val userStore by inject<UserStore>()
+    val invitationStore by inject<InvitationStore>()
+    val challengeStore by inject<ChallengeStore>()
+    val fileStorage by inject<FileStorage>()
+    val uploadStore by inject<UploadStore>()
+    val groupStore by inject<GroupStore>()
+    val featureStore by inject<FeatureStore>()
+
     install(GraphQL) {
         playground = true
         wrapErrors = true

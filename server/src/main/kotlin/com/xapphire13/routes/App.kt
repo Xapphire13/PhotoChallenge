@@ -1,10 +1,9 @@
 package com.xapphire13.routes
 
-import io.ktor.application.call
-import io.ktor.request.path
-import io.ktor.response.respondFile
-import io.ktor.routing.Routing
-import io.ktor.routing.get
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.io.path.exists
