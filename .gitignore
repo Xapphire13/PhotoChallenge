@@ -1,3 +1,6 @@
+# Build
+bazel-*
+
 # Web
 web/node_modules/
 web/dist/
