@@ -1,0 +1,23 @@
+.container {
+  font-size: var(--typography-base-medium-font-size);
+  line-height: var(--typography-base-medium-line-height);
+  border-radius: var(--corner-radius-small);
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--palette-white);
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.container:not(:focus-visible) {
+  outline: none;
+}
+
+.container:disabled {
+  cursor: not-allowed;
+  color: var(--palette-faint);
+}

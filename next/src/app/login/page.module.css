@@ -1,0 +1,24 @@
+.cardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitButton {
+  margin-top: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 300px;
+}
+
+.formField {
+  width: 100%;
+}
+
+.loginError {
+  margin-top: 8px;
+  color: var(--palette-warning);
+}

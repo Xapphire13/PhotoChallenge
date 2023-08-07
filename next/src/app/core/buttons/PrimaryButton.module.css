@@ -1,0 +1,7 @@
+.primary {
+  background: var(--palette-primary);
+}
+
+.primary:disabled {
+  background: var(--palette-background1);
+}

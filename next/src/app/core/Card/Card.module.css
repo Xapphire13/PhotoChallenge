@@ -1,0 +1,7 @@
+.container {
+  position: relative;
+  border-radius: var(--corner-radius-medium);
+  border: 1px solid var(--palette-background1);
+  background: var(--palette-background0);
+  overflow: hidden;
+}

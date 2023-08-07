@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Offside&display=swap");
+
+:root {
+  --typography-base-medium-font-size: 14px;
+  --typography-base-medium-line-height: 1.5;
+  --typography-base-large-font-size: 16px;
+  --typography-base-large-line-height: 1.5;
+
+  --palette-faint: #808080;
+  --palette-background0: #272737;
+  --palette-background1: #3f3f59;
+  --palette-white: #ffffff;
+  --palette-warning: #ff2424;
+  --palette-primary: #f61067;
+
+  --corner-radius-small: 4px;
+  --corner-radius-medium: 8px;
+  --elevation-primary: 5px 5px 20px #00000055;
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body,
+#app-root {
+  display: grid;
+  grid-template: 1fr / 1fr;
+  overflow: hidden;
+}
+
+body {
+  font-size: var(--typography-base-medium-font-size);
+  line-height: var(--typography-base-medium-line-height);
+  font-family: Offside, sans-serif;
+  background: var(--palette-background0);
+  color: var(--palette-white);
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-size: var(--typography-base-medium-font-size);
+  line-height: var(--typography-base-medium-line-height);
+}
+
+input,
+textarea {
+  ::placeholder {
+    color: var(--palette-faint);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--typography-base-medium-font-size);
+  line-height: var(--typography-base-medium-line-height);
+  margin: 0 0 12px;
+}
+
+p {
+  margin: 0;
+}

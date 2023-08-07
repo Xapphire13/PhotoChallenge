@@ -1,0 +1,5 @@
+.container {
+  border-radius: var(--corner-radius-small);
+  box-shadow: var(--elevation-primary);
+  z-index: 0;
+}

@@ -1,0 +1,22 @@
+.inputField {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--palette-white);
+  padding: 4px;
+  border-bottom: 2px solid var(--palette-background1);
+  font-size: var(--typography-base-large-font-size);
+  line-height: var(--typography-base-large-line-height);
+}
+
+.inputField:focus {
+  border-bottom: 2px solid var(--palette-primary);
+}
+
+.visiblyHidden {
+  display: none;
+}
+
+.fullWidth {
+  width: 100%;
+}
